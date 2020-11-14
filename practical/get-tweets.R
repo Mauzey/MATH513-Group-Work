@@ -25,7 +25,6 @@ twitter_token <- create_token(
 
 # Get tweets containing the hasthag '#iPhone12', excluding quotes and replies
 query <- '#iPhone12 -filter:quote -filter:replies'
-query <- '#Caturday'
 tweets <- search_tweets(
   q = query,
   n = 10,
@@ -57,5 +56,6 @@ list_to_char <- function(x){
 tweets <- data.frame(lapply(tweets, list_to_char), stringsAsFactors = F)
 
 # Export data to .csv files
-tweets_filename <- 'tweets_test.csv'
-users_filename <- 'users_test.csv'
+#   Rename these so that the file name is relevant to the query used
+tweets_filename <- 'data/tweets_test.csv'
+users_filename <- 'data/users_test.csv'
