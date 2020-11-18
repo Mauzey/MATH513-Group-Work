@@ -3,7 +3,7 @@ title: "Presentation Title"
 author: "10570155, 10696253, 10701983"
 date: "10/12/2020"
 output: beamer_presentation
----.
+---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
