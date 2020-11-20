@@ -95,3 +95,6 @@ for (dir in c('data/', 'data/backup/')) {
   write.csv(s20_tweets_parsed, paste0(dir, 's20-tweets-', name, '.csv'))  # Export Samsung Galaxy S20 tweet data
   write.csv(s20_users_parsed, paste0(dir, 's20-users-', name, '.csv'))  # Export Samsung Galaxy S20 user data
 }
+
+
+#Tania's test
