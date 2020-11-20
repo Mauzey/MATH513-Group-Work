@@ -97,4 +97,6 @@ for (dir in c('data/', 'data/backup/')) {
 }
 
 
-#Tania's test
+#Tania's test in VS Code using Git integrated
+
+#Tania's test in RStudio using Git separately
