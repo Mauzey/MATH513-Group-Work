@@ -58,8 +58,8 @@ s20_users <- user_data(s20_tweets)
 
 # Parse List Columns --------------------------------------------------------------------------------------------------------
 
-# DataFrame columns of class 'list' cannot be exported as a .csv file - The following function fixes this by parsing any lists 
-# into a string containing all list values, separated by commas
+# DataFrame columns of class 'list' cannot be exported as a .csv file - The following function fixes this by parsing any 
+# lists into a string containing all list values, separated by commas
 list_to_char <- function(column) {
   if (class(column) == 'list') {
     new_column <- paste(unlist(column[1]), sep = '', collapse = ', ')
