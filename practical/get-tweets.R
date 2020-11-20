@@ -96,7 +96,3 @@ for (dir in c('data/', 'data/backup/')) {
   write.csv(s20_users_parsed, paste0(dir, 's20-users-', name, '.csv'))  # Export Samsung Galaxy S20 user data
 }
 
-
-#Tania's test in VS Code using Git integrated
-
-#Tania's test in RStudio using Git separately
