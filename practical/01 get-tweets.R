@@ -3,6 +3,10 @@
 # Import dependencies
 library(rtweet)
 
+# CHANGES -------------------------------------------------------------------------------------------------------------------
+## 2020-11-20 - WON - Move any variables to the top of the file for easy editing. Added individual change log
+
+
 # rtweet Setup --------------------------------------------------------------------------------------------------------------
 
 # In order to avoid the raw Twitter API keys from appearing on the public Github repository, enter the following command in the 
@@ -15,6 +19,22 @@ library(rtweet)
 #   TWITTER_TOKEN.: Your Twitter API key
 #   TWITTER_SECRET: Your Twitter API private key
 
+
+# VARIABLES  ----------------------------------------------------------------------------------------------------------------
+
+## Hashtags
+iphone12_query <- '#iPhone12'
+s20fe_query <- '#GalaxyS20FE'
+s20_query <- '#GalaxyS20'
+
+## Date Ranges for Tweet Searches
+iphone12_date_range <- c(NULL, NULL)  # start_date, end_date (format: YYYYMMDDHHMM) -- CHANGE THIS !!
+s20fe_date_range <- c(NULL, NULL)  # start_date, end_date (format: YYYYMMDDHHMM) -- CHANGE THIS !!!
+s20_date_range <- c(NULL, NULL)  # start_date, end_date (format: YYYYMMDDHHMM) -- CHANGE THIS !!
+
+# Define name of user pulling tweets to use in filenames
+name <- 'alex'  # change this to you name; this is to avoid overwriting each others' pulled data
+
 # Initialize Twitter API token
 twitter_token <- create_token(
   app <- Sys.getenv('TWITTER_APP'),
@@ -22,30 +42,22 @@ twitter_token <- create_token(
   consumer_secret <- Sys.getenv('TWITTER_SECRET')
 )
 
-# Acquire Tweets ------------------------------------------------------------------------------------------------------------
+
+# AQUIRE TWEETS ------------------------------------------------------------------------------------------------------------
 
 # Get iPhone 12 Tweets
-iphone12_query <- '#iPhone12'
-iphone12_date_range <- c(NULL, NULL)  # start_date, end_date (format: YYYYMMDDHHMM) -- CHANGE THIS !!
-
 iphone12_tweets <- search_30day(q = iphone12_query, n = 12500,
                                 fromDate = iphone12_date_range[1],
                                 toDate = iphone12_date_range[2],
                                 token = twitter_token)
 
 # Get Samsung Galaxy S20 FE Tweets
-s20fe_query <- '#GalaxyS20FE'
-s20fe_date_range <- c(NULL, NULL)  # start_date, end_date (format: YYYYMMDDHHMM) -- CHANGE THIS !!!
-
 s20fe_tweets <- search_30day(q = s20fe_query, n = 12500,
                              fromDate = s20fe_date_range[1],
                              toDate = s20fe_date_range[2],
                              token = twitter_token)
 
 # Get Samsung Galaxy S20 Tweets
-s20_query <- '#GalaxyS20'
-s20_date_range <- c(NULL, NULL)  # start_date, end_date (format: YYYYMMDDHHMM) -- CHANGE THIS !!
-
 s20_tweets <- search_fullarchive(q = s20_query, n = 5000,
                                  fromDate = s20_date_range[1],
                                  toDate = s20_date_range[2],
@@ -56,7 +68,8 @@ iphone12_users <- user_data(iphone12_tweets)
 s20fe_users <- user_data(s20fe_tweets)
 s20_users <- user_data(s20_tweets)
 
-# Parse List Columns --------------------------------------------------------------------------------------------------------
+
+# PARSE LIST COLUMNS --------------------------------------------------------------------------------------------------------
 
 # DataFrame columns of class 'list' cannot be exported as a .csv file - The following function fixes this by parsing any 
 # lists into a string containing all list values, separated by commas
@@ -79,10 +92,8 @@ iphone12_users_parsed <- data.frame(lapply(iphone12_users, list_to_char), string
 s20fe_users_parsed <- data.frame(lapply(s20fe_users, list_to_char), stringsAsFactors = F)
 s20_users_parsed <- data.frame(lapply(s20_users, list_to_char), stringsAsFactors = F)
 
-# Export Data ---------------------------------------------------------------------------------------------------------------
 
-# Define file names
-name <- 'alex'  # change this to you name; this is to avoid overwriting each others' pulled data
+# EXPORT DATA ---------------------------------------------------------------------------------------------------------------
 
 # Export data to './data' and './data/backup'
 for (dir in c('data/', 'data/backup/')) {
