@@ -1,49 +1,52 @@
-# Import and Setup ----------------------------------------------------------------------------------------------------------
+#
+#   Download Tweets using the Twitter REST API via rtweet
+#
 
-# Import dependencies
-library(rtweet)
-
-# CHANGES -------------------------------------------------------------------------------------------------------------------
+# CHANGE LOG ----------------------------------------------------------------------------------------------------------------
 ## 2020-11-20 - WON - Move any variables to the top of the file for easy editing. Added individual change log
 
 
-# rtweet Setup --------------------------------------------------------------------------------------------------------------
+# IMPORT DEPENDENCIES / SETUP -----------------------------------------------------------------------------------------------
 
-# In order to avoid the raw Twitter API keys from appearing on the public Github repository, enter the following command in the 
-# RStudio terminal prior to executing the token initialization below:
-#
-# Sys.setenv(TWITTER_APP = '', TWITTER_TOKEN = '', TWITTER_SECRET = '')
-#
-# where:
-#   TWITTER_APP...: The name of your app in the Twitter developer portal
-#   TWITTER_TOKEN.: Your Twitter API key
-#   TWITTER_SECRET: Your Twitter API private key
+library(rtweet)
 
+#setwd() # Will
+#setwd() # Tania
+#setwd("~/Development/Repositories/MATH513-Group-Work/practical")  # Alex laptop
+#setwd("D:/Development/MATH513-Group-Work/practical")  # Alex desktop
 
-# VARIABLES  ----------------------------------------------------------------------------------------------------------------
+# IMPORT ENVIRONMENT VARIABLES ----------------------------------------------------------------------------------------------
 
-## Hashtags
+env_file <- file('./twitter-keys', open = 'r')  # Define env vars file
+envs <- readLines(env_file)  # Read in the file
+
+twitter_app <- strsplit(envs, ' ')[[1]][3]
+twitter_token <- strsplit(envs, ' ')[[2]][3]
+twitter_secret <- strsplit(envs, ' ')[[3]][3]
+
+# DEFINE LOCAL VARIABLES ----------------------------------------------------------------------------------------------------
+
+# Hashtags
 iphone12_query <- '#iPhone12'
 s20fe_query <- '#GalaxyS20FE'
 s20_query <- '#GalaxyS20'
 
-## Date Ranges for Tweet Searches
-iphone12_date_range <- c(NULL, NULL)  # start_date, end_date (format: YYYYMMDDHHMM) -- CHANGE THIS !!
-s20fe_date_range <- c(NULL, NULL)  # start_date, end_date (format: YYYYMMDDHHMM) -- CHANGE THIS !!!
-s20_date_range <- c(NULL, NULL)  # start_date, end_date (format: YYYYMMDDHHMM) -- CHANGE THIS !!
+# Date Ranges for Tweet Searches (format: YYYYMMDDHHMM)
+iphone_12_date_range <-c(NULL, NULL)
+s20fe_date_range <- c(NULL, NULL)
+s20_date_range <- c(NULL, NULL)
 
-# Define name of user pulling tweets to use in filenames
-name <- 'alex'  # change this to you name; this is to avoid overwriting each others' pulled data
+# Name of the user pulling tweets for use in file names (to avoid overwriting each others' data)
+name <- 'alex'
 
 # Initialize Twitter API token
 twitter_token <- create_token(
-  app <- Sys.getenv('TWITTER_APP'),
-  consumer_key <- Sys.getenv('TWITTER_TOKEN'),
-  consumer_secret <- Sys.getenv('TWITTER_SECRET')
+  app <- twitter_app,
+  consumer_key <- twitter_token,
+  consumer_secret <- twitter_secret
 )
 
-
-# AQUIRE TWEETS ------------------------------------------------------------------------------------------------------------
+# ACQUIRE TWEETS ------------------------------------------------------------------------------------------------------------
 
 # Get iPhone 12 Tweets
 iphone12_tweets <- search_30day(q = iphone12_query, n = 12500,
@@ -68,7 +71,6 @@ iphone12_users <- user_data(iphone12_tweets)
 s20fe_users <- user_data(s20fe_tweets)
 s20_users <- user_data(s20_tweets)
 
-
 # PARSE LIST COLUMNS --------------------------------------------------------------------------------------------------------
 
 # DataFrame columns of class 'list' cannot be exported as a .csv file - The following function fixes this by parsing any 
@@ -92,18 +94,16 @@ iphone12_users_parsed <- data.frame(lapply(iphone12_users, list_to_char), string
 s20fe_users_parsed <- data.frame(lapply(s20fe_users, list_to_char), stringsAsFactors = F)
 s20_users_parsed <- data.frame(lapply(s20_users, list_to_char), stringsAsFactors = F)
 
-
 # EXPORT DATA ---------------------------------------------------------------------------------------------------------------
 
 # Export data to './data' and './data/backup'
-for (dir in c('data/', 'data/backup/')) {
-  write.csv(iphone12_tweets_parsed, paste0(dir, 'iphone12-tweets-', name, '.csv'))  # Export iPhone 12 tweet data
-  write.csv(iphone12_users_parsed, paste0(dir, 'iphone12-users-', name, '.csv'))  # Export iPhone 12 user data
+for (dir in c('./data/', './data/backup/')) {
+  write.csv(iphone12_tweets_parsed, paste0(dir, 'tweets/iphone12-tweets-', name, '.csv'))  # Export iPhone 12 tweet data
+  write.csv(iphone12_users_parsed, paste0(dir, 'users/iphone12-users-', name, '.csv'))  # Export iPhone 12 user data
   
-  write.csv(s20fe_tweets_parsed, paste0(dir, 's20fe-tweets-', name, '.csv'))  # Export Samsung Galaxy S20 FE tweet data
-  write.csv(s20fe_users_parsed, paste0(dir, 's20fe-users-', name, '.csv'))  # Export Samsung Galaxy S20 FE user data
+  write.csv(s20fe_tweets_parsed, paste0(dir, 'tweets/s20fe-tweets-', name, '.csv'))  # Export Samsung Galaxy S20 FE tweet data
+  write.csv(s20fe_users_parsed, paste0(dir, 'users/s20fe-users-', name, '.csv'))  # Export Samsung Galaxy S20 FE user data
   
-  write.csv(s20_tweets_parsed, paste0(dir, 's20-tweets-', name, '.csv'))  # Export Samsung Galaxy S20 tweet data
-  write.csv(s20_users_parsed, paste0(dir, 's20-users-', name, '.csv'))  # Export Samsung Galaxy S20 user data
+  write.csv(s20_tweets_parsed, paste0(dir, 'tweets/s20-tweets-', name, '.csv'))  # Export Samsung Galaxy S20 tweet data
+  write.csv(s20_users_parsed, paste0(dir, 'users/s20-users-', name, '.csv'))  # Export Samsung Galaxy S20 user data
 }
-
