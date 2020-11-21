@@ -3,8 +3,10 @@
 #
 
 # CHANGE LOG ----------------------------------------------------------------------------------------------------------------
-## 2020-11-20 - WON - Move any variables to the top of the file for easy editing. Added individual change log
+## 2020-11-20 - WON - Move any variables to the top of the file for easy editing
+##                  - Added individual change log
 
+## 2020-11-21 - AM  - Environment variables are now loaded from a text file rather than 'Sys.getenvs()'
 
 # IMPORT DEPENDENCIES / SETUP -----------------------------------------------------------------------------------------------
 
@@ -12,8 +14,8 @@ library(rtweet)
 
 #setwd() # Will
 #setwd() # Tania
-#setwd("~/Development/Repositories/MATH513-Group-Work/practical")  # Alex laptop
-#setwd("D:/Development/MATH513-Group-Work/practical")  # Alex desktop
+#setwd("~/Development/Repositories/MATH513-Group-Work/practical")  # Alex
+#setwd("D:/Development/MATH513-Group-Work/practical")              # 
 
 # IMPORT ENVIRONMENT VARIABLES ----------------------------------------------------------------------------------------------
 
@@ -49,22 +51,16 @@ twitter_token <- create_token(
 # ACQUIRE TWEETS ------------------------------------------------------------------------------------------------------------
 
 # Get iPhone 12 Tweets
-iphone12_tweets <- search_30day(q = iphone12_query, n = 12500,
-                                fromDate = iphone12_date_range[1],
-                                toDate = iphone12_date_range[2],
-                                token = twitter_token)
+iphone12_tweets <- search_30day(q = iphone12_query, n = 12500, token = twitter_token,
+                                fromDate = iphone12_date_range[1], toDate = iphone12_date_range[2])
 
 # Get Samsung Galaxy S20 FE Tweets
-s20fe_tweets <- search_30day(q = s20fe_query, n = 12500,
-                             fromDate = s20fe_date_range[1],
-                             toDate = s20fe_date_range[2],
-                             token = twitter_token)
+s20fe_tweets <- search_30day(q = s20fe_query, n = 12500, token = twitter_token,
+                             fromDate = s20fe_date_range[1], toDate = s20fe_date_range[2])
 
 # Get Samsung Galaxy S20 Tweets
-s20_tweets <- search_fullarchive(q = s20_query, n = 5000,
-                                 fromDate = s20_date_range[1],
-                                 toDate = s20_date_range[2],
-                                 token = twitter_token)
+s20_tweets <- search_fullarchive(q = s20_query, n = 5000, token = twitter_token,
+                                 fromDate = s20_date_range[1], toDate = s20_date_range[2])
 
 # Extract user data
 iphone12_users <- user_data(iphone12_tweets)
@@ -98,12 +94,12 @@ s20_users_parsed <- data.frame(lapply(s20_users, list_to_char), stringsAsFactors
 
 # Export data to './data' and './data/backup'
 for (dir in c('./data/', './data/backup/')) {
-  write.csv(iphone12_tweets_parsed, paste0(dir, 'tweets/iphone12-tweets-', name, '.csv'))  # Export iPhone 12 tweet data
-  write.csv(iphone12_users_parsed, paste0(dir, 'users/iphone12-users-', name, '.csv'))  # Export iPhone 12 user data
+  write.csv(iphone12_tweets_parsed, paste0(dir, 'tweets/iphone12-tweets-', name, '.csv'))  # Export iPhone12 data
+  write.csv(iphone12_users_parsed, paste0(dir, 'users/iphone12-users-', name, '.csv'))     #
   
-  write.csv(s20fe_tweets_parsed, paste0(dir, 'tweets/s20fe-tweets-', name, '.csv'))  # Export Samsung Galaxy S20 FE tweet data
-  write.csv(s20fe_users_parsed, paste0(dir, 'users/s20fe-users-', name, '.csv'))  # Export Samsung Galaxy S20 FE user data
+  write.csv(s20fe_tweets_parsed, paste0(dir, 'tweets/s20fe-tweets-', name, '.csv'))        # Export Samsung Galaxy S20 FE data
+  write.csv(s20fe_users_parsed, paste0(dir, 'users/s20fe-users-', name, '.csv'))           #
   
-  write.csv(s20_tweets_parsed, paste0(dir, 'tweets/s20-tweets-', name, '.csv'))  # Export Samsung Galaxy S20 tweet data
-  write.csv(s20_users_parsed, paste0(dir, 'users/s20-users-', name, '.csv'))  # Export Samsung Galaxy S20 user data
+  write.csv(s20_tweets_parsed, paste0(dir, 'tweets/s20-tweets-', name, '.csv'))            # Export Samsung Galaxy S20 data
+  write.csv(s20_users_parsed, paste0(dir, 'users/s20-users-', name, '.csv'))               #
 }
