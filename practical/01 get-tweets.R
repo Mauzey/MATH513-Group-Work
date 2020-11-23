@@ -1,13 +1,16 @@
-# Import and Setup ----------------------------------------------------------------------------------------------------------
+# IMPORT AND SETUP --------------------------------------------------------
 
-# Import dependencies
+
+# IMPORT DEPENDANCIES -----------------------------------------------------
 library(rtweet)
 
-# CHANGES -------------------------------------------------------------------------------------------------------------------
+
+# CHANGES -----------------------------------------------------------------
+
 ## 2020-11-20 - WON - Move any variables to the top of the file for easy editing. Added individual change log
 
 
-# rtweet Setup --------------------------------------------------------------------------------------------------------------
+# RTWEET SETUP ------------------------------------------------------------
 
 # In order to avoid the raw Twitter API keys from appearing on the public Github repository, enter the following command in the 
 # RStudio terminal prior to executing the token initialization below:
@@ -20,7 +23,7 @@ library(rtweet)
 #   TWITTER_SECRET: Your Twitter API private key
 
 
-# VARIABLES  ----------------------------------------------------------------------------------------------------------------
+# VARIABLES  --------------------------------------------------------------
 
 ## Hashtags
 iphone12_query <- '#iPhone12'
@@ -43,7 +46,7 @@ twitter_token <- create_token(
 )
 
 
-# AQUIRE TWEETS ------------------------------------------------------------------------------------------------------------
+# AQUIRE TWEETS -----------------------------------------------------------
 
 # Get iPhone 12 Tweets
 iphone12_tweets <- search_30day(q = iphone12_query, n = 12500,
@@ -69,7 +72,7 @@ s20fe_users <- user_data(s20fe_tweets)
 s20_users <- user_data(s20_tweets)
 
 
-# PARSE LIST COLUMNS --------------------------------------------------------------------------------------------------------
+# PARSE LIST COLUMNS ------------------------------------------------------
 
 # DataFrame columns of class 'list' cannot be exported as a .csv file - The following function fixes this by parsing any 
 # lists into a string containing all list values, separated by commas
@@ -93,7 +96,7 @@ s20fe_users_parsed <- data.frame(lapply(s20fe_users, list_to_char), stringsAsFac
 s20_users_parsed <- data.frame(lapply(s20_users, list_to_char), stringsAsFactors = F)
 
 
-# EXPORT DATA ---------------------------------------------------------------------------------------------------------------
+# EXPORT DATA --------------------------------------------------------------
 
 # Export data to './data' and './data/backup'
 for (dir in c('data/', 'data/backup/')) {

@@ -1,8 +1,11 @@
 ---
-title: "Presentation Title"
+title: "MATH 513 Practical Presentation"
 author: "10570155, 10696253, 10701983"
 date: "10/12/2020"
-output: beamer_presentation
+output: 
+  beamer_presentation: 
+    theme: Boadilla
+    colortheme: beaver
 ---
 
 ```{r setup, include=FALSE}
@@ -11,22 +14,86 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ## Introduction
 
-...
+- Samsung and Apple as competing businesses
+- Flagship phones chosen
+  + S20
+  + iPhone12
+  + provides freshest data
+- S20FE was chosen for comparison
+
+__Tools Utilised__
+
+- RTweet
+- Rstudio
+- Twitter Developer API
+
+```{r, echo=FALSE, out.width="15%", fig.align = "center", fig.show='hold', fig.cap=""}
+
+knitr::include_graphics(
+  c("images/logos/apple_logo.png",
+    "images/logos/samsung_logo.jpg",
+    "images/logos/rstudio_logo.png", 
+    "images/logos/twitter_logo.png")
+)
+```
+
+
+## Research
+
+Examined the key hashtags that were being used for the phones chosen
+
+- Checked Samsung's Twitter feed
+- Checked Tim Cook's Twitter feed
+  + Apple's Twitter contains no tweets
+- Checked for number and age of tweets using a simple Twitter search for several hashtags
+- Avoided people so we can get a wide range of opions/tweets for a more rounded data set
+
+
+## Issues identified
+
+- Unable to filter by region without Google API (paid service)
+- Date refinement on Twitter Premium
+- Possible duplication if we extracted at the same time
+- Extraction capped at 500k tweets using non premium features and past 69 days
+- Extraction limited to 18k per 15mins
+- Foreign languages
+- Different regions with different opinions
+- Tweets are pulled from date to backwards to date to
+
 
 ## Overcoming Issues
+- Our dev suite allowed for:
+  + 15k of full archive extraction
+  + 25k of 30 day extraction
+- Full archive extraction allows for refinement of dates and pull tweets back to 2006
+- Use of premium features avoids some duplication
+- RTweet will continue to try until it gets to the number of tweets requested
+- Filter by 'en' applied to only pull English tweets
+- Region filter didn't work in test so we concluded we would examine this in the analysis stage
+- Pull tweets in a 2 month cycle
+
+
+# Data Extraction
+
+Clean-up required the following:
+
+
+## Stage 3 - Data Visualisation
+
 
 ...
 
-## Data Extraction
+## Stage 3 - Data Visualisation
 
 ...
 
-## Data Visualisation
+## Improvements & Further Study
 
-...
-
-## Improvements Further Study
-
+__Improvements__
+Access to the Google Maps API would 
+  - provide better region filter before pulling the tweets
+  - 
+  
 ...
 
 ## Next Steps
