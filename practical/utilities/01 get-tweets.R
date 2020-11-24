@@ -36,7 +36,7 @@ s20_query <- '#GalaxyS20'
 # Date Ranges for Tweet Searches (format: YYYYMMDDHHMM)
 iphone_12_date_range <-c(NULL, NULL)
 s20fe_date_range <- c(NULL, NULL)
-s20_date_range <- c(NULL, NULL)
+s20_date_range <- c(202002010000, 202002292359)
 
 # Name of the user pulling tweets for use in file names (to avoid overwriting each others' data)
 name <- 'alex'
@@ -60,7 +60,7 @@ s20fe_tweets <- search_30day(q = s20fe_query, n = 12500, token = twitter_token,
 
 # Get Samsung Galaxy S20 Tweets
 s20_tweets <- search_fullarchive(q = s20_query, n = 5000, token = twitter_token,
-                                 fromDate = s20_date_range[1], toDate = s20_date_range[2])
+                                 fromDate = s20_date_range[1], toDate = s20_date_range[2], env_name = 'dev')
 
 # Extract user data
 iphone12_users <- user_data(iphone12_tweets)
