@@ -39,7 +39,7 @@ names(users)   #
 dim(tweets)    # Dataset shape
 dim(users)     #
 
-# * Time-Series Plots to Check Dates ----------------------------------------------------------------------------------------
+# TIME SERIES PLOTS TO CHECK DATES ----------------------------------------------------------------------------------------
 
 # Suggestion: add a column during data cleaning which specifies which product a tweet is referring to, then plot all three 
 # ts_plots on a single graph with different colours (using 'filter()'). We'll also be able to use this column for facet_grids
