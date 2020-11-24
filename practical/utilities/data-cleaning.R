@@ -10,7 +10,7 @@
 library(dplyr)
 library(readr)
 
-#setwd() # Will
+#setwd("C:/Users/willo/SynologyDrive/Documents - Will/Qualifications/!MSc Data Science/!Courses/1 MATH513 Big Data and Social Network/Assessment/MATH513-Group-Work/practical") # Will
 #setwd() # Tania
 #setwd("~/Development/Repositories/MATH513-Group-Work/practical")  # Alex
 #setwd("D:/Development/MATH513-Group-Work/practical")              #
