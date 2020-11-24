@@ -1,0 +1,3 @@
+twitter_app <- "my_bangtan_app"
+twitter_token <- "J2mlmJQdrfOX3Pfrmbb0u9gXD"
+twitter_secret <- "WcGWBIJlIPBPZIsDIzHgf4CfSLybXwdN7svuvRUt3blfB47xyD"
