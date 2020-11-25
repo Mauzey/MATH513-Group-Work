@@ -27,6 +27,13 @@ twitter_app <- strsplit(api_info, ' ')[[1]][3]
 twitter_token <- strsplit(api_info, ' ')[[2]][3]
 twitter_secret <- strsplit(api_info, ' ')[[3]][3]
 
+# Initialise token
+twitter_token <- create_token(
+  app <- twitter_app,
+  consumer_key <- twitter_token,
+  consumer_secret <- twitter_secret
+)
+
 # DEFINE LOCAL VARIABLES ----------------------------------------------------------------------------------------------------
 
 # Names - this prevents us overwriting each others' data
@@ -55,14 +62,6 @@ if (name == 'will') {
   s20fe_date_range <- c(202010270000, 202011022359)
   s20_date_range <- c(202002292359, 202002070000)
 }
-
-# * Twitter API Token -------------------------------------------------------------------------------------------------------
-
-twitter_token <- create_token(
-  app <- twitter_app,
-  consumer_key <- twitter_token,
-  consumer_secret <- twitter_secret
-)
 
 # ACQUIRE TWEETS ------------------------------------------------------------------------------------------------------------
 
