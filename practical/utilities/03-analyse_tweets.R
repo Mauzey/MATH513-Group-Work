@@ -40,29 +40,12 @@ dim(users)
 
 # TIME SERIES PLOTS ---------------------------------------------------------------------------------------------------------
 
-ts_plot(iphone12_tweets, "secs", trim = 1) + 
+ts_plot(tweets, "secs", trim = 1) + 
   theme_minimal() + 
   theme(plot.title = element_text(face = "bold")) +
   labs(x = NULL, y = NULL,
-       title = "Frequency of Twitter statuses for #iPhone12",
-       subtitle = "Twitter status (tweet) counts aggregated using 1-seconds intervals",
-       caption = "Source: Data collected from Twitter's REST API via rtweet"
-  )
+      title = "Frequency of Twitter statuses",
+      subtitle = "Twitter status (tweet) counts aggregated using 1-seconds intervals",
+      caption = "Source: Data collected from Twitter's REST API via rtweet"
 
-ts_plot(s20fe_tweets, "secs", trim = 1) + 
-  theme_minimal() + 
-  theme(plot.title = element_text(face = "bold")) +
-  labs(x = NULL, y = NULL,
-       title = "Frequency of Twitter statuses for #GalaxyS20FE",
-       subtitle = "Twitter status (tweet) counts aggregated using 1-seconds intervals",
-       caption = "Source: Data collected from Twitter's REST API via rtweet"
-  )
-
-ts_plot(s20_tweets, "secs", trim = 1) + 
-  theme_minimal() + 
-  theme(plot.title = element_text(face = "bold")) +
-  labs(x = NULL, y = NULL,
-       title = "Frequency of Twitter statuses for #GalaxyS20",
-       subtitle = "Twitter status (tweet) counts aggregated using 1-seconds intervals",
-       caption = "Source: Data collected from Twitter's REST API via rtweet"
   )
