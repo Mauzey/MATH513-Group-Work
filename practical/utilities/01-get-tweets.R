@@ -52,7 +52,7 @@ if (name == 'will') {
   
 } else if (name == 'alex') {
   iphone12_date_range <- c(202011022359, 202010270000)
-  s20fe_date_range <- c(202011022359, 202010270000)
+  s20fe_date_range <- c(202010270000, 202011022359)
   s20_date_range <- c(202002292359, 202002070000)
 }
 
@@ -121,19 +121,19 @@ s20_users_parsed <- data.frame(lapply(s20_users, list_to_char), stringsAsFactors
 # EXPORT DATA ---------------------------------------------------------------------------------------------------------------
 
 # Export iphone12 data
-for (dir in c('./data/', './data/backup')) {
+for (dir in c('./data/', './data/backup/')) {
   write.csv(iphone12_tweets_parsed, paste0(dir, 'tweets/iphone12-tweets-', name, '.csv'))
   write.csv(iphone12_users_parsed, paste0(dir, 'users/iphone12-users-', name, '.csv'))
 }
 
 # Export s20fe data
-for (dir in c('./data/', './data/backup')) {
+for (dir in c('./data/', './data/backup/')) {
   write.csv(s20fe_tweets_parsed, paste0(dir, 'tweets/s20fe-tweets-', name, '.csv'))
   write.csv(s20fe_users_parsed, paste0(dir, 'users/s20fe-users-', name, '.csv'))
 }
 
 # Export s20 data
-for (dir in c('./data/', './data/backup')) {
+for (dir in c('./data/', './data/backup/')) {
   write.csv(s20_tweets_parsed, paste0(dir, 'tweets/s20-tweets-', name, '.csv'))
   write.csv(s20_users_parsed, paste0(dir, 'users/s20-users-', name, '.csv'))
 }
