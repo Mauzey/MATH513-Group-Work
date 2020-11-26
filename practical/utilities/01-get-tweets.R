@@ -26,12 +26,17 @@ api_info <- readLines(api_file)  # read in the file
 twitter_app <- strsplit(api_info, ' ')[[1]][3]
 twitter_token <- strsplit(api_info, ' ')[[2]][3]
 twitter_secret <- strsplit(api_info, ' ')[[3]][3]
+twitter_access_token <- strsplit(api_info, ' ')[[4]][3]
+twitter_access_secret <- strsplit(api_info, ' ')[[5]][3]
+
 
 # Initialise token
 twitter_token <- create_token(
   app <- twitter_app,
   consumer_key <- twitter_token,
-  consumer_secret <- twitter_secret
+  consumer_secret <- twitter_secret,
+  access_token <- twitter_access_token,
+  access_secret <- twitter_access_secret
 )
 
 # DEFINE LOCAL VARIABLES ----------------------------------------------------------------------------------------------------
@@ -53,9 +58,9 @@ if (name == 'will') {
   s20_date_range <- c(202003062359, 202003060000)  # <-- this date range is just one day
   
 } else if (name == 'tania') {
-  iphone12_date_range <- c(202011162359, 202011100000)
-  s20fe_date_range <- c(202011162359, 202011100000)
-  s20_date_range <- c(202001222359, 202002110000)
+  iphone12_date_range <- c(202011100000, 202011162359)
+  s20fe_date_range <- c(202011100000, 202011162359)
+  s20_date_range <- c(202002120000, 202002122359)
   
 } else if (name == 'alex') {
   iphone12_date_range <- c(202011022359, 202010270000)
@@ -83,14 +88,15 @@ s20fe_tweets <- rbind(s20fe_tweets, s20fe_tweets_recent)  # combine the two data
 
 # * Galaxy S20 --------------------------------------------------------------------------------------------------------------
 
-s20_tweets <- search_30day(q = s20_query, n = 5000, token = twitter_token,
+s20_tweets <- search_fullarchive(q = s20_query, n = 5000, token = twitter_token,
                            fromDate = s20_date_range[1], toDate = s20_date_range[2], env_name = 'dev')
 
 # ACQUIRE USER DATA ---------------------------------------------------------------------------------------------------------
 
 iphone12_users <- users_data(iphone12_tweets)
 s20fe_users <- users_data(s20fe_tweets)
-s20_users <- users_data(s20_tweets)
+s20_users <- users_data(s20_tweets_2)
+
 
 # PARSE LIST COLUMNS --------------------------------------------------------------------------------------------------------
 
