@@ -53,9 +53,9 @@ s20_query <- "#GalaxyS20 (lang:en)"
 
 # Date ranges (format: YYYYMMDDHHMM)
 if (name == 'will') {
-  iphone12_date_range <- c(202011092359, 202011030000)
-  s20fe_date_range <- c(202011092359, 202011030000)
-  s20_date_range <- c(202003062359, 202003060000)  # <-- this date range is just one day
+  iphone12_date_range <- c(202011030000, 202011092359)
+  s20fe_date_range <- c(202011030000, 202011092359)
+  s20_date_range <- c(202003060000, 202003062359)  # <-- this date range is just one day
   
 } else if (name == 'tania') {
   iphone12_date_range <- c(202011100000, 202011162359)
