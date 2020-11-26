@@ -19,7 +19,7 @@ library(rtweet)
 
 # IMPORT ENVIRONMENT VARIABLES ----------------------------------------------------------------------------------------------
 
-env_file <- file('./twitter-keys', open = 'r')  # Define env vars file
+env_file <- file('./twitter-keys.txt', open = 'r')  # Define env vars file
 envs <- readLines(env_file)  # Read in the file
 
 twitter_app <- strsplit(envs, ' ')[[1]][3]
