@@ -1,3 +1,0 @@
-twitter_app = math513-social-media-analysis
-twitter_token = W6jOJLPW81bFvHox3geg79y0w
-twitter_secret = zlYTs04dUBqlIKlWpApXhmtaUeWVd0qESxOEuskHEbqTY3Jm1H
