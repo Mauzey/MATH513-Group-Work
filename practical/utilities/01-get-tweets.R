@@ -133,7 +133,7 @@ for (dir in c("./data/", "./data/backup/")) {
 
 # Export s20fe data
 for (dir in c("./data/", "./data/backup/")) {
-  write.csv(s20fe_tweets_parsed, paste0(dir, "tweets/s20fe-tweets", name, ".csv"))
+  write.csv(s20fe_tweets_parsed, paste0(dir, "tweets/s20fe-tweets-", name, ".csv"))
   write.csv(s20fe_users_parsed, paste0(dir, "users/s20fe-users-", name, ".csv"))
 }
 
