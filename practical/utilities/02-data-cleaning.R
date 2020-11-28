@@ -50,7 +50,6 @@ for (file in list.files(path = "./data/tweets", pattern = '*.csv', full.names = 
   rm(new_data)  # delete the 'new_data' variable from memory to keep the environment tidy
 }
 
-
 # IMPORT & COMBINE USER DATA ------------------------------------------------------------------------------------------------
 
 # Define columns to keep from the raw user data
@@ -73,13 +72,27 @@ for (file in list.files(path = "./data/users", pattern = '*.csv', full.names = T
   rm(new_data)  # delete the 'new_data' variable from memory to keep the environment tidy
 }
 
+# DATA SUMMARY --------------------------------------------------------------------------------------------------------------
+
+# List column names
+names(complete_tweet_data)
+names(complete_user_data)
+
+# Show dataframe shape
+dim(complete_tweet_data)
+dim(complete_user_data)
+
+# Show NA counts for each column
+lapply(complete_tweet_data, function(x) {length(which(is.na(x)))})
+lapply(complete_user_data, function(x) {length(which(is.na(x)))})
+
 # DATA CLEANING -------------------------------------------------------------------------------------------------------------
 
 # Remove duplicate entries
 complete_tweet_data <- distinct(complete_tweet_data, status_id, .keep_all = T)
 complete_user_data <- distinct(complete_user_data, user_id, .keep_all = T)
 
-# Convert blank location values to 'NA'
+# Handle NA values
 # ...
 
 # EXPORT CLEANED DATA -------------------------------------------------------------------------------------------------------
@@ -87,21 +100,4 @@ complete_user_data <- distinct(complete_user_data, user_id, .keep_all = T)
 for (dir in c("./data/", "./data/backup/")) {
   write.csv(complete_tweet_data, paste0(dir, "cleaned-tweets.csv"))
   write.csv(complete_user_data, paste0(dir, "cleaned-users.csv"))
-}
-
-# DATA SUMMARY --------------------------------------------------------------------------------------------------------------
-
-# List column names
-names(tweets)
-names(users)
-
-# Show dataframe shape
-dim(tweets)
-dim(users)
-
-# EXPORT CLEANED DATA -------------------------------------------------------------------------------------------------------
-
-for (dir in c('./data/', './data/backup/')) {
-  write.csv(tweets, paste0(dir, 'cleaned-tweets.csv'))
-  write.csv(users, paste0(dir, 'cleaned-users.csv'))
 }
