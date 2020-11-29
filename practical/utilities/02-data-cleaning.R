@@ -95,6 +95,15 @@ complete_user_data <- distinct(complete_user_data, user_id, .keep_all = T)
 # Handle NA values
 # ...
 
+
+# Remove identified sources as bots
+
+  # Show list of all sources from data
+
+
+  # Remove tweets with source in collection
+    sources_to_remove = c('Bot libre!', 'ContestGuy', 'Cubi.so', 'Julia Tech News Bot')
+
 # EXPORT CLEANED DATA -------------------------------------------------------------------------------------------------------
 
 for (dir in c("./data/", "./data/backup/")) {
