@@ -29,8 +29,7 @@ twitter_secret <- strsplit(api_info, ' ')[[3]][3]
 twitter_access_token <- strsplit(api_info, ' ')[[4]][3]
 twitter_access_secret <- strsplit(api_info, ' ')[[5]][3]
 
-
-# Initialise token
+# Initialize token
 twitter_token <- create_token(
   app <- twitter_app,
   consumer_key <- twitter_token,
@@ -72,31 +71,30 @@ if (name == 'will') {
 
 # * iPhone 12 ---------------------------------------------------------------------------------------------------------------
 
-iphone12_tweets2 <- search_30day(q = iphone12_query, n = 12500, token = twitter_token,
-                               fromDate = iphone12_date_range[1], toDate = iphone12_date_range[2], env_name = 'dev')
+iphone12_tweets <- search_30day(q = iphone12_query, n = 12500, token = twitter_token,
+                                fromDate = iphone12_date_range[1], toDate = iphone12_date_range[2], env_name = 'dev')
 iphone12_tweets_recent <- search_tweets(q = iphone12_query, n = 18000, token = twitter_token, retryonratelimit = T)
 
 iphone12_tweets <- rbind(iphone12_tweets, iphone12_tweets2)  # combine the two datasets
 
 # * Galaxy S20 FE -----------------------------------------------------------------------------------------------------------
 
-s20fe_tweets1 <- search_30day(q = s20fe_query, n = 12500, token = twitter_token,
-                            fromDate = s20fe_date_range[1], toDate = s20fe_date_range[2], env_name = 'dev')
+s20fe_tweets <- search_30day(q = s20fe_query, n = 12500, token = twitter_token,
+                             fromDate = s20fe_date_range[1], toDate = s20fe_date_range[2], env_name = 'dev')
 s20fe_tweets_recent <- search_tweets(q = s20fe_query, n = 18000, token = twitter_token, retryonratelimit = T)
 
-s20fe_tweets <- rbind(s20fe_tweets1, s20fe_tweets_recent)  # combine the two datasets
+s20fe_tweets <- rbind(s20fe_tweets, s20fe_tweets_recent)  # combine the two datasets
 
 # * Galaxy S20 --------------------------------------------------------------------------------------------------------------
 
-s20_tweets1 <- search_fullarchive(q = s20_query, n = 5000, token = twitter_token,
-                           fromDate = s20_date_range[1], toDate = s20_date_range[2], env_name = 'dev')
+s20_tweets <- search_fullarchive(q = s20_query, n = 5000, token = twitter_token,
+                                 fromDate = s20_date_range[1], toDate = s20_date_range[2], env_name = 'dev')
 
 # ACQUIRE USER DATA ---------------------------------------------------------------------------------------------------------
 
 iphone12_users <- users_data(iphone12_tweets)
 s20fe_users <- users_data(s20fe_tweets)
 s20_users <- users_data(s20_tweets)
-
 
 # PARSE LIST COLUMNS --------------------------------------------------------------------------------------------------------
 
