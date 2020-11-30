@@ -151,12 +151,13 @@ data_with_bs <- complete_tweet_noNa %>%
                     regex(".win|win.|competition|i want|give me", ignore_case = TRUE)))
 
 #removing the BS tweets
-
-#TANIA: I DIDN'T CLEAN THE USER DATA YET, CAUSE OBVIOUSLY SOME USERS WILL BE REMOVED
-#AND SO I DIDN'T SAVE THE DATA TO NEW CSV FILES
-#the following code wasn't performed yet
 complete_tweet_noNa <- complete_tweet_noNa %>% 
   anti_join(data_with_bs)
+
+#TANIA: I DIDN'T CLEAN THE USER DATA YET, CAUSE OBVIOUSLY SOME USERS WILL BE REMOVED
+#AND SO I DIDN'T SAVE THE DATA TO NEW .CSV FILES
+#the following code wasn't performed yet
+
 # EXPORT CLEANED DATA -------------------------------------------------------------------------------------------------------
 
 for (dir in c("./data/", "./data/backup/")) {
