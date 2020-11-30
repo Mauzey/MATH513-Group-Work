@@ -93,17 +93,70 @@ complete_tweet_data <- distinct(complete_tweet_data, status_id, .keep_all = T)
 complete_user_data <- distinct(complete_user_data, user_id, .keep_all = T)
 
 # Handle NA values
-# ...
 
+#***CLEANING TWEETS***
 
+# Removing column 'media_type' since it got all NAs
+complete_tweet_noNa <- complete_tweet_data %>% select(-media_type)
+
+#after the next magic line you'll get the data cut in 3 - only 25k obs. left
+#removing observations where source value is NA
+#complete_tweet_noNa <- complete_tweet_noNa %>% na.omit(source)
+
+#Show all the sources
+complete_tweet_noNa %>% group_by(source) %>% summarise(n = n()) %>% arrange(desc(n))
+
+#show the number of tweets that were posted using sources that have 'bot' in them
+# complete_tweet_noNa %>%
+#   filter(str_detect(source, regex(".bot.|.bot", ignore_case = TRUE))) %>%
+#   group_by(source) %>%
+#   summarise(n = n()) %>%
+#   arrange(desc(n))
+
+#filter the sources which have 'bot' in their name and save in the list
+# botSource <- complete_tweet_noNa %>% 
+#   filter(str_detect(source, regex(".bot.|.bot|bot.", ignore_case = TRUE))) %>% 
+#   group_by(source) %>% 
+#   summarise(n = n()) %>% 
+#   select(source)
 # Remove identified sources as bots
 
-  # Show list of all sources from data
+# Show list of all sources from data
+
+data_with_bot_sources <- complete_tweet_noNa %>%
+  filter(str_detect(source, regex(".bot.|.bot", ignore_case = TRUE)))
+
+# Remove tweets with source in collection
+sources_to_remove <- c('Bot libre!','ContestGuy', 'Cubi.so') #sources that Will wrote
+#sources_to_remove <- c(sources_to_remove, botSource$source)
 
 
-  # Remove tweets with source in collection
-    sources_to_remove = c('Bot libre!', 'ContestGuy', 'Cubi.so', 'Julia Tech News Bot')
+#searching for all the tweets with sources from Will's list
+data_with_bot_sources_2 <- complete_tweet_noNa %>% 
+  filter(source %in% sources_to_remove)
 
+#adding the tweets to already existing tibble with tweets posted through bot-like sources
+data_with_bot_sources <- rbind(data_with_bot_sources, data_with_bot_sources_2)
+
+
+#removing the tweets posted through bot-like sources with 'anti_join'
+complete_tweet_noNa <- complete_tweet_noNa %>%
+  anti_join(data_with_bot_sources)
+
+#searching if we've filtered all the 'win' 'competition' types of tweets
+#and adding them to a tibble in order to disjoint them later
+
+data_with_bs <- complete_tweet_noNa %>% 
+  filter(str_detect(text, 
+                    regex(".win|win.|competition|i want|give me", ignore_case = TRUE)))
+
+#removing the BS tweets
+
+#TANIA: I DIDN'T CLEAN THE USER DATA YET, CAUSE OBVIOUSLY SOME USERS WILL BE REMOVED
+#AND SO I DIDN'T SAVE THE DATA TO NEW CSV FILES
+#the following code wasn't performed yet
+complete_tweet_noNa <- complete_tweet_noNa %>% 
+  anti_join(data_with_bs)
 # EXPORT CLEANED DATA -------------------------------------------------------------------------------------------------------
 
 for (dir in c("./data/", "./data/backup/")) {
