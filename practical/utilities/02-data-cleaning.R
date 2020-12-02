@@ -6,6 +6,7 @@
 
 library(readr)
 library(dplyr)
+library(stringr)
 
 # SET WORKING DIRECTORY -----------------------------------------------------------------------------------------------------
 
@@ -97,70 +98,36 @@ complete_user_data <- distinct(complete_user_data, user_id, .keep_all = T)
 #***CLEANING TWEETS***
 
 # Removing column 'media_type' since it got all NAs
-complete_tweet_noNa <- complete_tweet_data %>% select(-media_type)
+tweetDataNoNA <- complete_tweet_data %>% select(-media_type)
 
-#after the next magic line you'll get the data cut in 3 - only 25k obs. left
-#removing observations where source value is NA
-#complete_tweet_noNa <- complete_tweet_noNa %>% na.omit(source)
+#creating a new list of sources that have 'bot' in them
+botSources <- tweetDataNoNA %>%
+  filter(str_detect(source, regex("bot", ignore_case = TRUE))) %>%
+  distinct(source) %>% .$source
+  
 
-#Show all the sources
-complete_tweet_noNa %>% group_by(source) %>% summarise(n = n()) %>% arrange(desc(n))
+#Will's sources to remove
+sourcesToRemove <- c('ContestGuy', 'Cubi.so', 'zigmeme')
 
-#show the number of tweets that were posted using sources that have 'bot' in them
-# complete_tweet_noNa %>%
-#   filter(str_detect(source, regex(".bot.|.bot", ignore_case = TRUE))) %>%
-#   group_by(source) %>%
-#   summarise(n = n()) %>%
-#   arrange(desc(n))
+#combining a list of bot sources
+botSources <- c(botSources, sourcesToRemove)
 
-#filter the sources which have 'bot' in their name and save in the list
-# botSource <- complete_tweet_noNa %>% 
-#   filter(str_detect(source, regex(".bot.|.bot|bot.", ignore_case = TRUE))) %>% 
-#   group_by(source) %>% 
-#   summarise(n = n()) %>% 
-#   select(source)
-# Remove identified sources as bots
+#adding a new column which will take True or False 
+#depending on whether a source is a bot (NA source gives False value):
 
-# Show list of all sources from data
+tweetDataNoNA <- tweetDataNoNA %>% mutate(is_bot = source %in% botSources)
 
-data_with_bot_sources <- complete_tweet_noNa %>%
-  filter(str_detect(source, regex(".bot.|.bot", ignore_case = TRUE)))
+#adding a new column which will store 'True' if an entry is spam or 'False' otherwise
+tweetDataNoNA <- tweetDataNoNA %>% 
+  mutate(is_spam = str_detect(text, regex("giveaway|give me", ignore_case = TRUE)))
 
-# Remove tweets with source in collection
-sources_to_remove <- c('Bot libre!','ContestGuy', 'Cubi.so') #sources that Will wrote
-#sources_to_remove <- c(sources_to_remove, botSource$source)
-
-
-#searching for all the tweets with sources from Will's list
-data_with_bot_sources_2 <- complete_tweet_noNa %>% 
-  filter(source %in% sources_to_remove)
-
-#adding the tweets to already existing tibble with tweets posted through bot-like sources
-data_with_bot_sources <- rbind(data_with_bot_sources, data_with_bot_sources_2)
-
-
-#removing the tweets posted through bot-like sources with 'anti_join'
-complete_tweet_noNa <- complete_tweet_noNa %>%
-  anti_join(data_with_bot_sources)
-
-#searching if we've filtered all the 'win' 'competition' types of tweets
-#and adding them to a tibble in order to disjoint them later
-
-data_with_bs <- complete_tweet_noNa %>% 
-  filter(str_detect(text, 
-                    regex(".win|win.|competition|i want|give me", ignore_case = TRUE)))
-
-#removing the BS tweets
-complete_tweet_noNa <- complete_tweet_noNa %>% 
-  anti_join(data_with_bs)
-
-#TANIA: I DIDN'T CLEAN THE USER DATA YET, CAUSE OBVIOUSLY SOME USERS WILL BE REMOVED
-#AND SO I DIDN'T SAVE THE DATA TO NEW .CSV FILES
-#the following code wasn't performed yet
+#adding a new column to user data if they're spammers  (True) or not (False)
+complete_user_data <- complete_user_data %>% 
+  mutate(is_spammer = user_id %in% spammersID)
 
 # EXPORT CLEANED DATA -------------------------------------------------------------------------------------------------------
 
 for (dir in c("./data/", "./data/backup/")) {
-  write.csv(complete_tweet_data, paste0(dir, "cleaned-tweets.csv"))
+  write.csv(tweetDataNoNA, paste0(dir, "cleaned-tweets.csv"))
   write.csv(complete_user_data, paste0(dir, "cleaned-users.csv"))
 }
