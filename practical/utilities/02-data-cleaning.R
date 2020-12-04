@@ -119,7 +119,11 @@ tweetDataNoNA <- tweetDataNoNA %>% mutate(is_bot = source %in% botSources)
 
 #adding a new column which will store 'True' if an entry is spam or 'False' otherwise
 tweetDataNoNA <- tweetDataNoNA %>% 
-  mutate(is_spam = str_detect(text, regex("giveaway|give me", ignore_case = TRUE)))
+  mutate(is_spam = str_detect(text, 
+                              regex("giveaway|give me|win|competition", 
+                                    ignore_case = TRUE)
+                              )
+         )
 
 #adding a new column to user data if they're spammers  (True) or not (False)
 complete_user_data <- complete_user_data %>% 
