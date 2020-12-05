@@ -93,9 +93,14 @@ lapply(complete_user_data, function(x) {length(which(is.na(x)))})
 complete_tweet_data <- distinct(complete_tweet_data, status_id, .keep_all = T)
 complete_user_data <- distinct(complete_user_data, user_id, .keep_all = T)
 
-# Handle NA values
-
-#***CLEANING TWEETS***
+# Extract hashtags from the tweet text and add to 'hashtags' column
+extract_hashtags <- function(row) {
+  hashtags <- str_extract_all(row['text'], '#\\S+')
+  unlist_hashtags <- unlist(hashtags, recursive = T, use.names = T)
+  
+  return(paste(unlist_hashtags, collapse = ', '))
+}
+complete_tweet_data$hashtags <- apply(complete_tweet_data, 1, extract_hashtags)
 
 # Removing column 'media_type' since it got all NAs
 tweetDataNoNA <- complete_tweet_data %>% select(-media_type)
