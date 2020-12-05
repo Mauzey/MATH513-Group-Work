@@ -231,21 +231,21 @@ S20FE_bing_count %>% group_by(sentiment) %>%
 tweets$sentiment_score <- 10  # PLACEHOLDER VALUE
 
 # Extract relevant information
-feature_sentiment <- select(tweets, product, mentioned_features, sentiment_score)
+feature_sentiment_data <- select(tweets, product, mentioned_features, sentiment_score)
 
 # Separate 'mentioned_features' column
-feature_sentiment <- separate(feature_sentiment, col = mentioned_features, into = paste0('feature', 1:5), sep = ', ')
+feature_sentiment_data <- separate(feature_sentiment_data, col = mentioned_features, into = paste0('feature', 1:5), sep = ', ')
 
 # Pivot feature columns
-feature_sentiment <- pivot_longer(feature_sentiment, cols = names(feature_sentiment)[which(grepl('feature', names(feature_sentiment)))])
+feature_sentiment <- pivot_longer(feature_sentiment_data,
+                                  cols = names(feature_sentiment_data)[which(grepl('feature', names(feature_sentiment_data)))])
 
 # Remove NAs and whitespace
-feature_sentiment <- feature_sentiment %>%
-  mutate(value = trimws(value)) %>%
-  filter(!is.na(value))
+feature_sentiment_data <- feature_sentiment_data %>%
+  mutate(value = trimws(value)) %>% filter(!is.na(value))
 
 # Plot feature sentiment
-ggplot(feature_sentiment, aes(x = product, y = sentiment_score)) +
+ggplot(feature_sentiment_data, aes(x = product, y = sentiment_score)) +
   geom_point() +
   facet_wrap(. ~ value)
 
