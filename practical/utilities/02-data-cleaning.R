@@ -147,6 +147,11 @@ complete_tweet_data$mentioned_features <- apply(complete_tweet_data, 1, extract_
 
 complete_tweet_data$mentioned_features[complete_tweet_data$mentioned_features == ''] <- NA  # Mark empty cells as NA
 
+
+# Move the extracted features into their own separate columns
+
+
+
 # EXPORT CLEANED DATA -------------------------------------------------------------------------------------------------------
 
 for (dir in c("./data/", "./data/backup/")) {
