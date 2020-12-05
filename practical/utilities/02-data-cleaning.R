@@ -7,6 +7,9 @@
 library(readr)
 library(dplyr)
 library(stringr)
+library(mgsub)
+
+options(scipen = 999)  # Disable scientific notation (for tweet and user ids)
 
 # SET WORKING DIRECTORY -----------------------------------------------------------------------------------------------------
 
@@ -25,7 +28,7 @@ library(stringr)
 # Define columns to keep from the raw tweet data
 # The raw tweet data is not going to be overwritten - if you think more columns could be useful, add them to this vector
 tweet_cols_to_keep = c('user_id', 'status_id', 'created_at', 'text', 'source', 'is_retweet', 'favorite_count', 'retweet_count',
-                       'quote_count', 'reply_count', 'hashtags', 'media_type', 'lang')
+                       'quote_count', 'reply_count', 'hashtags', 'lang')
 
 # Iterate over each file in the 'tweets' directory
 for (file in list.files(path = "./data/tweets", pattern = '*.csv', full.names = T)) {
@@ -47,9 +50,8 @@ for (file in list.files(path = "./data/tweets", pattern = '*.csv', full.names = 
   } else {
     complete_tweet_data <- rbind(complete_tweet_data, new_data)
   }
-  
-  rm(new_data)  # delete the 'new_data' variable from memory to keep the environment tidy
 }
+rm(new_data, file, tweet_cols_to_keep)  # Remove vars from memory to keep the environment tidy
 
 # IMPORT & COMBINE USER DATA ------------------------------------------------------------------------------------------------
 
@@ -69,9 +71,8 @@ for (file in list.files(path = "./data/users", pattern = '*.csv', full.names = T
   } else {
     complete_user_data <- rbind(complete_user_data, new_data)
   }
-  
-  rm(new_data)  # delete the 'new_data' variable from memory to keep the environment tidy
 }
+rm(new_data, file, user_cols_to_keep)  # Remove vars from memory to keep the environment tidy
 
 # DATA SUMMARY --------------------------------------------------------------------------------------------------------------
 
@@ -89,11 +90,13 @@ lapply(complete_user_data, function(x) {length(which(is.na(x)))})
 
 # DATA CLEANING -------------------------------------------------------------------------------------------------------------
 
-# Remove duplicate entries
+# Remove duplicate observations
 complete_tweet_data <- distinct(complete_tweet_data, status_id, .keep_all = T)
 complete_user_data <- distinct(complete_user_data, user_id, .keep_all = T)
 
-# Extract hashtags from the tweet text and add to 'hashtags' column
+# FEATURE ENGINEERING -------------------------------------------------------------------------------------------------------
+
+# Extract hashtags from the tweet text, and add to the 'hashtags' column
 extract_hashtags <- function(row) {
   hashtags <- str_extract_all(row['text'], '#\\S+')
   unlist_hashtags <- unlist(hashtags, recursive = T, use.names = T)
@@ -102,41 +105,51 @@ extract_hashtags <- function(row) {
 }
 complete_tweet_data$hashtags <- apply(complete_tweet_data, 1, extract_hashtags)
 
-# Removing column 'media_type' since it got all NAs
-tweetDataNoNA <- complete_tweet_data %>% select(-media_type)
+rm(extract_hashtags)  # Remove vars from memory to keep the environment tidy
 
-#creating a new list of sources that have 'bot' in them
-botSources <- tweetDataNoNA %>%
-  filter(str_detect(source, regex("bot", ignore_case = TRUE))) %>%
-  distinct(source) %>% .$source
+
+# Mark potential spam tweets based on a selection of keywords found in the tweet text
+spam_keywords <- 'giveaway|contest|competition|giving away|register'
+
+identify_potential_spam <- function(row) {
+  grepl(regex(spam_keywords, ignore_case = T), row['text'])
+}
+complete_tweet_data$potential_spam <- apply(complete_tweet_data, 1, identify_potential_spam)
+
+rm(spam_keywords, identify_potential_spam)  # Remove vars from memory to keep the environment tidy
+
+
+# Mark potential bots based on the source used to post tweets
+bot_keywords <- 'ContestGuy|Cubi.so|zigmeme|bot|cloud'
+bot_tweets <- complete_tweet_data %>%
+  filter(grepl(regex(bot_keywords, ignore_case = T), source))  # Compile tweets containing bot keywords
+
+# If a user_id appears in the 'bot_tweets' dataframe, mark that user as a potential bot
+complete_user_data$potential_bot <- ifelse(complete_user_data$user_id %in% bot_tweets$user_id, T, F)
+
+rm(bot_keywords, bot_tweets)  # Remove vars from memory to keep the environment tidy
+
+# Remove links, hashtags, and user mentions from tweet text
+complete_tweet_data$stripped_text <- gsub(" ?(f|ht)tp(s?)://(.*)[.][a-z]+", "", complete_tweet_data$text)
+complete_tweet_data$stripped_text <- gsub("#[A-Za-z0-9]+|@[A-Za-z0-9]+|\\w+(?:\\.\\w+)*/\\S+",
+                                          "", complete_tweet_data$stripped_text)
+
+
+# Extract mentioned product features for further analysis
+product_features <- 'display|battery|camera|price|5g'
+extract_mentioned_product_features <- function(row) {
+  mentioned_features <- str_extract_all(row['stripped_text'], regex(product_features, ignore_case = T))
+  unlist_mentioned_features <- unique(unlist(mentioned_features, recursive = T, use.names = T))
   
+  return(tolower(paste(unlist_mentioned_features, collapse = ', ')))
+}
+complete_tweet_data$mentioned_features <- apply(complete_tweet_data, 1, extract_mentioned_product_features)
 
-#Will's sources to remove
-sourcesToRemove <- c('ContestGuy', 'Cubi.so', 'zigmeme')
-
-#combining a list of bot sources
-botSources <- c(botSources, sourcesToRemove)
-
-#adding a new column which will take True or False 
-#depending on whether a source is a bot (NA source gives False value):
-
-tweetDataNoNA <- tweetDataNoNA %>% mutate(is_bot = source %in% botSources)
-
-#adding a new column which will store 'True' if an entry is spam or 'False' otherwise
-tweetDataNoNA <- tweetDataNoNA %>% 
-  mutate(is_spam = str_detect(text, 
-                              regex("giveaway|give me|win|competition", 
-                                    ignore_case = TRUE)
-                              )
-         )
-
-#adding a new column to user data if they're spammers  (True) or not (False)
-complete_user_data <- complete_user_data %>% 
-  mutate(is_spammer = user_id %in% spammersID)
+complete_tweet_data$mentioned_features[complete_tweet_data$mentioned_features == ''] <- NA  # Mark empty cells as NA
 
 # EXPORT CLEANED DATA -------------------------------------------------------------------------------------------------------
 
 for (dir in c("./data/", "./data/backup/")) {
-  write.csv(tweetDataNoNA, paste0(dir, "cleaned-tweets.csv"))
+  write.csv(complete_tweet_data, paste0(dir, "cleaned-tweets.csv"))
   write.csv(complete_user_data, paste0(dir, "cleaned-users.csv"))
 }
