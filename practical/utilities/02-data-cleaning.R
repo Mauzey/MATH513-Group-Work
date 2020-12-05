@@ -144,13 +144,9 @@ extract_mentioned_product_features <- function(row) {
   return(tolower(paste(unlist_mentioned_features, collapse = ', ')))
 }
 complete_tweet_data$mentioned_features <- apply(complete_tweet_data, 1, extract_mentioned_product_features)
+rm(extract_mentioned_product_features)  # Remove vars from memory to keep the environment tidy
 
 complete_tweet_data$mentioned_features[complete_tweet_data$mentioned_features == ''] <- NA  # Mark empty cells as NA
-
-
-# Move the extracted features into their own separate columns
-
-
 
 # EXPORT CLEANED DATA -------------------------------------------------------------------------------------------------------
 
