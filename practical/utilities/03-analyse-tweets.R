@@ -225,7 +225,23 @@ S20FE_bing_count %>% group_by(sentiment) %>%
           axis.title = element_text(size = 11, colour = 'black'),
           title = element_text(size = 12))
 
+# SENTIMENT ANALYSIS - Product Features -------------------------------------------------------------------------------------
 
+# TODO:
+#   - Filter data for the three products by 5 features (tweets$mentioned_features)
+#       - Display
+#       - Battery
+#       - Camera
+#       - Price
+#       - 5G
+#   - Perform sentiment analysis on these features - CANCELLED
+#   - For these features, facet grid sentiment for the Galaxy S20 FE and iPhone12
+#   - Draw conclusions from these plots
+
+
+
+# ---------------------------------------------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------------------------------------------
 
 # what do we expect to see from the sentiment analysis?
 # 
