@@ -15,6 +15,7 @@ library(rtweet)
 library(stringr)
 library(tidytext)
 library(ggthemes)
+library(sentimentr) #for 'SENTIMENT ANALYSIS - Product Features' section
 
 # SET WORKING DIRECTORY -----------------------------------------------------------------------------------------------------
 
@@ -174,9 +175,9 @@ iPhone12_sentiment <- iPhone12_words %>%
 
 head(iPhone12_sentiment)
 #
-# Add a variable to indicate the topic
+# Add a variable to indicate the phone model
 
-iPhone12_sentiment <- iPhone12_sentiment %>% mutate(topic = "iPhone12")
+iPhone12_sentiment <- iPhone12_sentiment %>% mutate(phone_model = "iPhone12")
 
 # Tabulate the scores
 iPhone12_sentiment %>% count(score)
@@ -254,7 +255,7 @@ head(S20_sentiment)
 #
 # Add a variable to indicate the topic
 
-S20_sentiment <- S20_sentiment %>% mutate(topic = "S20")
+S20_sentiment <- S20_sentiment %>% mutate(phone_model = "S20")
 
 # Tabulate the scores
 S20_sentiment %>% count(score)
@@ -334,7 +335,7 @@ head(S20FE_sentiment)
 #
 # Add a variable to indicate the topic
 
-S20FE_sentiment <- S20FE_sentiment %>% mutate(topic = "S20FE")
+S20FE_sentiment <- S20FE_sentiment %>% mutate(phone_model = "S20FE")
 
 # Tabulate the scores
 S20FE_sentiment %>% count(score)
@@ -371,14 +372,14 @@ S20FE_sentiment %>%
 iPhone12_S20FE_sentiment <-rbind(S20FE_sentiment, iPhone12_sentiment)
 
 sentiment_mean_iPhone12_S20FE <- iPhone12_S20FE_sentiment %>% 
-  group_by(topic) %>% 
+  group_by(phone_model) %>% 
   summarize(mean_score = mean(score)) 
 
 
 # Perform the plot
 iPhone12_S20FE_sentiment %>%
   ggplot(aes(x = score, # Sentiment score on x-axis
-           fill = topic)) + # Fill bars with a colour according to the topic
+           fill = phone_model)) + # Fill bars with a colour according to the topic
   geom_bar() + # geom_bar will do the tabulation for you :-)
   geom_vline(aes(xintercept = mean_score), 
              data = sentiment_mean_iPhone12_S20FE) +
@@ -392,24 +393,54 @@ iPhone12_S20FE_sentiment %>%
   scale_x_continuous(breaks = -15:15, 
                      minor_breaks = NULL) + # Show integers; set this to a suitably large range
   scale_fill_manual(values = c("iPhone12" = "lightgoldenrod3", 
-                               "S20FE" = "turquoise")) + # Specify your own colours
+                               "S20FE" = "mediumpurple1")) + # Specify your own colours
   labs(x = "Sentiment Score" , 
        y = "Number of tweets", 
-       fill = "Topic") +
-  facet_grid(topic ~ .) + 
+       fill = "Phone Model") +
+  facet_grid(phone_model ~ .) + 
   theme_minimal() +
   theme(legend.position = "bottom") # Legend on the bottom
 
 
-
+#CLEANING AFTER OURSELVES
+rm(iPhone12_bing_count, iPhone12_sentiment, 
+   iphone12_stopWords, iPhone12_S20FE_sentiment,
+            S20_bing_count, S20_sentiment, 
+            S20FE_sentiment, S20FE_bing_count)
 
 # SENTIMENT ANALYSIS - Product Features -------------------------------------------------------------------------------------
 
-# Compute overall sentiment score for each tweet
-tweets$sentiment_score <- 10  # PLACEHOLDER VALUE
+#For features analysis we'll be using a different package called "sentimentr"
+
+#Find more info about it here:
+#https://towardsdatascience.com/sentiment-analysis-in-r-good-vs-not-good-handling-negations-2404ec9ff2ae
+
+# install.packages('sentimentr')
+# #or
+# library(devtools)
+# install_github('trinker/sentimentr')
+
+# “sentimentr attempts to take into account valence shifters 
+# (i.e., negators, amplifiers (intensifiers), de-amplifiers (downtoners), 
+# and adversative conjunctions) while maintaining speed. Simply put, 
+# sentimentr is an augmented dictionary lookup.”
+
+
+# Compute overall sentiment score for each tweet using sentimentr
+
+tweets_features <- tweets %>% filter(potential_spam != T)
+
+for (i in dim(tweets_features)[1]){
+  tweets_features$sentiment_score[i] <- tweets_features$text[i] %>% 
+  (function(t) sum(sentiment(t)$sentiment))
+}
+
+# I want to do it with sapply but it's picky :(
+#tweets$sentiment_score <- sapply(tweets$text, function(t) sum(sentiment(t)$sentiment))
+
 
 # Extract relevant information
-feature_sentiment_data <- select(tweets, product, mentioned_features, sentiment_score)
+feature_sentiment_data <- select(tweets_features, product, mentioned_features, sentiment_score)
 
 # Separate 'mentioned_features' column
 feature_sentiment_data <- separate(feature_sentiment_data, col = mentioned_features, into = paste0('feature', 1:5), sep = ', ')
@@ -419,15 +450,111 @@ feature_sentiment <- pivot_longer(feature_sentiment_data,
                                   cols = names(feature_sentiment_data)[which(grepl('feature', names(feature_sentiment_data)))])
 
 # Remove NAs and whitespace
-feature_sentiment_data <- feature_sentiment_data %>%
+feature_sentiment <- feature_sentiment %>%
   mutate(value = trimws(value)) %>% filter(!is.na(value))
 
-# Plot feature sentiment
-ggplot(feature_sentiment_data, aes(x = product, y = sentiment_score)) +
-  geom_point() +
-  facet_wrap(. ~ value)
+feature_sentiment_stat <- feature_sentiment %>% 
+  group_by(product, value) %>% 
+  summarise(mean_sentiment = mean(sentiment_score),
+            sum_sentiment = sum(sentiment_score))
 
-# TODO:
+#AVERAGE SENTIMENT
+
+# Plot feature avg sentiment - point
+feature_sentiment_stat %>% 
+  group_by(product) %>%
+  ggplot(aes(x = product, y = mean_sentiment, color = product)) +
+  geom_point(size = 5) +
+  facet_wrap(. ~ value) +
+  theme_bw() +
+  scale_color_manual(values = c("iPhone12" = "lightgoldenrod3", 
+                               "Galaxy S20" = "turquoise",
+                               "Galaxy S20 FE" = "mediumpurple1"),) +
+  scale_y_continuous(name = "Average Sentiment Score", limits = c(0,10)) +
+  theme(axis.title.x=element_blank(), 
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank()) +
+  labs(title = "Average Sentiment Score of 5 Features for Each of the Phone Models",
+       color = "Phone Model")
+
+
+# Plot feature avg sentiment - bars
+feature_sentiment_stat %>% 
+  group_by(product) %>%
+  ggplot(aes(x = product, y = mean_sentiment, fill = product)) +
+  geom_col() +
+  facet_wrap(. ~ value) +
+  theme_bw() +
+  scale_fill_manual(values = c("iPhone12" = "lightgoldenrod3", 
+                                "Galaxy S20" = "turquoise",
+                                "Galaxy S20 FE" = "mediumpurple1"),) +
+  scale_y_continuous(name = "Average Sentiment Score", limits = c(0,10)) +
+  theme(axis.title.x=element_blank(), 
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank()) +
+  labs(title = "Average Sentiment Score of 5 Features for Each of the Phone Models",
+       color = "Phone Model")
+
+
+#SUM SENTIMENT
+
+# Plot feature avg sentiment - point
+feature_sentiment_stat %>% 
+  group_by(product) %>%
+  ggplot(aes(x = product, y = sum_sentiment, color = product)) +
+  geom_point(size = 5) +
+  facet_wrap(. ~ value) +
+  theme_bw() +
+  scale_color_manual(values = c("iPhone12" = "lightgoldenrod3", 
+                                "Galaxy S20" = "turquoise",
+                                "Galaxy S20 FE" = "mediumpurple1"),) +
+  scale_y_continuous(name = "Sentiment Score") +
+  theme(axis.title.x=element_blank(), 
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank()) +
+  labs(title = "Sentiment Score of 5 Features for Each of the Phone Models",
+       color = "Phone Model")
+
+
+# Plot feature avg sentiment - bars
+feature_sentiment_stat %>% 
+  group_by(product) %>%
+  ggplot(aes(x = product, y = sum_sentiment, fill = product)) +
+  geom_col() +
+  facet_wrap(. ~ value) +
+  theme_bw() +
+  scale_fill_manual(values = c("iPhone12" = "lightgoldenrod3", 
+                               "Galaxy S20" = "turquoise",
+                               "Galaxy S20 FE" = "mediumpurple1"),) +
+  scale_y_continuous(name = "Sentiment Score") +
+  theme(axis.title.x=element_blank(), 
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank()) +
+  labs(title = "Sentiment Score of 5 Features for Each of the Phone Models",
+       color = "Phone Model")
+
+
+#BOXPLOT
+feature_sentiment %>% 
+  group_by(product) %>%
+  ggplot(aes(x = product, y = sentiment_score, color = product)) +
+  geom_boxplot() +
+  facet_wrap(. ~ value) +
+  theme_bw() +
+  scale_color_manual(values = c("iPhone12" = "lightgoldenrod3", 
+                               "Galaxy S20" = "turquoise",
+                               "Galaxy S20 FE" = "mediumpurple1"),) +
+  scale_y_continuous(name = "Sentiment Score") +
+  theme(axis.title.x=element_blank(), 
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank()) +
+  labs(title = "Sentiment Score of 5 Features for Each of the Phone Models",
+       color = "Phone Model")
+
+
+
+
+  # TODO:
 #   - Filter data for the three products by 5 features (tweets$mentioned_features)
 #       - Display
 #       - Battery
