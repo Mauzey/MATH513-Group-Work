@@ -9,8 +9,37 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+
+knitr::opts_chunk$set(include = FALSE)
+# IMPORT DEPENDENCIES -------------------------------------------------------------------------------------------------------
+
+libs <- c('readr', 'dplyr', 'tidyverse', 'tidyr', 'tidytext', 'modelr', # wrangling
+          'stringr', 'rtweet',    # strings, tweets
+          'knitr',  # table styling
+          'ggplot2', 'ggthemes')  # plots
+
+invisible(lapply(libs, library, character.only = TRUE))
+
+
+
+# SET WORKING DIRECTORY -----------------------------------------------------------------------------------------------------
+
+# Will
+setwd("C:/Users/willo/SynologyDrive/Documents - Will/Qualifications/!MSc Data Science/!Courses/1 MATH513 Big Data and Social Network/Assessment/MATH513-Group-Work/practical")
+
+# Tania
+#setwd("")
+
+# Alex
+#setwd("~/Development/Repositories/MATH513-Group-Work/practical")
+#setwd("D:/Development/MATH513-Group-Work/practical")
+
+# IMPORT DATA ---------------------------------------------------------------------------------------------------------------
+#Load in tweets
+tweets <- read_csv("./data/cleaned-tweets.csv")
+
 ```
+
 
 ## Introduction
 
@@ -18,10 +47,9 @@ knitr::opts_chunk$set(echo = FALSE)
 - Flagship phones chosen
   + S20FE
   + iPhone12
-  + provides freshest data
 - S20 was chosen for demonstration purposes
 
-__Tools Utilised__
+**Tools Utilised**
 
 - RTweet
 - Rstudio
@@ -39,6 +67,60 @@ knitr::include_graphics(
 
 
 ## Research
+
+
+<!-- Need to reference the Twitter accounts that we used to determine the #hashtags that we chose --->
+
+- Twitter data provides up to date information for companies to analyse for customer feedback
+- Data can provide useful information to guide product teams when analysed correctly
+
+
+
+<!-- Pictures of the phones in colours that match graphs to associate? -->
+
+
+
+
+- Twitter data provides up to date information for companies to analyse for customer feedback
+
+- Data can provide useful information to guide product teams when analysed correctly
+
+
+```{r}
+
+# Extract relevant information
+feature_sentiment_data <- select(tweets, product, mentioned_features, avg_sentiment, sd_sentiment)
+
+# Separate 'mentioned_features' column
+feature_sentiment_data <- separate(feature_sentiment_data, col = mentioned_features, into = paste0('feature', 1:5), sep = ', ')
+
+# Pivot feature columns
+feature_sentiment <- pivot_longer(feature_sentiment_data,
+                                  cols = names(feature_sentiment_data)[which(grepl('feature', names(feature_sentiment_data)))])
+
+#Count of tweet data
+feature_sentiment %>% count(product, value)
+
+feature_sentiment %>% count(product)
+
+```
+
+
+
+74,000 Tweets
+
+XXXX mentioned features
+
+
+Total for features: 
+S20 3,480 sentiment scores
+S20FE 6,302 sentiment scores 
+iPhone12 2,470 sentiment scores
+
+S20FE 4,659 tweets for camera
+
+
+
 
 Examined the key hashtags that were being used for the phones chosen
 
@@ -69,18 +151,35 @@ Examined the key hashtags that were being used for the phones chosen
 
 Time series plots of data pulled from Twitter
 
-- iPhone12
-- S20FE
-- S20
+```{r Time_Series_Plots, echo=FALSE}
+tweets %>% filter(product == 'Galaxy S20 FE' | product == 'iPhone12') %>%
+  group_by(product, is_retweet) %>%
+  ts_plot('days', trim = 1) + theme_minimal() +
+    facet_grid(product ~ .) +
+    labs(x = NULL, y = NULL,
+         title = "Frequency of Twitter Statuses",
+         subtitle = "Twitter status counts aggregated using 1-day intervals",
+         caption = "Source: Data collected from Twitter's REST API via rtweet") +
+    theme(plot.title = element_text(face = 'bold')) + 
+  geom_vline(xintercept = as.POSIXct("2020-10-02 00:00:00", tz = "UTC"))+ #Add line for S20FE
+  geom_vline(xintercept = as.POSIXct("2020-10-23 00:00:00", tz = "UTC"))+  #Add line for iPhone12
+  scale_x_continuous(limits = c(as.Date("2020-10-01 00:00:00", tz = "UTC"),
+                                as.Date("2020-11-30 00:00:00", tz = "UTC"))
+                     )
+```
 
-...
+
+
+
 
 ## Results - Sentiment Analysis
 
-__Overview of sentiment analysis__
+**Overview of sentiment analysis**
 
 
-__Choice of feature to analyse__
+**Choice of feature to analyse**
+
+
 
 
 ## Results - Sentiment Analysis
@@ -88,44 +187,53 @@ __Choice of feature to analyse__
 GRAPH HERE
 
 
+
+
 ## Results - Sentiment Analysis
 
 GRAPH HERE
+
 
 
 
 ## Improvements & Further Study
 
-__Improvements__
+**Improvements**
 
 Google Maps API to have region filter
 
-  
-...
+
+
+
 
 
 ## Conclusions
 
 - Twitter data provides up to date information for companies to analyse for customer feedback
 
-- Data can provide useful information when analysed correctly
+- Data can provide useful information to guide product teams when analysed correctly
 
 
 
-...
+
 
 ## References
 
-- Twitter API Documentation
-  + [https://developer.twitter.com/en/docs/twitter-api](https://developer.twitter.com/en/docs/twitter-api)
+- Twitter (2020) *API Documentation* Available at: [https://developer.twitter.com/en/docs/twitter-api](https://developer.twitter.com/en/docs/twitter-api) (Accessed: 10 October 2020)
 
-- R Markdown Cheat Sheet
-  + [https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf](https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf)
+- RStudio (2020) *R Markdown Cheat Sheet* Available at: [https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf](https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf) (Accessed: 10 October 2020)
 
-- R Markdown Reference Guide
-  - [https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf](https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf)
+- RStudio (2014) *R Markdown Reference Guide* Available at: [https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf](https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf) (Accessed: 10 October 2020)
 
-- MATH513 Lecture and Tutorial Code, Luciana Dalla Valle, University of Plymouth
-  - [https://dle.plymouth.ac.uk/course/view.php?id=49628](https://dle.plymouth.ac.uk/course/view.php?id=49628)
+- Dalla Valle, Luciana (2020) *MATH513 Lecture and Tutorial Code* Available at: [https://dle.plymouth.ac.uk/course/view.php?id=49628](https://dle.plymouth.ac.uk/course/view.php?id=49628) (Accessed:  2020)
 
+- Fuchs, Matti (2018) *Doing your first sentiment analysis in R with Sentimentr* Available at: [https://towardsdatascience.com/doing-your-first-sentiment-analysis-in-r-with-sentimentr-167855445132](https://towardsdatascience.com/doing-your-first-sentiment-analysis-in-r-with-sentimentr-167855445132) (Accessed: 06 December 2020)
+  
+- Rinker, Tyler (2020)  *R Documentation - sentiment_by* Available at:  [https://www.rdocumentation.org/packages/sentimentr/versions/2.7.1/topics/sentiment_by](https://www.rdocumentation.org/packages/sentimentr/versions/2.7.1/topics/sentiment_by) (Accessed: 06 December 2020)
+
+```{r}
+
+citation()
+
+```
 
