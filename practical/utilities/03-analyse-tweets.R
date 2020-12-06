@@ -122,7 +122,7 @@ custom_stop_words <- data.frame(word = c('iphone12', 'iphone', 'apple', '12', 'i
                                          'utc', 'tmsvspi6pw', 'okb', '50,000', '6000', 'gt', 'black', '0001f4f1', 'ft', 'cosmo',
                                          '0001f92f', 'blue', 'ares', 'unboxing', 'blason', 'fwn7ozovs7', '0001f6a8', 'follow',
                                          'devices', 'isn', 'link', '10', 'rt', 'friday', 'store', 'close', 'space', 'glow',
-                                         'formats', 'grade', 'mode', 'butterfly\'s'))
+                                         'formats', 'grade', 'mode', 'cloud', 'butterfly\'s'))
 iPhone12_words <- iPhone12_words %>% anti_join(custom_stop_words)
 S20_words <- S20_words %>% anti_join(custom_stop_words)
 S20FE_words <- S20FE_words %>% anti_join(custom_stop_words)
@@ -161,6 +161,53 @@ iPhone12_bing_count %>% group_by(sentiment) %>%
           axis.title = element_text(size = 11, colour = 'black'),
           title = element_text(size = 12))
 
+
+
+# We count up how many positive and negative words there are in each tweet
+# associate sentiment scores to each tweet
+
+iPhone12_sentiment <- iPhone12_words %>%
+  inner_join(get_sentiments("bing")) %>%
+  count(tweet_number, sentiment) %>%
+  spread(sentiment, n, fill = 0) %>% # negative and positive sentiment in separate columns
+  mutate(score = positive - negative) # score = net sentiment (positive - negative)
+
+head(iPhone12_sentiment)
+#
+# Add a variable to indicate the topic
+
+iPhone12_sentiment <- iPhone12_sentiment %>% mutate(topic = "iPhone12")
+
+# Tabulate the scores
+iPhone12_sentiment %>% count(score)
+
+# Let's work out the mean score 
+# We'll include it as a line and as a numerical value to our plot
+#
+sentiment_mean_iPhone12 <- iPhone12_sentiment %>% 
+  summarise(mean_score = mean(score))
+
+# Barplot
+iPhone12_sentiment %>%
+  ggplot(aes(x = score)) + # Sentiment score on x-axis
+  geom_bar(fill = "lightgoldenrod3", colour = "brown") + # geom_bar will do the tabulation for you :-)
+  geom_vline(aes(xintercept = mean_score), data = sentiment_mean_iPhone12) +
+  # Add a vertical line at the mean score, calculated and stored in sentiment_mean_climate above
+  geom_text(aes(x = mean_score, 
+                y = Inf, 
+                label = signif(mean_score, 3)), # Show to three significant figures
+            vjust = 2, 
+            data = sentiment_mean_iPhone12) + 
+  theme_minimal() +
+  # Add the mean as a number; vjust moves it down from the top of the plot
+  scale_x_continuous(breaks = -10:10,  # Specify a suitable integer range for the x-axis
+                     minor_breaks = NULL) + # Show integers; set this to a suitably large range
+  labs(title = paste("Sentiments towards iPhone12 give a mean of", signif(sentiment_mean_iPhone12$mean_score, 3)),
+       # Title that gives page name and mean sentiment score, to three significant figures
+       x = "Sentiment Score", 
+       y = "Number of tweets") 
+
+
 # SENTIMENT ANALYSIS - Galaxy S20 -------------------------------------------------------------------------------------------
 
 # Plot most frequent words in Galaxy S20 tweets
@@ -193,6 +240,54 @@ S20_bing_count %>% group_by(sentiment) %>%
           axis.title = element_text(size = 11, colour = 'black'),
           title = element_text(size = 12))
 
+
+# We count up how many positive and negative words there are in each tweet
+# associate sentiment scores to each tweet
+
+S20_sentiment <- S20_words %>%
+  inner_join(get_sentiments("bing")) %>%
+  count(tweet_number, sentiment) %>%
+  spread(sentiment, n, fill = 0) %>% # negative and positive sentiment in separate columns
+  mutate(score = positive - negative) # score = net sentiment (positive - negative)
+
+head(S20_sentiment)
+#
+# Add a variable to indicate the topic
+
+S20_sentiment <- S20_sentiment %>% mutate(topic = "S20")
+
+# Tabulate the scores
+S20_sentiment %>% count(score)
+
+# Let's work out the mean score 
+# We'll include it as a line and as a numerical value to our plot
+#
+sentiment_mean_S20 <- S20_sentiment %>% 
+  summarise(mean_score = mean(score))
+
+# Barplot
+S20_sentiment %>%
+  ggplot(aes(x = score)) + # Sentiment score on x-axis
+  geom_bar(fill = "turquoise", colour = "cyan") + # geom_bar will do the tabulation for you :-)
+  geom_vline(aes(xintercept = mean_score), data = sentiment_mean_S20) +
+  # Add a vertical line at the mean score, calculated and stored in sentiment_mean_climate above
+  geom_text(aes(x = mean_score, 
+                y = Inf, 
+                label = signif(mean_score, 3)), # Show to three significant figures
+            vjust = 2, 
+            data = sentiment_mean_S20) + 
+  theme_minimal() +
+  # Add the mean as a number; vjust moves it down from the top of the plot
+  scale_x_continuous(breaks = -10:10,  # Specify a suitable integer range for the x-axis
+                     minor_breaks = NULL) + # Show integers; set this to a suitably large range
+  labs(title = paste("Sentiments towards S20 give a mean of", signif(sentiment_mean_S20$mean_score, 3)),
+       # Title that gives page name and mean sentiment score, to three significant figures
+       x = "Sentiment Score", 
+       y = "Number of tweets") 
+
+
+
+
 # SENTIMENT ANALYSIS - Galaxy S20 FE ----------------------------------------------------------------------------------------
 
 # Plot most frequent words in Galaxy S20 FE tweets
@@ -224,6 +319,89 @@ S20FE_bing_count %>% group_by(sentiment) %>%
     theme(axis.text = element_text(size = 11, colour = 'black'),
           axis.title = element_text(size = 11, colour = 'black'),
           title = element_text(size = 12))
+
+
+# We count up how many positive and negative words there are in each tweet
+# associate sentiment scores to each tweet
+
+S20FE_sentiment <- S20FE_words %>%
+  inner_join(get_sentiments("bing")) %>%
+  count(tweet_number, sentiment) %>%
+  spread(sentiment, n, fill = 0) %>% # negative and positive sentiment in separate columns
+  mutate(score = positive - negative) # score = net sentiment (positive - negative)
+
+head(S20FE_sentiment)
+#
+# Add a variable to indicate the topic
+
+S20FE_sentiment <- S20FE_sentiment %>% mutate(topic = "S20FE")
+
+# Tabulate the scores
+S20FE_sentiment %>% count(score)
+
+# Let's work out the mean score 
+# We'll include it as a line and as a numerical value to our plot
+#
+sentiment_mean_S20FE <- S20FE_sentiment %>% 
+  summarise(mean_score = mean(score))
+
+# Barplot
+S20FE_sentiment %>%
+  ggplot(aes(x = score)) + # Sentiment score on x-axis
+  geom_bar(fill = "mediumpurple1", colour = "purple") + # geom_bar will do the tabulation for you :-)
+  geom_vline(aes(xintercept = mean_score), data = sentiment_mean_S20FE) +
+  # Add a vertical line at the mean score, calculated and stored in sentiment_mean_climate above
+  geom_text(aes(x = mean_score, 
+                y = Inf, 
+                label = signif(mean_score, 3)), # Show to three significant figures
+            vjust = 2, 
+            data = sentiment_mean_S20FE) + 
+  theme_minimal() +
+  # Add the mean as a number; vjust moves it down from the top of the plot
+  scale_x_continuous(breaks = -10:10,  # Specify a suitable integer range for the x-axis
+                     minor_breaks = NULL) + # Show integers; set this to a suitably large range
+  labs(title = paste("Sentiments towards S20 give a mean of", signif(sentiment_mean_S20FE$mean_score, 3)),
+       # Title that gives page name and mean sentiment score, to three significant figures
+       x = "Sentiment Score", 
+       y = "Number of tweets") 
+
+
+#PLOTTING IPHONE12 AND S20FE
+
+iPhone12_S20FE_sentiment <-rbind(S20FE_sentiment, iPhone12_sentiment)
+
+sentiment_mean_iPhone12_S20FE <- iPhone12_S20FE_sentiment %>% 
+  group_by(topic) %>% 
+  summarize(mean_score = mean(score)) 
+
+
+# Perform the plot
+iPhone12_S20FE_sentiment %>%
+  ggplot(aes(x = score, # Sentiment score on x-axis
+           fill = topic)) + # Fill bars with a colour according to the topic
+  geom_bar() + # geom_bar will do the tabulation for you :-)
+  geom_vline(aes(xintercept = mean_score), 
+             data = sentiment_mean_iPhone12_S20FE) +
+  # Add a vertical line at the mean scores, calculated and stored in sentiment_mean_both above
+  geom_text(aes(x = mean_score, 
+                y = Inf, 
+                label = signif(mean_score, 3)), 
+            vjust = 2, 
+            data = sentiment_mean_iPhone12_S20FE) + 
+  # Add the mean as a number; vjust moves it down from the top of the plot
+  scale_x_continuous(breaks = -15:15, 
+                     minor_breaks = NULL) + # Show integers; set this to a suitably large range
+  scale_fill_manual(values = c("iPhone12" = "lightgoldenrod3", 
+                               "S20FE" = "turquoise")) + # Specify your own colours
+  labs(x = "Sentiment Score" , 
+       y = "Number of tweets", 
+       fill = "Topic") +
+  facet_grid(topic ~ .) + 
+  theme_minimal() +
+  theme(legend.position = "bottom") # Legend on the bottom
+
+
+
 
 # SENTIMENT ANALYSIS - Product Features -------------------------------------------------------------------------------------
 
@@ -283,7 +461,7 @@ ggplot(feature_sentiment_data, aes(x = product, y = sentiment_score)) +
 #<- why you want to listen to your fans 
 #
 #stage 4
-#plot s20 against iphone12 (see stage 2)
+#plot s20 against iphone12 (see stage 2) <- DONE
 
 
 # SLIDE WITH LOCATION PLOT (GLOBE) ----------------------------------------
