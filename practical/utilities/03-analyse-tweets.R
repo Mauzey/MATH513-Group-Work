@@ -545,6 +545,136 @@ feature_sentiment %>%
   labs(title = "Sentiment Score of 5 Features for Each of the Phone Models",
        color = "Phone Model")
 
+#DOING STANDARD SCALING: new_val = (val-mean)/sd for each model
+
+stat_s20 <- feature_sentiment %>% 
+  filter(product == "Galaxy S20") %>% 
+  summarise(sd = sd(avg_sentiment),
+            mean = mean(avg_sentiment)) 
+
+stat_iphone12 <- feature_sentiment %>% 
+  filter(product == "iPhone12") %>% 
+  summarise(sd = sd(avg_sentiment),
+            mean = mean(avg_sentiment))
+  
+stat_s20fe <- feature_sentiment %>% 
+  filter(product == "Galaxy S20 FE")%>% 
+  summarise(sd = sd(avg_sentiment),
+            mean = mean(avg_sentiment))
+
+feature_sentiment <- feature_sentiment %>%
+  mutate(norm_sentiment = avg_sentiment)
+
+feature_sentiment <- feature_sentiment %>% 
+  mutate_at(vars(norm_sentiment), 
+            ~case_when(product == 'Galaxy S20'~ (. - stat_s20$mean)/stat_s20$sd,
+                       product == 'Galaxy S20 FE'~ (. - stat_s20fe$mean)/stat_s20fe$sd,
+                       product == 'iPhone12'~ (. - stat_s20$mean)/stat_s20$sd),
+            TRUE ~ as.numeric(.))
+
+
+
+
+
+#NORMALIZED PLOTS:::!!!!!
+
+
+feature_sentiment_stat <- feature_sentiment %>% 
+  group_by(product, value) %>% 
+  summarise(mean_sentiment = mean(norm_sentiment),
+            sum_sentiment = sum(norm_sentiment))
+
+
+# Plot feature avg sentiment - point -NOT WORKING!!!
+feature_sentiment_stat %>%
+  group_by(product) %>%
+  ggplot(aes(x = product, y = mean_sentiment, color = product)) +
+  geom_point(size = 5) +
+  facet_wrap(. ~ value) +
+  theme_bw() +
+  scale_color_manual(values = c("iPhone12" = "lightgoldenrod3",
+                                "Galaxy S20" = "turquoise",
+                                "Galaxy S20 FE" = "mediumpurple1")) +
+  scale_y_continuous(name = "Average Sentiment Score", limits = c(-1, 1)) +
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank()) +
+  labs(title = "Average Sentiment Score of 5 Features for Each of the Phone Models",
+       color = "Phone Model")
+
+
+# Plot feature avg sentiment - bars
+feature_sentiment_stat %>%
+  group_by(product) %>%
+  ggplot(aes(x = product, y = mean_sentiment, fill = product)) +
+  geom_col() +
+  facet_wrap(. ~ value) +
+  theme_bw() +
+  scale_fill_manual(values = c("iPhone12" = "lightgoldenrod3",
+                               "Galaxy S20" = "turquoise",
+                               "Galaxy S20 FE" = "mediumpurple1"),) +
+  scale_y_continuous(name = "Average Sentiment Score", limits = c(-1, 1)) +
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank()) +
+  labs(title = "Average Sentiment Score of 5 Features for Each of the Phone Models",
+       color = "Phone Model")
+
+
+#SUM SENTIMENT
+
+# Plot feature accumulated sentiment - point
+feature_sentiment_stat %>% 
+  group_by(product) %>%
+  ggplot(aes(x = product, y = sum_sentiment, color = product)) +
+  geom_point(size = 5) +
+  facet_wrap(. ~ value) +
+  theme_bw() +
+  scale_color_manual(values = c("iPhone12" = "lightgoldenrod3", 
+                                "Galaxy S20" = "turquoise",
+                                "Galaxy S20 FE" = "mediumpurple1"),) +
+  scale_y_continuous(name = "Sentiment Score") +
+  theme(axis.title.x=element_blank(), 
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank()) +
+  labs(title = "Sentiment Score of 5 Features for Each of the Phone Models",
+       color = "Phone Model")
+
+
+# Plot feature accumulated sentiment - bars
+feature_sentiment_stat %>% 
+  group_by(product) %>%
+  ggplot(aes(x = product, y = sum_sentiment, fill = product)) +
+  geom_col() +
+  facet_wrap(. ~ value) +
+  theme_bw() +
+  scale_fill_manual(values = c("iPhone12" = "lightgoldenrod3", 
+                               "Galaxy S20" = "turquoise",
+                               "Galaxy S20 FE" = "mediumpurple1"),) +
+  scale_y_continuous(name = "Sentiment Score") +
+  theme(axis.title.x=element_blank(), 
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank()) +
+  labs(title = "Sentiment Score of 5 Features for Each of the Phone Models",
+       color = "Phone Model")
+
+
+#BOXPLOT
+feature_sentiment %>% 
+  group_by(product) %>%
+  ggplot(aes(x = product, y = norm_sentiment, color = product)) +
+  geom_boxplot() +
+  facet_wrap(. ~ value) +
+  theme_bw() +
+  scale_color_manual(values = c("iPhone12" = "lightgoldenrod3", 
+                                "Galaxy S20" = "turquoise",
+                                "Galaxy S20 FE" = "mediumpurple1"),) +
+  scale_y_continuous(name = "Sentiment Score") +
+  theme(axis.title.x=element_blank(), 
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank()) +
+  labs(title = "Sentiment Score of 5 Features for Each of the Phone Models",
+       color = "Phone Model")
 
 
 
