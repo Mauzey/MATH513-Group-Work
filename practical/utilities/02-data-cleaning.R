@@ -129,10 +129,11 @@ complete_user_data$potential_bot <- ifelse(complete_user_data$user_id %in% bot_t
 
 rm(bot_keywords, bot_tweets)  # Remove vars from memory to keep the environment tidy
 
-# Remove links, hashtags, and user mentions from tweet text
+# Remove links, hashtags, emojis, and user mentions from tweet text
 complete_tweet_data$stripped_text <- gsub(" ?(f|ht)tp(s?)://(.*)[.][a-z]+", "", complete_tweet_data$text)
 complete_tweet_data$stripped_text <- gsub("#[A-Za-z0-9]+|@[A-Za-z0-9]+|\\w+(?:\\.\\w+)*/\\S+",
                                           "", complete_tweet_data$stripped_text)
+complete_tweet_data$stripped_text <- gsub("[^\x01-\x7F]", "", complete_tweet_data$stripped_text)
 
 
 # Extract mentioned product features for further analysis
