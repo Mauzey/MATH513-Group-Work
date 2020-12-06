@@ -73,6 +73,7 @@ tweets %>% filter(product == 'Galaxy S20 FE' | product == 'iPhone12') %>%
 # SENTIMENT ANALYSIS - PREPARATION ------------------------------------------------------------------------------------------
 
 # Filter out spam
+
 tweets_no_spam <- tweets %>% filter(potential_spam == F)
 
 # ...
@@ -428,20 +429,8 @@ rm(iPhone12_bing_count, iPhone12_sentiment,
 
 # Compute overall sentiment score for each tweet using sentimentr
 
-tweets_features <- tweets %>% filter(potential_spam != T)
-
-tweets_features$sentiment_score <- 10
-
-tweets_features_length <- 1: dim(tweets_features)[1]
-
-for (i in tweets_features_length){
-  temp_sentiment[i] <- sentiment_by(tweets_features$stripped_text[i])
-}
-
-temp_sentiment <- sapply(tweets_features$stripped_text, sentiment_by)
-
 # Extract relevant information
-feature_sentiment_data <- select(tweets_features, product, mentioned_features, sentiment_score)
+feature_sentiment_data <- select(tweets, product, mentioned_features, avg_sentiment, sd_sentiment)
 
 # Separate 'mentioned_features' column
 feature_sentiment_data <- separate(feature_sentiment_data, col = mentioned_features, into = paste0('feature', 1:5), sep = ', ')
@@ -456,10 +445,14 @@ feature_sentiment <- feature_sentiment %>%
 
 feature_sentiment_stat <- feature_sentiment %>% 
   group_by(product, value) %>% 
-  summarise(mean_sentiment = mean(sentiment_score),
-            sum_sentiment = sum(sentiment_score))
+  summarise(mean_sentiment = mean(avg_sentiment),
+            sum_sentiment = sum(avg_sentiment))
 
 #AVERAGE SENTIMENT
+feature_sentiment %>% count(product, value)
+
+feature_sentiment %>% count(product)
+
 
 # Plot feature avg sentiment - point
 feature_sentiment_stat %>% 
@@ -471,7 +464,7 @@ feature_sentiment_stat %>%
   scale_color_manual(values = c("iPhone12" = "lightgoldenrod3", 
                                "Galaxy S20" = "turquoise",
                                "Galaxy S20 FE" = "mediumpurple1"),) +
-  scale_y_continuous(name = "Average Sentiment Score", limits = c(0,10)) +
+  scale_y_continuous(name = "Average Sentiment Score", limits = c(0,1)) +
   theme(axis.title.x=element_blank(), 
         axis.text.x=element_blank(),
         axis.ticks.x=element_blank()) +
@@ -489,7 +482,7 @@ feature_sentiment_stat %>%
   scale_fill_manual(values = c("iPhone12" = "lightgoldenrod3", 
                                 "Galaxy S20" = "turquoise",
                                 "Galaxy S20 FE" = "mediumpurple1"),) +
-  scale_y_continuous(name = "Average Sentiment Score", limits = c(0,10)) +
+  scale_y_continuous(name = "Average Sentiment Score", limits = c(0,1)) +
   theme(axis.title.x=element_blank(), 
         axis.text.x=element_blank(),
         axis.ticks.x=element_blank()) +
@@ -499,7 +492,7 @@ feature_sentiment_stat %>%
 
 #SUM SENTIMENT
 
-# Plot feature avg sentiment - point
+# Plot feature accemulated sentiment - point
 feature_sentiment_stat %>% 
   group_by(product) %>%
   ggplot(aes(x = product, y = sum_sentiment, color = product)) +
@@ -517,7 +510,7 @@ feature_sentiment_stat %>%
        color = "Phone Model")
 
 
-# Plot feature avg sentiment - bars
+# Plot feature accumulated sentiment - bars
 feature_sentiment_stat %>% 
   group_by(product) %>%
   ggplot(aes(x = product, y = sum_sentiment, fill = product)) +
@@ -538,7 +531,7 @@ feature_sentiment_stat %>%
 #BOXPLOT
 feature_sentiment %>% 
   group_by(product) %>%
-  ggplot(aes(x = product, y = sentiment_score, color = product)) +
+  ggplot(aes(x = product, y = avg_sentiment, color = product)) +
   geom_boxplot() +
   facet_wrap(. ~ value) +
   theme_bw() +
