@@ -109,7 +109,7 @@ rm(extract_hashtags)  # Remove vars from memory to keep the environment tidy
 
 
 # Mark potential spam tweets based on a selection of keywords found in the tweet text
-spam_keywords <- 'giveaway|contest|competition|giving away|register'
+spam_keywords <- 'giveaway|contest|competition|giving away|register|subscribers|your pick'
 
 identify_potential_spam <- function(row) {
   grepl(regex(spam_keywords, ignore_case = T), row['text'])

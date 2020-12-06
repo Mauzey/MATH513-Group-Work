@@ -430,14 +430,15 @@ rm(iPhone12_bing_count, iPhone12_sentiment,
 
 tweets_features <- tweets %>% filter(potential_spam != T)
 
-for (i in dim(tweets_features)[1]){
-  tweets_features$sentiment_score[i] <- tweets_features$text[i] %>% 
-  (function(t) sum(sentiment(t)$sentiment))
+tweets_features$sentiment_score <- 10
+
+tweets_features_length <- 1: dim(tweets_features)[1]
+
+for (i in tweets_features_length){
+  temp_sentiment[i] <- sentiment_by(tweets_features$stripped_text[i])
 }
 
-# I want to do it with sapply but it's picky :(
-#tweets$sentiment_score <- sapply(tweets$text, function(t) sum(sentiment(t)$sentiment))
-
+temp_sentiment <- sapply(tweets_features$stripped_text, sentiment_by)
 
 # Extract relevant information
 feature_sentiment_data <- select(tweets_features, product, mentioned_features, sentiment_score)
