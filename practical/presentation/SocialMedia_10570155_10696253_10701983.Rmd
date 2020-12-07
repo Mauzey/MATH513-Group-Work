@@ -257,7 +257,7 @@ users_summary <- users %>%
 
 --->
 
-```{r echo=FALSE}
+```{r echo=FALSE, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4.5}
 
 tweets$product <- as.factor(tweets$product)  # Factorize product column
 
@@ -273,7 +273,6 @@ tweets %>% group_by(product, is_retweet) %>%
 ```
 
 <!--- End of Slide 05 ------------------------------------------------------------------------------------------------------>
-
 
 
 
@@ -314,7 +313,7 @@ feature_sentiment_stat <- feature_sentiment %>%
             sum_sentiment = sum(avg_sentiment))
 ```
 
-```{r echo=FALSE}
+```{r echo=FALSE, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4.5}
 #BOXPLOT
 feature_sentiment %>% 
   group_by(product) %>%
@@ -334,12 +333,12 @@ feature_sentiment %>%
 
 ```
 
-
+<!---
 **Overview of sentiment analysis**
 
 
 **Choice of feature to analyse**
-
+--->
 
 
 
@@ -390,6 +389,7 @@ mapCountryData(iPhone12_matched,
 ```
 
 <!--- End of Slide  ------------------------------------------------------------------------------------------------------>
+
 
 
 
