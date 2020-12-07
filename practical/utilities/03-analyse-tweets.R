@@ -13,6 +13,7 @@ library(modelr)
 library(tidyr)
 library(rtweet)
 library(stringr)
+library(RColorBrewer)
 library(tidytext)
 library(ggthemes)
 library(sentimentr) #for 'SENTIMENT ANALYSIS - Product Features' section
@@ -618,10 +619,46 @@ geo_tweets <- tweets %>%
 geo_sentiment <- merge(geo_users, geo_tweets, by = 'user_id')
 
 
-# ...
+
+# IPHONE 12
+
+# Join data referenced by country codes to an internal map
 iPhone12_matched <- geo_sentiment %>%
   filter(product == 'iPhone12') %>%
   joinCountryData2Map(joinCode = 'NAME', nameJoinColumn = 'country')
-
 # Plot the average sentiment for tweets regarding the iPhone12, for each country
-mapCountryData(iPhone12_matched, nameColumnToPlot = 'avg_sentiment')
+mapCountryData(iPhone12_matched,
+               mapTitle = "iPhone12 Sentiment by Country",
+               borderCol = 'gray40',
+               colourPalette = c('lightgoldenrod', 'goldenrod2', 'darkgoldenrod4'),
+               nameColumnToPlot = 'avg_sentiment', catMethod = 'pretty')
+
+
+
+# GALAXY S20
+
+# Join data referenced by country codes to an internal map
+S20_matched <- geo_sentiment %>%
+  filter(product == 'Galaxy S20') %>%
+  joinCountryData2Map(joinCode = 'NAME', nameJoinColumn = 'country')
+# Plot the average sentiment for tweets regarding the iPhone12, for each country
+mapCountryData(S20_matched,
+               mapTitle = "Galaxy S20 Sentiment by Country",
+               borderCol = 'gray40',
+               colourPalette = c('paleturquoise', 'mediumturquoise', 'turquoise4'),
+               nameColumnToPlot = 'avg_sentiment', catMethod = 'pretty')
+
+
+
+# GALAXY S20 FE
+
+# Join data referenced by country codes to an internal map
+S20FE_matched <- geo_sentiment %>%
+  filter(product == 'Galaxy S20 FE') %>%
+  joinCountryData2Map(joinCode = 'NAME', nameJoinColumn = 'country')
+# Plot the average sentiment for tweets regarding the iPhone12, for each country
+mapCountryData(S20FE_matched,
+               mapTitle = "Galaxy S20 FE Sentiment by Country",
+               borderCol = 'gray40',
+               colourPalette = c('thistle', 'mediumpurple2', 'purple4'),
+               nameColumnToPlot = 'avg_sentiment', catMethod = 'pretty')
