@@ -58,8 +58,12 @@ knitr::include_graphics(c("./Images/Logos/apple_logo.png", "./Images/Logos/samsu
 
 Chosen as competing businesses due to the current releases of their flagship phones meaning data would be available.
 
-We chose to gather some tweets on the S20 to give us some comparable information for sentiment analysis. This allowed us to show the usefulness of the analysis process and outcomes as Samsung had supposedly listened to its fan base when developing the S20 Fan Edition.
+We chose to gather some tweets on the S20 to give us some comparable information for sentiment analysis. 
 
+This allowed us to show the usefulness of the analysis process and outcomes as Samsung had supposedly listened to its fan base when developing the S20 Fan Edition.
+
+
+#### SHIT REWRITE
 Allowed us access to the twitter data to analyse.
 
 To allow us to work on various parts of the project and keep an up to date record of changes as a team.
@@ -79,9 +83,9 @@ To allow us to work on various parts of the project and keep an up to date recor
 
 <!--- SPEAKER NOTES:
   
-  Twitter provides its data via a number of APIs and after the Cambridge Analytica 'data breach' is one of the few who has not limited the data provided through APIs according to Dr. Wasim Ahmed from Newcastle University. Michelle Young of Chat Bots Life.com stated in 2017 that unlike other platforms, almost every user's tweets are pullable and public. The API is vast and allows a multitude of queries and filters to be performed. Twitter data can be a large door into the insights of the general public and combined with the openness and the generous rate limiting of Twitter’s API, it can produce powerful results.
+  Twitter provides its data via a number of APIs and after the Cambridge Analytica 'data breach' is one of the few who has not limited the data provided through APIs according to Dr. Wasim Ahmed from Newcastle University. Michelle Young of Chat Bots Life.com stated in 2017 that unlike other platforms, almost every user's tweets are pullable and public. The API is vast and allows a multitude of queries and filters to be performed. Twitter data can provide insights into the general public's opinions and combined with the openness and the generous rate limiting of Twitter’s API, it can produce powerful results.
 
-  From the Samsung Mobile page we identified that the hastags #GalaxyS20 and #GalaxyS20FE were the offical hashtags used by Samsung in their Twitter posts.
+  Regarding the hastags we chose we looked to the  Samsung Mobile page abd identified that the hastags #GalaxyS20 and #GalaxyS20FE were the offical hashtags used by Samsung in their Twitter posts.
   
   We then looked for the same information from Apple but found that since the Twitter account was hacked on the 15th July 2020, Apple have not been keeping tweets on their Twitter page. (Swider, Matt (2020), TechRadar - https://www.techradar.com/news/twitter-hack-2020).
   
@@ -89,7 +93,7 @@ To allow us to work on various parts of the project and keep an up to date recor
   
   We also did some sample searches of other hashtags like S20 and S20FE using the advanced Twitter search on the website to determine how relevant the hashtag was.
   
-  We did this simply by examining after how spread the dates were from the first 25 tweets. This research further supported our findings on the iphone12, samsungs20 and samungs20fe hashtags.
+  ####REWRITE We did this simply by examining after how spread the dates were from the first 25 tweets. This research further supported our findings on the iphone12, samsungs20 and samungs20fe hashtags.
   
   We came to the conclusion that it was better to use hashtags over actual profiles, both business or individual, so that we would get a wide range of options for a fairer analysis.
 
@@ -150,11 +154,11 @@ To allow us to work on various parts of the project and keep an up to date recor
   
   - We had to manually extract the hash-tags from the tweet text due to an issue with rtweet
   
-  - We extracted product features from each of the tweet's text:
+  - We extracted product features from each of the tweet's text due to a glitch in rtweet
     - These features were: The product's Display, Camera, Battery, Price, and 5G Capabilities
   
-  - Finally, sentiment score was calculated for each tweet, by computing a sentiment for each word in the tweet,
-    and averaging the results
+#### REWRITE
+    - Finally, sentiment score was calculated for each tweet.
 
 --->
 
@@ -262,7 +266,8 @@ users_summary <- users %>%
 tweets$product <- as.factor(tweets$product)  # Factorize product column
 
 tweets %>% group_by(product, is_retweet) %>%
-  ts_plot('days', trim = 1) + theme_minimal() +
+  ts_plot('days', trim = 1) + 
+  theme_bw() +
   facet_grid(product ~ .) +
   labs(x = NULL, y = NULL,
        title = "Frequency of Twitter Statuses",
@@ -318,6 +323,7 @@ feature_sentiment_stat <- feature_sentiment %>%
 feature_sentiment %>% 
   group_by(product) %>%
   ggplot(aes(x = product, y = avg_sentiment, color = product)) +
+  geom_hline(yintercept = 0)+
   geom_boxplot() +
   facet_wrap(. ~ value) +
   theme_bw() +
@@ -343,7 +349,7 @@ feature_sentiment %>%
 
 
 <!--- Slide  ------------------------------------------------------------------------------------------------------------->
-## Results - Sentiment Globally - Iphone12
+## Results - Sentiment Globally
 
 ```{r include=FALSE}
 # SENTIMENT ANALYSIS - Geographical Data ------------------------------------------------------------------------------------
@@ -378,6 +384,9 @@ S20_matched <- geo_sentiment %>%
 
 ```
 
+
+######## NEED TO PLOT 3 GRAPHS ON ONE SLIDE
+
 ```{r echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4.5}
 
 # Plot the average sentiment for tweets regarding the iPhone12, for each country
@@ -387,15 +396,6 @@ mapCountryData(iPhone12_matched,
                colourPalette = c('lightgoldenrod', 'goldenrod2', 'darkgoldenrod4'),
                nameColumnToPlot = 'avg_sentiment', catMethod = 'pretty')
 ```
-
-<!--- End of Slide  ------------------------------------------------------------------------------------------------------>
-
-
-
-
-
-<!--- Slide  ------------------------------------------------------------------------------------------------------------->
-## Results - Sentiment Globally - S20FE
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4.5}
 
@@ -407,14 +407,6 @@ mapCountryData(S20FE_matched,
                nameColumnToPlot = 'avg_sentiment', catMethod = 'pretty')
 
 ```
-
-<!--- End of Slide 06 ------------------------------------------------------------------------------------------------------>
-
-
-
-
-<!--- Slide 06 ------------------------------------------------------------------------------------------------------------->
-## Results - Sentiment Globally - S20
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4.5}
 
