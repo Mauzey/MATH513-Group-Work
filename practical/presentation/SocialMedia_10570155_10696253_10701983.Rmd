@@ -210,8 +210,28 @@ knitr::include_graphics(c("./Images/Logos/apple_logo.png", "./Images/Logos/samsu
 
 <!--- SPEAKER NOTES:
 
-  ...
-
+  - We collected roughly 110,000 tweets
+    - After data cleaning, we were left with roughly 74,000 tweets
+  
+  - We extracted 5 features from these tweets during feature engineering
+  
+  - Table 1 shows a summary of the tweet data:
+  
+    - There are less tweets for the Galaxy S20 than the S20 FE and iPhone 12
+      - This is due to the constraints imposed by the Twitter API rate limits
+      
+    - 15-20% of the S20 FE and iPhone12 tweets are marked as spam, compared to the 3% for the S20
+      - Perhaps due to spammers focusing on the newer, more relevant products to reach a wider audience
+      
+    - Only 7% of iPhone12 tweets contained mentions of the features, compared to roughly 20% for the S20 and S20 FE
+  
+  - Table 2 shows a summary of the user data:
+  
+    - There were 35,000 unique users, from 163 identified countries
+      - XX% of users didn't have a valid country associated
+    
+    - Less than 1% of users were marked as bots (the actual number of identified bots is 155)
+    
 --->
 
 ```{r Overview of Data Extracted}
@@ -234,7 +254,7 @@ users_summary <- users %>%
   rename('Number of Users' = n_users, '% Bot Users' = percent_bots, 'Unique Countries' = n_countries)
 ```
 
-**Total Tweets:** `r total_tweets`
+**Total Tweets:** `r total_tweets` (after data cleaning)
 
 **Total Features:** `5 (Display, Battery, Camera, Price, and 5G)`
 
