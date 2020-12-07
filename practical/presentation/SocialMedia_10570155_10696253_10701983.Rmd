@@ -12,7 +12,7 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 
 # IMPORT DEPENDENCIES -------------------------------------------------------------------------------------------------------
-libs <- c('readr', 'dplyr', 'tidyverse', 'tidyr', 'tidytext', 'modelr', 'stringr', 'rtweet', 'ggplot2', 'ggthemes','scales', 'knitr')
+libs <- c('readr', 'dplyr', 'tidyverse', 'tidyr', 'tidytext', 'modelr', 'stringr', 'rtweet', 'ggplot2', 'ggthemes','scales', 'knitr', 'rworldmap')
 invisible(lapply(libs, library, character.only = TRUE))
 
 # IMPORT DATA ---------------------------------------------------------------------------------------------------------------
@@ -257,19 +257,27 @@ users_summary <- users %>%
 
 --->
 
-```{r Time Series Plots, echo=FALSE, fig.width=8, fig.height=4.5}
+```{r Time_Series_Plots, echo=FALSE, fig.width=8, fig.height=4.5}
+
+library(lubridate)
 
 tweets$product <- as.factor(tweets$product)  # Factorize product column
 
-# Plot time series
 tweets %>% group_by(product, is_retweet) %>%
-  ts_plot('days', trim = 1) + theme_light() +
+  ts_plot('days', trim = 1) + theme_minimal() +
   facet_grid(product ~ .) +
   labs(x = NULL, y = NULL,
-       title = "Frequency of Twitter Statuses over Time",
+       title = "Frequency of Twitter Statuses",
        subtitle = "Twitter status counts aggregated using 1-day intervals",
        caption = "Source: Data collected from Twitter's REST API via rtweet") +
   theme(plot.title = element_text(face = 'bold'))
+
+
+
+tweet_df <- tweets %>% mutate(date_created = as.Date(ymd_hms(tweets$created_at)))
+
+tweet_df <- tweets %>% group_by(product, is_retweet, date_created) 
+
 
 ```
 
@@ -291,9 +299,38 @@ tweets %>% group_by(product, is_retweet) %>%
 <!--- Slide  ------------------------------------------------------------------------------------------------------------->
 ## Results - Sentiment Globally - Iphone12
 
+```{r Geographical Data Iphone12, echo=FALSE}
+
+# SENTIMENT ANALYSIS - Geographical Data ------------------------------------------------------------------------------------
+
+# Get the 'user_id' and 'country' of users with valid country values
+geo_users <- users %>%
+  filter(potential_bot == F & !is.na(country)) %>%
+  select(user_id, country)
+
+# Get 'avg_sentiment' and 'product' of tweets posted by users with valid country values
+geo_tweets <- tweets %>%
+  filter(potential_spam == F & user_id %in% geo_users$user_id) %>%
+  select(user_id, product, avg_sentiment)
+
+# Merge the data frames
+geo_sentiment <- merge(geo_users, geo_tweets, by = 'user_id')
+
+# IPHONE 12
+
+# Join data referenced by country codes to an internal map
+iPhone12_matched <- geo_sentiment %>%
+  filter(product == 'iPhone12') %>%
+  joinCountryData2Map(joinCode = 'NAME', nameJoinColumn = 'country')
+# Plot the average sentiment for tweets regarding the iPhone12, for each country
+mapCountryData(iPhone12_matched,
+               mapTitle = "iPhone12 Sentiment by Country",
+               borderCol = 'gray40',
+               colourPalette = c('lightgoldenrod', 'goldenrod2', 'darkgoldenrod4'),
+               nameColumnToPlot = 'avg_sentiment', catMethod = 'pretty')
+```
 
 <!--- End of Slide  ------------------------------------------------------------------------------------------------------>
-
 
 
 
@@ -301,15 +338,46 @@ tweets %>% group_by(product, is_retweet) %>%
 <!--- Slide  ------------------------------------------------------------------------------------------------------------->
 ## Results - Sentiment Globally - S20FE
 
+```{r Geographical Data S20FE, echo=FALSE}
 
+# GALAXY S20 FE
 
+# Join data referenced by country codes to an internal map
+S20FE_matched <- geo_sentiment %>%
+  filter(product == 'Galaxy S20 FE') %>%
+  joinCountryData2Map(joinCode = 'NAME', nameJoinColumn = 'country')
+# Plot the average sentiment for tweets regarding the iPhone12, for each country
+mapCountryData(S20FE_matched,
+               mapTitle = "Galaxy S20 FE Sentiment by Country",
+               borderCol = 'gray40',
+               colourPalette = c('thistle', 'mediumpurple2', 'purple4'),
+               nameColumnToPlot = 'avg_sentiment', catMethod = 'pretty')
+
+```
 
 <!--- End of Slide 06 ------------------------------------------------------------------------------------------------------>
+
+
 
 
 <!--- Slide 06 ------------------------------------------------------------------------------------------------------------->
 ## Results - Sentiment Globally - S20
 
+```{r Geographical Data S20, echo=FALSE}
+
+# GALAXY S20
+
+# Join data referenced by country codes to an internal map
+S20_matched <- geo_sentiment %>%
+  filter(product == 'Galaxy S20') %>%
+  joinCountryData2Map(joinCode = 'NAME', nameJoinColumn = 'country')
+# Plot the average sentiment for tweets regarding the iPhone12, for each country
+mapCountryData(S20_matched,
+               mapTitle = "Galaxy S20 Sentiment by Country",
+               borderCol = 'gray40',
+               colourPalette = c('paleturquoise', 'mediumturquoise', 'turquoise4'),
+               nameColumnToPlot = 'avg_sentiment', catMethod = 'pretty')
+```
 
 <!--- End of Slide 06 ------------------------------------------------------------------------------------------------------>
 
