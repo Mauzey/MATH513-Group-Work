@@ -18,6 +18,8 @@ library(tidytext)
 library(ggthemes)
 library(sentimentr) #for 'SENTIMENT ANALYSIS - Product Features' section
 library(rworldmap)
+library(ggpubr)
+
 
 # SET WORKING DIRECTORY -----------------------------------------------------------------------------------------------------
 
@@ -53,7 +55,7 @@ tweets$product <- as.factor(tweets$product)
 
 # All products
 tweets %>% group_by(product, is_retweet) %>%
-  ts_plot('days', trim = 1) + theme_minimal() +
+  ts_plot('days', trim = 1) + theme_bw() +
   facet_grid(product ~ .) +
   labs(x = NULL, y = NULL,
        title = "Frequency of Twitter Statuses",
@@ -64,7 +66,7 @@ tweets %>% group_by(product, is_retweet) %>%
 # Galaxy S20 FE vs. iPhone12
 tweets %>% filter(product == 'Galaxy S20 FE' | product == 'iPhone12') %>%
   group_by(product, is_retweet) %>%
-  ts_plot('days', trim = 1) + theme_minimal() +
+  ts_plot('days', trim = 1) + theme_bw() +
     facet_grid(product ~ .) +
     labs(x = NULL, y = NULL,
          title = "Frequency of Twitter Statuses",
@@ -595,7 +597,7 @@ feature_sentiment %>%
   theme_bw() +
   scale_color_manual(values = c("iPhone12" = "lightgoldenrod3", 
                                 "Galaxy S20" = "turquoise",
-                                "Galaxy S20 FE" = "mediumpurple1"),) +
+                                "Galaxy S20 FE" = "mediumpurple1")) +
   scale_y_continuous(name = "Sentiment Score") +
   theme(axis.title.x=element_blank(), 
         axis.text.x=element_blank(),
@@ -620,7 +622,7 @@ geo_sentiment <- merge(geo_users, geo_tweets, by = 'user_id')
 
 
 
-# IPHONE 12
+# IPHONE 12z
 
 # Join data referenced by country codes to an internal map
 iPhone12_matched <- geo_sentiment %>%
@@ -662,3 +664,75 @@ mapCountryData(S20FE_matched,
                borderCol = 'gray40',
                colourPalette = c('thistle', 'mediumpurple2', 'purple4'),
                nameColumnToPlot = 'avg_sentiment', catMethod = 'pretty')
+
+
+#T-TEST
+
+#we can run the t-test if :
+# when the two groups of samples (A and B), being compared, are normally distributed. 
+# This can be checked using Shapiro-Wilk test.
+# 
+# and when the variances of the two groups are equal. 
+# This can be checked using F-test.
+
+#If we were to perform t-test, we'd do it on sentiment values for tweets related to 
+#each model we're using, regardless of whether it's related to any feature or not
+
+#first let's plot them and see if the tweets sentiments for each model are normally 
+#distributed. package for sentiments used - 'sentimentr'
+
+library(hrbrthemes)
+library(viridis)
+
+# The diamonds dataset is natively available with R.
+
+
+#p2
+
+# vals %>% 
+#   group_by()
+# ggdensity(vals$s20, main = "Density plot of tweets sentiments",
+#             xlab = "Sentiments range")
+# 
+
+
+feature_sentiment_data %>%
+  ggplot(aes(x=avg_sentiment, group=product, fill=product)) +
+  geom_density(adjust=1.5) +
+  theme_bw() +
+  facet_wrap(~product) +
+  scale_fill_manual(values = c("Galaxy S20" = "turquoise",
+                               "Galaxy S20 FE" = "mediumpurple1",
+                               "iPhone12" = "lightgoldenrod3")) +
+  theme(
+    legend.position="none",
+    panel.spacing = unit(0.1, "lines"),
+    axis.ticks.x=element_blank()
+  ) 
+
+
+
+feature_sentiment_data %>%
+  ggplot(aes(x=avg_sentiment, group=product, fill=product)) +
+  geom_density(adjust=1.5, alpha=.3) +
+  theme_bw() +
+  scale_fill_manual(values = c("Galaxy S20" = "turquoise",
+                               "Galaxy S20 FE" = "mediumpurple1",
+                               "iPhone12" = "lightgoldenrod3"))
+
+#T-TEST
+
+s20fe_vals <- feature_sentiment_data %>% 
+  filter(product=="Galaxy S20 FE") %>% .$avg_sentiment
+
+s20_vals <- feature_sentiment_data %>% 
+  filter(product=="Galaxy S20") %>% .$avg_sentiment
+
+iphone12_vals <- feature_sentiment_data %>% 
+  filter(product=="iPhone12") %>% .$avg_sentiment
+
+vals <- list(s20 = s20_vals, s20fe = s20fe_vals, iphone12 = iphone12_vals)
+
+
+t.test(vals$s20fe, vals$iphone12)
+t.test(vals$s20fe, vals$s20)
