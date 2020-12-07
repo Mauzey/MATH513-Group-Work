@@ -101,7 +101,7 @@ marketing interest (Apple, Samsung)
 - Github <!-- To allow us to work on various parts of the project and keep an up to date record of changes as a team --->
 
 ```{r Logos, echo=FALSE, out.width="15%", fig.align = "center", fig.show='hold', fig.cap=""}
-knitr::include_graphics(c("./Images/Logos/apple_logo.png", "./Images/Logos/samsung_logo.jpg", "./Images/Logos/rstudio_logo.png",     "./Images/Logos/twitter_logo.png"))
+knitr::include_graphics(c("./images/logos/apple_logo.png", "./images/logos/samsung_logo.jpg", "./images/logos/rstudio_logo.png",     "./images/logos/twitter_logo.png"))
 ```
 
 <!--- End of Slide 01 ------------------------------------------------------------------------------------------------------>
@@ -157,29 +157,34 @@ knitr::include_graphics(c("./Images/Logos/apple_logo.png", "./Images/Logos/samsu
 <!--- SPEAKER NOTES:
 
   - We removed duplicate entries for both the tweet and user data
+    - Duplicate tweets were collected due to overlapping data collection periods
+      - We started with about 110,000 tweets, and ended up with roughly 74,000
+      
+    - Duplicate users were collected due to individual users posting multiple tweets
+      - Started with about 110,000 users (one for each tweet), that went down to roughly 35,000 unique users
   
   - The tweet text and user bios were stripped of:
     - Links
     - Hash-tags
     - Emojis
     - User mentions
+  
+  - Users were marked as potential bots based on:
+    - Whether the source of their tweets identified them as a bot through the use of keywords
+    - Whether the user's bio identified them as a bot, which was also through the use of keywords
+
+  - The raw user locations varied due to twitter allowing custom locations:
+    - We used the 'country code' package to extract countries in order to make use of geolocational information
     
-  - We marked users as bots depending on:
-    - Whether the source of their tweets identified them as a bot, using keywords
-    - Whether their user bio identified them as a bot, using keywords
-    
-  - User locations varied to the point where they couldn't be plotted:
-    - We used the 'country code' package to identify the country of a user
+  - Tweets were marked as potential spam based on:
+    - Whether the tweet text identified it as spam, through the use of keywords
+    - Whether the author of the tweet had been previously marked as a bot
   
-  - We marked tweets as spam depending on:
-    - Whether the tweet text identified it a spam, using keywords
-    - Whether the author of the tweet was previously marked as a bot
+  - We extracted product features from each tweet's text:
+    - These features were: The product's Display, Camera, Battery, Price, and 5G Capabilities
   
-  - We extracted the following product features from the tweet text:
-    - Display, Camera, Battery, Price, and 5G Capability
-  
-  - We calculated a sentiment score for each tweet by:
-    - Getting sentiment for each word in the tweet, and averaging the results
+  - A sentiment score was calculated for each tweet, by computing a sentiment for each word in the tweet,
+    and averaging the results
 
 --->
 
@@ -210,31 +215,28 @@ knitr::include_graphics(c("./Images/Logos/apple_logo.png", "./Images/Logos/samsu
 
 <!--- SPEAKER NOTES:
 
-  - We collected roughly 110,000 tweets
-    - After data cleaning, we were left with roughly 74,000 tweets
+  - After data cleaning, we were left with about 74,000 tweets and 5 extracted features
   
-  - We extracted 5 features from these tweets during feature engineering
+  - Table 1 shows a summary of the collected tweet data grouped by product:
   
-  - Table 1 shows a summary of the tweet data:
-  
-    - There are less tweets for the Galaxy S20 than the S20 FE and iPhone 12
+    - There were less tweets for the Galaxy S20 than the S20 FE and iPhone 12.
       - This is due to the constraints imposed by the Twitter API rate limits
-      
-    - 15-20% of the S20 FE and iPhone12 tweets are marked as spam, compared to the 3% for the S20
-      - Perhaps due to spammers focusing on the newer, more relevant products to reach a wider audience
-      
-    - Only 7% of iPhone12 tweets contained mentions of the features, compared to roughly 20% for the S20 and S20 FE
+    
+    - 15-20% of the S20 FE and iPhone12 tweets were marked as spam, compared to the 3% for the S20
+      - This is perhaps due to the spammers focusing their efforts on newer, more relevant products in order to reach
+        a wider audience
+    
+    - Only 7% of iPhone12 tweets contained mentions of the chosen features, compared to roughly 20% for the S20 and S20 FE
   
   - Table 2 shows a summary of the user data:
   
-    - There were 35,000 unique users, from 163 identified countries
-      - XX% of users didn't have a valid country associated
+    - There were about 35,000 unique users, from 163 identified countries
     
-    - Less than 1% of users were marked as bots (the actual number of identified bots is 155)
+    - Less than 1% of users were marked as bots. The actual amount of bots is 155
     
 --->
 
-```{r Overview of Data Extracted}
+```{r}
 total_tweets <- nrow(tweets)
 
 tweets_summary <- tweets %>%
@@ -254,7 +256,7 @@ users_summary <- users %>%
   rename('Number of Users' = n_users, '% Bot Users' = percent_bots, 'Unique Countries' = n_countries)
 ```
 
-**Total Tweets:** `r total_tweets` (after data cleaning)
+**Total Tweets:** `r total_tweets` after data cleaning
 
 **Total Features:** `5 (Display, Battery, Camera, Price, and 5G)`
 
@@ -282,18 +284,20 @@ users_summary <- users %>%
 
 --->
 
-```{r Time_Series_Plots, echo=FALSE}
-tweets %>% 
-  filter(product == 'Galaxy S20 FE' | product == 'iPhone12') %>%
-  group_by(product, is_retweet) %>%
-  ts_plot('days', trim = 1) + 
-  theme_minimal() +
+```{r}
+
+tweets$product <- as.factor(tweets$product)  # Factorize product column
+
+# Plot time series
+tweets %>% group_by(product, is_retweet) %>%
+  ts_plot('days', trim = 1) + theme_minimal() +
   facet_grid(product ~ .) +
   labs(x = NULL, y = NULL,
-       title = "Frequency of Twitter Statuses",
-       subtitle = "Twitter status counts aggregated using 1-day intervals by product",
+       title = "Frequency of Twitter Statuses over Time",
+       subtitle = "Twitter status counts aggregated using 1-day intervals",
        caption = "Source: Data collected from Twitter's REST API via rtweet") +
   theme(plot.title = element_text(face = 'bold'))
+
 ```
 
 <!--- End of Slide 05 ------------------------------------------------------------------------------------------------------>
