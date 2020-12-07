@@ -257,15 +257,6 @@ users_summary <- users %>%
 
 --->
 
-```{r Time_Series_Plots, echo=FALSE, fig.width=8, fig.height=4.5}
-
-
-
-tweet_df <- tweets %>% mutate(date_created = as.Date(ymd_hms(tweets$created_at)))
-
-```
-
-
 ```{r echo=FALSE}
 
 tweets$product <- as.factor(tweets$product)  # Factorize product column
@@ -287,6 +278,62 @@ tweets %>% group_by(product, is_retweet) %>%
 
 
 ## Results - Sentiment Analysis
+
+```{r include=FALSE}
+# SENTIMENT ANALYSIS - Product Features -------------------------------------------------------------------------------------
+
+#For features analysis we'll be using a different package called "sentimentr"
+
+#Find more info about it here:
+#https://towardsdatascience.com/sentiment-analysis-in-r-good-vs-not-good-handling-negations-2404ec9ff2ae
+
+# “sentimentr attempts to take into account valence shifters 
+# (i.e., negators, amplifiers (intensifiers), de-amplifiers (downtoners), 
+# and adversative conjunctions) while maintaining speed. Simply put, 
+# sentimentr is an augmented dictionary lookup.”
+
+# Compute overall sentiment score for each tweet using sentimentr
+
+# Extract relevant information
+feature_sentiment_data <- select(tweets, product, mentioned_features, avg_sentiment, sd_sentiment)
+
+# Separate 'mentioned_features' column
+feature_sentiment_data <- separate(feature_sentiment_data, col = mentioned_features, into = paste0('feature', 1:5), sep = ', ')
+
+# Pivot feature columns
+feature_sentiment <- pivot_longer(feature_sentiment_data,
+                                  cols = names(feature_sentiment_data)[which(grepl('feature', names(feature_sentiment_data)))])
+
+# Remove NAs and whitespace
+feature_sentiment <- feature_sentiment %>%
+  mutate(value = trimws(value)) %>% filter(!is.na(value))
+
+feature_sentiment_stat <- feature_sentiment %>% 
+  group_by(product, value) %>% 
+  summarise(mean_sentiment = mean(avg_sentiment),
+            sum_sentiment = sum(avg_sentiment))
+```
+
+```{r echo=FALSE}
+#BOXPLOT
+feature_sentiment %>% 
+  group_by(product) %>%
+  ggplot(aes(x = product, y = avg_sentiment, color = product)) +
+  geom_boxplot() +
+  facet_wrap(. ~ value) +
+  theme_bw() +
+  scale_color_manual(values = c("iPhone12" = "lightgoldenrod3", 
+                               "Galaxy S20" = "turquoise",
+                               "Galaxy S20 FE" = "mediumpurple1"),) +
+  scale_y_continuous(name = "Sentiment Score") +
+  theme(axis.title.x=element_blank(), 
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank()) +
+  labs(title = "Sentiment Score of 5 Features for Each of the Phone Models",
+       color = "Phone Model")
+
+```
+
 
 **Overview of sentiment analysis**
 
@@ -332,7 +379,7 @@ S20_matched <- geo_sentiment %>%
 
 ```
 
-```{r GeographicalDataIphone12, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4.5}
+```{r echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4.5}
 
 # Plot the average sentiment for tweets regarding the iPhone12, for each country
 mapCountryData(iPhone12_matched,
@@ -350,7 +397,7 @@ mapCountryData(iPhone12_matched,
 <!--- Slide  ------------------------------------------------------------------------------------------------------------->
 ## Results - Sentiment Globally - S20FE
 
-```{r Geographical Data S20FE, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4.5}
+```{r echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4.5}
 
 # Plot the average sentiment for tweets regarding the S20 FE, for each country
 mapCountryData(S20FE_matched,
@@ -369,7 +416,7 @@ mapCountryData(S20FE_matched,
 <!--- Slide 06 ------------------------------------------------------------------------------------------------------------->
 ## Results - Sentiment Globally - S20
 
-```{r Geographical Data S20, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4.5}
+```{r echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4.5}
 
 # Plot the average sentiment for tweets regarding the S20, for each country
 mapCountryData(S20_matched,
