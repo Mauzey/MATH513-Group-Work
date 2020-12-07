@@ -8,169 +8,185 @@ output:
     colortheme: beaver
 ---
 
-```{r setup, include=FALSE}
+<!-- 
+
+OVERVIEW
+
+  Speaker notes are kept in comments to hide from presentation unless the comment is in a code chunck
+  Code requires you to have the csv data set that is available from the following GitHub repository: https://github.com/Mauzey/MATH513-Group-Work
+
+-->
+
+```{r Initial Setup, include=FALSE}
 
 knitr::opts_chunk$set(include = FALSE)
+
 # IMPORT DEPENDENCIES -------------------------------------------------------------------------------------------------------
-
-libs <- c('readr', 'dplyr', 'tidyverse', 'tidyr', 'tidytext', 'modelr', # wrangling
-          'stringr', 'rtweet',    # strings, tweets
-          'knitr',  # table styling
-          'ggplot2', 'ggthemes')  # plots
-
+libs <- c('readr', 'dplyr', 'tidyverse', 'tidyr', 'tidytext', 'modelr', 'stringr', 'rtweet','knitr', 'ggplot2', 'ggthemes')
 invisible(lapply(libs, library, character.only = TRUE))
 
-
-
 # SET WORKING DIRECTORY -----------------------------------------------------------------------------------------------------
-
-# Will
-setwd("C:/Users/willo/SynologyDrive/Documents - Will/Qualifications/!MSc Data Science/!Courses/1 MATH513 Big Data and Social Network/Assessment/MATH513-Group-Work/practical")
-
-# Tania
-#setwd("")
-
-# Alex
-#setwd("~/Development/Repositories/MATH513-Group-Work/practical")
-#setwd("D:/Development/MATH513-Group-Work/practical")
+setwd("C:/Users/willo/SynologyDrive/Documents - Will/Qualifications/!MSc Data Science/!Courses/1 MATH513 Big Data and Social Network/Assessment/MATH513-Group-Work/practical") # Will
+#setwd("") # Tania
+#setwd("~/Development/Repositories/MATH513-Group-Work/practical") # Alex
 
 # IMPORT DATA ---------------------------------------------------------------------------------------------------------------
-#Load in tweets
-tweets <- read_csv("./data/cleaned-tweets.csv")
-
+tweets <- read_csv("./data/cleaned-tweets.csv") #Load in tweets from the csv file.
 ```
 
+<!-- 
+
+PRESETNATION CHECKLIST
+
+/ = complete and in presentation
+
+/Two contrasting business related topics
+  - /Apple and Samsung Intro
+
+/social media source such as Twitter
+  - /rtweet and twitter api
+  - holistic view using other sources ###### NEED THIS
+
+Range of suitable data visualization techniques
+  - /Box Plot
+  - /Time Series
+  - /Location Map
+  - /Pie Chart of Tweets - % Spam VS General VS usable feature tweets per product, normalised for easy comparison ################### NEED THIS
+  - Data Frame (Tweet count) ######################### NEED THIS
+
+/appropriate sentiment analysis
+  - /sentiment by feature by product (mean/avg sentiment)
+  
+ 
+Statistical Test
+  Stock price VS sentiment on a daily basis ############### NEED THIS
+  Is a T-Test appropriate?  ################## NEED THIS
+
+
+Manipulation techniques used and why ##### ALEX FILLING IN
+    Remove hyperlinks, emojis, user mentions and hashtags
+    Adding additional columns for filtering data correctly
+Graphs and why
+
+strategic business impact (Apple, Samsung)
+marketing interest (Apple, Samsung)
+
+--->
+
+
+
+<!--- ## SLIDE 01 ## --->
 
 ## Introduction
 
-- Samsung and Apple as competing businesses
+- Samsung and Apple <!-- Chosen as competing businesses due to the current releases of their flagship phones meaning data would be available. --->
 - Flagship phones chosen
   + S20FE
   + iPhone12
-- S20 was chosen for demonstration purposes
+  + S20 <!-- We chose to gather some tweets on the S20 to give us some comparable information for sentiment analysis. This allowed us to show the usefulness of the analysis process and outcomes as Samsung had supposedly listened to its fan base when developing the S20 Fan Edition. --->
 
 **Tools Utilised**
 
-- RTweet
 - Rstudio
-- Twitter Developer API
+- RTweet
+- Twitter Developer API <!--- Allowed us access to the twitter data to analyse --->
+- Github <!-- To allow us to work on various parts of the project and keep an up to date record of changes as a team --->
 
-```{r, echo=FALSE, out.width="15%", fig.align = "center", fig.show='hold', fig.cap=""}
-
-knitr::include_graphics(
-  c("images/logos/apple_logo.png",
-    "images/logos/samsung_logo.jpg",
-    "images/logos/rstudio_logo.png", 
-    "images/logos/twitter_logo.png")
-)
+```{r Logos, echo=FALSE, out.width="15%", fig.align = "center", fig.show='hold', fig.cap=""}
+knitr::include_graphics(c("images/logos/apple_logo.png",    "images/logos/samsung_logo.jpg",    "images/logos/rstudio_logo.png",     "images/logos/twitter_logo.png"))
 ```
 
 
+
+
+
+<!--- ## SLIDE 02 ## --->
+ 
 ## Research
 
+**Chosing Twitter for Analysis**
 
-<!-- Need to reference the Twitter accounts that we used to determine the #hashtags that we chose --->
+  !!! Why did we choose Twitter data ## Ref needed
 
 - Twitter data provides up to date information for companies to analyse for customer feedback
 - Data can provide useful information to guide product teams when analysed correctly
 
+  <!-- Need to reference the Twitter accounts that we used to determine the #hashtags that we chose --->
 
 
-<!-- Pictures of the phones in colours that match graphs to associate? -->
+**Hashtags**
+- @SamsungMobile - https://twitter.com/SamsungMobile <!-- From the Samsung Mobile page we identified that the hastags #GalaxyS20 and #GalaxyS20FE were the offical hashtags used by Samsung in their Twitter posts
+- @Apple - https://twitter.com/Apple <!-- We then looked for the same information from Apple but found that since the Twitter account was hacked on the 15th July 2020, Apple have not been keeping tweets on their Twitter page. (Swider, Matt (2020), TechRadar - https://www.techradar.com/news/twitter-hack-2020)  -->
+- @tim_cook - https://twitter.com/tim_cook <!-- We then looked to the CEO of Apple as it was deemed most likely that he would be using the offical hashtags as deemed by Apple's marketing team, which led us to the hashatg #iphone12. -->
+
+<!-- We also did some sample searches of other hashtags like S20 and S20FE using the advanced Twitter search on the website to determine how relevant the hashtag was. We did this simply by examining after how spread the dates were from the first 25 tweets. This research further supported our findings on the iphone12, samsungs20 and samungs20fe hashtags. -->
+<!-- We came to the conclusion that it was better to use hashtags over actual profiles, both business or individual, so that we would get a wide range of opions for a fairer analysis. -->
+
+
+!!! Pictures of the phones in colours that match graphs to associate?
 
 
 
 
-- Twitter data provides up to date information for companies to analyse for customer feedback
 
-- Data can provide useful information to guide product teams when analysed correctly
+<!--- ## SLIDE 03 ## --->
+ 
+## Data Collected
 
-
-```{r}
-
-# Extract relevant information
-feature_sentiment_data <- select(tweets, product, mentioned_features, avg_sentiment, sd_sentiment)
-
-# Separate 'mentioned_features' column
-feature_sentiment_data <- separate(feature_sentiment_data, col = mentioned_features, into = paste0('feature', 1:5), sep = ', ')
-
-# Pivot feature columns
-feature_sentiment <- pivot_longer(feature_sentiment_data,
-                                  cols = names(feature_sentiment_data)[which(grepl('feature', names(feature_sentiment_data)))])
-
-#Count of tweet data
-feature_sentiment %>% count(product, value)
-
+**Data Frame (Tweet Count)**
+```{r Overview of Data Extracted}
+feature_sentiment_data <- select(tweets, product, mentioned_features, avg_sentiment, sd_sentiment) # Extract relevant information
+feature_sentiment_data <- separate(feature_sentiment_data, col = mentioned_features, into = paste0('feature', 1:5), sep = ', ') # Separate 'mentioned_features' column
+feature_sentiment <- pivot_longer(feature_sentiment_data,cols = names(feature_sentiment_data)[which(grepl('feature', names(feature_sentiment_data)))]) # Pivot feature columns
+feature_sentiment %>% count(product, value) #Count of tweet data
 feature_sentiment %>% count(product)
 
 ```
 
-
+!!!!! Need to push the above into a useable data frame with grouping by product (y axis) and feature (x axis)
 
 74,000 Tweets
 
 XXXX mentioned features
 
-
-Total for features: 
-S20 3,480 sentiment scores
-S20FE 6,302 sentiment scores 
-iPhone12 2,470 sentiment scores
-
-S20FE 4,659 tweets for camera
+Total for features
+|Product | Sentiment Scores|
+|S20 | 3,480 sentiment scores|
+|S20FE | 6,302 sentiment scores|
+|iPhone12 | 2,470 sentiment scores|
 
 
 
 
-Examined the key hashtags that were being used for the phones chosen
-
-- Checked Samsung's Twitter feed
-- Checked Tim Cook's Twitter feed
-  + Apple's Twitter contains no tweets
-- Checked for number and age of tweets using a simple Twitter search for several hashtags
-- Avoided selecting individuals or companies so we can get a wide range of opinions for a more rounded data set
-
-
-## Issues and overcoming them
-
-- Date refinement on Twitter Premium API functions only
-  + Dev suite allowed limited access to full archive and 30 day extraction features
-- Possible duplication if we extracted at the same time
-  + Full archive and 30 day extraction allowed for refinement of dates and pull tweets back to 2006
-- Extraction limited to 18k per 15mins
-  + Controlled pull of tweets with date refinement over time as retry on rate limit did not function a expected
-- Foreign languages
-  + Filter by language of 'en' applied to only pull English tweets
-- Different regions with different opinions
-  + Region filter didn't work in test so we concluded we would examine this in the analysis stage
-- Tweets are pulled from date to backwards to date to
-  + Pull tweets in a controlled manner using weeks and days
-
-
-## Results - Overview of Twitter Data
-
-Time series plots of data pulled from Twitter
-
+<!--- ## SLIDE 04 ## --->
+ 
+## Results - Time Series
 ```{r Time_Series_Plots, echo=FALSE}
-tweets %>% filter(product == 'Galaxy S20 FE' | product == 'iPhone12') %>%
+tweets %>% 
+  filter(product == 'Galaxy S20 FE' | product == 'iPhone12') %>%
   group_by(product, is_retweet) %>%
-  ts_plot('days', trim = 1) + theme_minimal() +
-    facet_grid(product ~ .) +
-    labs(x = NULL, y = NULL,
-         title = "Frequency of Twitter Statuses",
-         subtitle = "Twitter status counts aggregated using 1-day intervals",
-         caption = "Source: Data collected from Twitter's REST API via rtweet") +
-    theme(plot.title = element_text(face = 'bold')) + 
-  geom_vline(xintercept = as.POSIXct("2020-10-02 00:00:00", tz = "UTC"))+ #Add line for S20FE
-  geom_vline(xintercept = as.POSIXct("2020-10-23 00:00:00", tz = "UTC"))+  #Add line for iPhone12
-  scale_x_continuous(limits = c(as.Date("2020-10-01 00:00:00", tz = "UTC"),
-                                as.Date("2020-11-30 00:00:00", tz = "UTC"))
-                     )
+  ts_plot('days', trim = 1) + 
+  theme_minimal() +
+  facet_grid(product ~ .) +
+  labs(x = NULL, y = NULL,
+       title = "Frequency of Twitter Statuses",
+       subtitle = "Twitter status counts aggregated using 1-day intervals by product",
+       caption = "Source: Data collected from Twitter's REST API via rtweet") +
+  theme(plot.title = element_text(face = 'bold'))
 ```
 
+<!-- 
+  Due to the limitations of the free version of the Twitter API we pulled as much data as we could over the last month. 
+  The release date for the S20FE was the 2nd October 2020 and for the iPhone12 was the 23rd October 2020.
+  This limitation meant that the tweets we pulled are about 3 weeks after the release date for the S20FE and 1 week after the iPhone release.
+  From the graph, you can see that we managed to gather a reasonable amount of tweets over the month of November.
+
+-->
 
 
 
+
+<!--- ## SLIDE 05 ## --->
 
 ## Results - Sentiment Analysis
 
@@ -202,8 +218,33 @@ GRAPH HERE
 
 Google Maps API to have region filter
 
+Look at mentions of apple in samsung and vice versa
 
 
+
+
+## Issues and overcoming them
+
+- Extraction by date
+- Duplication
+- Time limits
+- Foreign languages
+- 
+
+
+<!--
+- Date refinement on Twitter Premium API functions only
+  + Dev suite allowed limited access to full archive and 30 day extraction features
+- Tweets are pulled from date to backwards to date to
+  + Pull tweets in a controlled manner using weeks and days
+- Possible duplication if we extracted at the same time
+  + Full archive and 30 day extraction allowed for refinement of dates and pull tweets back to 2006
+- Extraction limited to 18k per 15mins
+  + Controlled pull of tweets with date refinement over time as retry on rate limit did not function a expected
+- Foreign languages
+  + Filter by language of 'en' applied to only pull English tweets
+
+-->
 
 
 
