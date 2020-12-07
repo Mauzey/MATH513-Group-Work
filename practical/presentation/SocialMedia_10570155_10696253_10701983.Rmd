@@ -259,6 +259,15 @@ users_summary <- users %>%
 
 ```{r Time_Series_Plots, echo=FALSE, fig.width=8, fig.height=4.5}
 
+
+
+tweet_df <- tweets %>% mutate(date_created = as.Date(ymd_hms(tweets$created_at)))
+
+```
+
+
+```{r echo=FALSE}
+
 tweets$product <- as.factor(tweets$product)  # Factorize product column
 
 tweets %>% group_by(product, is_retweet) %>%
@@ -269,8 +278,6 @@ tweets %>% group_by(product, is_retweet) %>%
        subtitle = "Twitter status counts aggregated using 1-day intervals",
        caption = "Source: Data collected from Twitter's REST API via rtweet") +
   theme(plot.title = element_text(face = 'bold'))
-
-tweet_df <- tweets %>% mutate(date_created = as.Date(ymd_hms(tweets$created_at)))
 
 ```
 
@@ -292,7 +299,7 @@ tweet_df <- tweets %>% mutate(date_created = as.Date(ymd_hms(tweets$created_at))
 <!--- Slide  ------------------------------------------------------------------------------------------------------------->
 ## Results - Sentiment Globally - Iphone12
 
-```{r Geographical Data Iphone12, echo=FALSE}
+```{r GeographicalDataIphone12, echo=FALSE}
 
 # SENTIMENT ANALYSIS - Geographical Data ------------------------------------------------------------------------------------
 
