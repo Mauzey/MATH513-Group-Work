@@ -160,10 +160,10 @@ knitr::include_graphics(c("./images/logos/apple_logo.png", "./images/logos/samsu
     - Duplicate tweets were collected due to overlapping data collection periods
       - We started with about 110,000 tweets, and ended up with roughly 74,000
       
-    - Duplicate users were collected due to individual users posting multiple tweets
-      - Started with about 110,000 users (one for each tweet), that went down to roughly 35,000 unique users
+    - Duplicate users were collected because one user can post many tweets
+      - Again, we started with about 110,000 users (one for each tweet), that went down to roughly 35,000 unique users
   
-  - The tweet text and user bios were stripped of:
+  - We then stripped the tweet text and user bios of:
     - Links
     - Hash-tags
     - Emojis
@@ -171,19 +171,21 @@ knitr::include_graphics(c("./images/logos/apple_logo.png", "./images/logos/samsu
   
   - Users were marked as potential bots based on:
     - Whether the source of their tweets identified them as a bot through the use of keywords
-    - Whether the user's bio identified them as a bot, which was also through the use of keywords
+    - ...and whether the user's bio identified them as a bot, this also used keywords
 
-  - The raw user locations varied due to twitter allowing custom locations:
-    - We used the 'country code' package to extract countries in order to make use of geolocational information
+  - The raw user locations varied because twitter allows custom locations (such as 'on a mountain' or 'earth'):
+    - We used the 'country code' package to extract countries in order to make them usable in analysis
     
   - Tweets were marked as potential spam based on:
     - Whether the tweet text identified it as spam, through the use of keywords
-    - Whether the author of the tweet had been previously marked as a bot
+    - ...and whether the author of the tweet had been previously marked as a bot
   
-  - We extracted product features from each tweet's text:
+  - We had to manually extract the hash-tags from the tweet text due to an issue with rtweet
+  
+  - We extracted product features from each of the tweet's text:
     - These features were: The product's Display, Camera, Battery, Price, and 5G Capabilities
   
-  - A sentiment score was calculated for each tweet, by computing a sentiment for each word in the tweet,
+  - Finally, sentiment score was calculated for each tweet, by computing a sentiment for each word in the tweet,
     and averaging the results
 
 --->
@@ -192,12 +194,14 @@ knitr::include_graphics(c("./images/logos/apple_logo.png", "./images/logos/samsu
 
 - Duplicate tweet and user observations were removed
 - Tweet text and user bios were cleaned
+  + Removed links, hash-tags, emojis, and user mentions
 
 **Feature Engineering**
 
 - Users were marked as potential bots
 - User country was extracted from the location of their profile
 - Tweets were marked as potential spam
+- Hash-tags were extracted from the tweet text
 - Product features were extracted from the tweet text
   + Display, Battery, Camera, Price, and 5G Capability
 - An overall sentiment score was calculated for each tweet
@@ -232,7 +236,7 @@ knitr::include_graphics(c("./images/logos/apple_logo.png", "./images/logos/samsu
   
     - There were about 35,000 unique users, from 163 identified countries
     
-    - Less than 1% of users were marked as bots. The actual amount of bots is 155
+    - Less than 1% of these users were marked as bots. The actual amount being 155
     
 --->
 
