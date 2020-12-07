@@ -233,7 +233,7 @@ users_summary <- users %>%
 
 <!--- Slide 05 ------------------------------------------------------------------------------------------------------------->
 
-## Results - Time Series
+## Time Periods for Data Collection
 
 <!--- SPEAKER NOTES:
 
@@ -250,7 +250,7 @@ tweets$product <- as.factor(tweets$product)  # Factorize product column
 
 # Plot time series
 tweets %>% group_by(product, is_retweet) %>%
-  ts_plot('days', trim = 1) + theme_minimal() +
+  ts_plot('days', trim = 1) + theme_light() +
   facet_grid(product ~ .) +
   labs(x = NULL, y = NULL,
        title = "Frequency of Twitter Statuses over Time",
