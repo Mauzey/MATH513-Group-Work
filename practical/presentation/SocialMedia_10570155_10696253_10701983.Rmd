@@ -60,6 +60,7 @@ Chosen as competing businesses due to the current releases of their flagship pho
 
 We chose to gather some tweets on the S20 to give us some comparable information for sentiment analysis. This allowed us to show the usefulness of the analysis process and outcomes as Samsung had supposedly listened to its fan base when developing the S20 Fan Edition.
 
+Allowed us access to the twitter data to analyse.
 
 To allow us to work on various parts of the project and keep an up to date record of changes as a team.
 
