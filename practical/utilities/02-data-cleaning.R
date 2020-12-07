@@ -8,6 +8,7 @@ library(readr)
 library(dplyr)
 library(stringr)
 library(countrycode)
+library(sentimentr)
 
 options(scipen = 999)  # Disable scientific notation (for tweet and user ids)
 
@@ -134,7 +135,7 @@ complete_user_data$potential_bot <- ifelse(complete_user_data$user_id %in% bot_t
 
 # Mark potential bots based on the content of the user description
 bot_users <- complete_user_data %>%
-  filter(grepl(regex(bot_keywords, ignore_case = T), description))  # Compile users whose description contains bot keywords
+  filter(grepl(regex(bot_keywords, ignore_case = T), stripped_description))  # Compile users whose description contains bot keywords
 # Mark users as potential bots if their 'user_id' appears in the above dataframe
 complete_user_data$potential_bot <- ifelse(complete_user_data$user_id %in% bot_users | complete_user_data$potential_bot == T,
                                            T, complete_user_data$potential_bot)
@@ -160,13 +161,13 @@ rm(extract_country, countries)  # Remove vars from memory to keep the environmen
 # FEATURE ENGINEERING - Tweet Data ------------------------------------------------------------------------------------------
 
 # Extract hash-tags from the tweet text, and add to the 'hashtags' column
-extract_hashtags <- function(x) {
-  hashtags <- str_extract_all(x, '#\\S+')  # Get hash-tags from the tweet text
+extract_hashtags <- function(row) {
+  hashtags <- str_extract_all(row['text'], '#\\S+')  # Get hash-tags from the tweet text
   unlist_hashtags <- unlist(hashtags, recursive = T, use.names = T)  # Un-list the hash-tags
   
   return(paste(unlist_hashtags, collapse = ', '))  # Return the hash-tags as a string, separated by commas
 }
-complete_tweet_data$hashtags <- lapply(complete_tweet_data$text, extract_hashtags)
+complete_tweet_data$hashtags <- apply(complete_tweet_data, 1, extract_hashtags)
 
 rm(extract_hashtags)  # Remove vars from memory to keep the environment tidy
 
@@ -191,16 +192,22 @@ rm(spam_tweets, spam_keywords, bot_users)  # Remove vars from memory to keep the
 
 # Extract mentioned product features for further analysis
 features <- 'display|battery|camera|price|5g'
-extract_features <- function(x) {
-  mentioned_features <- str_extract_all(x, regex(features, ignore_case = T))  # Get features from tweet text
-  unlist_mentioned_features <- unique(unlist(mentioned_features, recursive = T, use.names = T))  # Un-list the features
+extract_features <- function(row) {
+  mentioned_features <- str_extract_all(row['stripped_text'], regex(features, ignore_case = T))  # Get features from tweet text
+  unlist_mentioned_features <- unlist(mentioned_features, recursive = T, use.names = T)  # Un-list the features
   
-  return(tolower(paste(unlist_mentioned_features, collapse = ', ')))  # Return the features as a lower-case string, separated by commas
+  return(tolower(paste(unlist_mentioned_features, collapse = ', ')))
 }
-complete_tweet_data$mentioned_features <- lapply(complete_tweet_data$stripped_text, extract_features)
+complete_tweet_data$mentioned_features <- apply(complete_tweet_data, 1, extract_features)
 complete_tweet_data$mentioned_features[complete_tweet_data$mentioned_features == ''] <- NA  # Mark empty cells as NA
 
 rm(extract_features, features)  # Remove vars from memory to keep the environment tidy
+
+
+# Calculate sentiment scores for each tweet
+complete_tweet_data$avg_sentiment <- sentiment_by(complete_tweet_data$stripped_text)$ave_sentiment
+complete_tweet_data$sd_sentiment <- sentiment_by(complete_tweet_data$stripped_text)$sd
+
 
 # EXPORT CLEANED DATA -------------------------------------------------------------------------------------------------------
 
