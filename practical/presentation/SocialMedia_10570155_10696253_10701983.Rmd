@@ -12,7 +12,7 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 
 # IMPORT DEPENDENCIES -------------------------------------------------------------------------------------------------------
-libs <- c('readr', 'dplyr', 'tidyverse', 'tidyr', 'tidytext', 'modelr', 'stringr', 'rtweet', 'ggplot2', 'ggthemes','scales', 'knitr', 'rworldmap')
+libs <- c('readr', 'dplyr', 'tidyverse', 'tidyr', 'tidytext', 'modelr', 'stringr', 'rtweet', 'ggplot2', 'ggthemes','scales', 'knitr', 'rworldmap', 'lubridate')
 invisible(lapply(libs, library, character.only = TRUE))
 
 # IMPORT DATA ---------------------------------------------------------------------------------------------------------------
@@ -257,9 +257,7 @@ users_summary <- users %>%
 
 --->
 
-```{r Time_Series_Plots, echo=FALSE, fig.width=8, fig.height=4.5, error=TRUE}
-
-library(lubridate)
+```{r Time_Series_Plots, echo=FALSE, fig.width=8, fig.height=4.5}
 
 tweets$product <- as.factor(tweets$product)  # Factorize product column
 
@@ -272,11 +270,7 @@ tweets %>% group_by(product, is_retweet) %>%
        caption = "Source: Data collected from Twitter's REST API via rtweet") +
   theme(plot.title = element_text(face = 'bold'))
 
-
 tweet_df <- tweets %>% mutate(date_created = as.Date(ymd_hms(tweets$created_at)))
-
-tweet_df <- tweets %>% group_by(product, is_retweet, date_created) 
-
 
 ```
 
