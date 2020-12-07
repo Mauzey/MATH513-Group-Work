@@ -299,8 +299,7 @@ tweets %>% group_by(product, is_retweet) %>%
 <!--- Slide  ------------------------------------------------------------------------------------------------------------->
 ## Results - Sentiment Globally - Iphone12
 
-```{r GeographicalDataIphone12, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4.5}
-
+```{r include=FALSE}
 # SENTIMENT ANALYSIS - Geographical Data ------------------------------------------------------------------------------------
 
 # Get the 'user_id' and 'country' of users with valid country values
@@ -320,6 +319,21 @@ geo_sentiment <- merge(geo_users, geo_tweets, by = 'user_id')
 iPhone12_matched <- geo_sentiment %>%
   filter(product == 'iPhone12') %>%
   joinCountryData2Map(joinCode = 'NAME', nameJoinColumn = 'country')
+
+# Join data referenced by country codes to an internal map
+S20FE_matched <- geo_sentiment %>%
+  filter(product == 'Galaxy S20 FE') %>%
+  joinCountryData2Map(joinCode = 'NAME', nameJoinColumn = 'country')
+
+# Join data referenced by country codes to an internal map
+S20_matched <- geo_sentiment %>%
+  filter(product == 'Galaxy S20') %>%
+  joinCountryData2Map(joinCode = 'NAME', nameJoinColumn = 'country')
+
+```
+
+```{r GeographicalDataIphone12, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4.5}
+
 # Plot the average sentiment for tweets regarding the iPhone12, for each country
 mapCountryData(iPhone12_matched,
                mapTitle = "iPhone12 Sentiment by Country",
@@ -338,10 +352,6 @@ mapCountryData(iPhone12_matched,
 
 ```{r Geographical Data S20FE, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4.5}
 
-# Join data referenced by country codes to an internal map
-S20FE_matched <- geo_sentiment %>%
-  filter(product == 'Galaxy S20 FE') %>%
-  joinCountryData2Map(joinCode = 'NAME', nameJoinColumn = 'country')
 # Plot the average sentiment for tweets regarding the S20 FE, for each country
 mapCountryData(S20FE_matched,
                mapTitle = "Galaxy S20 FE Sentiment by Country",
@@ -361,10 +371,6 @@ mapCountryData(S20FE_matched,
 
 ```{r Geographical Data S20, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4.5}
 
-# Join data referenced by country codes to an internal map
-S20_matched <- geo_sentiment %>%
-  filter(product == 'Galaxy S20') %>%
-  joinCountryData2Map(joinCode = 'NAME', nameJoinColumn = 'country')
 # Plot the average sentiment for tweets regarding the S20, for each country
 mapCountryData(S20_matched,
                mapTitle = "Galaxy S20 Sentiment by Country",
