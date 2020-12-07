@@ -1,5 +1,5 @@
 ---
-title: "MATH 513 Practical Presentation"
+title: "MATH513 Practical Presentation"
 author: "10570155, 10696253, 10701983"
 date: "10/12/2020"
 output: 
@@ -8,101 +8,50 @@ output:
     colortheme: beaver
 ---
 
-<!-- 
-
-OVERVIEW
-
-  Speaker notes are kept in comments to hide from presentation unless the comment is in a code chunck
-  Code requires you to have the csv data set that is available from the following GitHub repository: https://github.com/Mauzey/MATH513-Group-Work
-
--->
-
-```{r Initial Setup, include=FALSE}
-
-knitr::opts_chunk$set(include = FALSE)
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
 
 # IMPORT DEPENDENCIES -------------------------------------------------------------------------------------------------------
-libs <- c('readr', 'dplyr', 'tidyverse', 'tidyr', 'tidytext', 'modelr', 'stringr', 'rtweet','knitr', 'ggplot2', 'ggthemes',
-          'scales', 'knitr')
+libs <- c('readr', 'dplyr', 'tidyverse', 'tidyr', 'tidytext', 'modelr', 'stringr', 'rtweet', 'ggplot2', 'ggthemes','scales', 'knitr')
 invisible(lapply(libs, library, character.only = TRUE))
-
-# SET WORKING DIRECTORY -----------------------------------------------------------------------------------------------------
-#setwd("C:/Users/willo/SynologyDrive/Documents - Will/Qualifications/!MSc Data Science/!Courses/1 MATH513 Big Data and Social Network/Assessment/MATH513-Group-Work/practical") # Will
-#setwd("") # Tania
-#setwd("~/Development/Repositories/MATH513-Group-Work/practical") # Alex
 
 # IMPORT DATA ---------------------------------------------------------------------------------------------------------------
 tweets <- read_csv("../data/cleaned-tweets.csv") #Load in tweets from the csv file.
 users <- read_csv("../data/cleaned-users.csv")
+
 ```
 
-<!-- 
-
-PRESETNATION CHECKLIST
-
-/ = complete and in presentation
-
-/Two contrasting business related topics
-  - /Apple and Samsung Intro
-
-/social media source such as Twitter
-  - /rtweet and twitter api
-  - holistic view using other sources ###### NEED THIS
-
-Range of suitable data visualization techniques
-  - /Box Plot
-  - /Time Series
-  - /Location Map
-  - /Pie Chart of Tweets - % Spam VS General VS usable feature tweets per product, normalised for easy comparison ################### NEED THIS
-  - Data Frame (Tweet count) ######################### NEED THIS
-
-/appropriate sentiment analysis
-  - /sentiment by feature by product (mean/avg sentiment)
-  
- 
-Statistical Test
-  Stock price VS sentiment on a daily basis ############### NEED THIS
-  Is a T-Test appropriate?  ################## NEED THIS
-
-
-Manipulation techniques used and why ##### ALEX FILLING IN
-    Remove hyperlinks, emojis, user mentions and hashtags
-    Adding additional columns for filtering data correctly
-Graphs and why
-
-strategic business impact (Apple, Samsung)
-marketing interest (Apple, Samsung)
-
---->
-
-
-
-<!--- Slide 01 ------------------------------------------------------------------------------------------------------------->
 
 ## Introduction
 
-<!--- SPEAKER NOTES:
+<!--- OVERVIEW
+  Speaker notes are kept in comments to hide from presentation unless the comment is in a code chunck
+  Code requires you to have the csv data set that is available from the following GitHub repository: https://github.com/Mauzey/MATH513-Group-Work
+  Extraction code has been left in the GitHub and not embedded here as per discussion with Luciana
+-->
 
-  ...
-
---->
-
-- Samsung and Apple <!-- Chosen as competing businesses due to the current releases of their flagship phones meaning data would be available. --->
+- Samsung and Apple
 - Flagship phones chosen
   + S20FE
   + iPhone12
-  + S20 <!-- We chose to gather some tweets on the S20 to give us some comparable information for sentiment analysis. This allowed us to show the usefulness of the analysis process and outcomes as Samsung had supposedly listened to its fan base when developing the S20 Fan Edition. --->
-
+  + S20 
+  
 **Tools Utilised**
 
 - Rstudio
 - RTweet
-- Twitter Developer API <!--- Allowed us access to the twitter data to analyse --->
-- Github <!-- To allow us to work on various parts of the project and keep an up to date record of changes as a team --->
+- Twitter Developer API
 
-```{r Logos, echo=FALSE, out.width="15%", fig.align = "center", fig.show='hold', fig.cap=""}
-knitr::include_graphics(c("./Images/Logos/apple_logo.png", "./Images/Logos/samsung_logo.jpg", "./Images/Logos/rstudio_logo.png",     "./Images/Logos/twitter_logo.png"))
+```{r Logos, echo=FALSE, fig.align="center", fig.cap="", fig.show='hold', out.width="15%"}
+knitr::include_graphics(c("./Images/Logos/apple_logo.png", "./Images/Logos/samsung_logo.jpg", "./Images/Logos/rstudio_logo.png", "./Images/Logos/twitter_logo.png"))
 ```
+
+<!--- SPEAKER NOTES
+Chosen as competing businesses due to the current releases of their flagship phones meaning data would be available.
+We chose to gather some tweets on the S20 to give us some comparable information for sentiment analysis. This allowed us to show the usefulness of the analysis process and outcomes as Samsung had supposedly listened to its fan base when developing the S20 Fan Edition.
+Allowed us access to the twitter data to analyse.
+To allow us to work on various parts of the project and keep an up to date record of changes as a team
+--->
 
 <!--- End of Slide 01 ------------------------------------------------------------------------------------------------------>
 
@@ -117,14 +66,24 @@ knitr::include_graphics(c("./Images/Logos/apple_logo.png", "./Images/Logos/samsu
 
 <!--- SPEAKER NOTES:
 
-  ...
+  From the Samsung Mobile page we identified that the hastags #GalaxyS20 and #GalaxyS20FE were the offical hashtags used by Samsung in their Twitter posts.
+  
+  We then looked for the same information from Apple but found that since the Twitter account was hacked on the 15th July 2020, Apple have not been keeping tweets on their Twitter page. (Swider, Matt (2020), TechRadar - https://www.techradar.com/news/twitter-hack-2020).
+  
+  We then looked to the CEO of Apple as it was deemed most likely that he would be using the offical hashtags as deemed by Apple's marketing team, which led us to the hashatg #iphone12.
+  
+  We also did some sample searches of other hashtags like S20 and S20FE using the advanced Twitter search on the website to determine how relevant the hashtag was.
+  
+  We did this simply by examining after how spread the dates were from the first 25 tweets. This research further supported our findings on the iphone12, samsungs20 and samungs20fe hashtags.
+  
+  We came to the conclusion that it was better to use hashtags over actual profiles, both business or individual, so that we would get a wide range of opions for a fairer analysis.
 
 --->
 
 
-**Chosing Twitter for Analysis**
+**Choosing Twitter for Analysis**
 
-  !!! Why did we choose Twitter data ## Ref needed
+  !!! Why did we choose Twitter data ## Ref needed ##
 
 - Twitter data provides up to date information for companies to analyse for customer feedback
 - Data can provide useful information to guide product teams when analysed correctly
@@ -133,15 +92,10 @@ knitr::include_graphics(c("./Images/Logos/apple_logo.png", "./Images/Logos/samsu
 
 
 **Hashtags**
-- @SamsungMobile - https://twitter.com/SamsungMobile <!-- From the Samsung Mobile page we identified that the hastags #GalaxyS20 and #GalaxyS20FE were the offical hashtags used by Samsung in their Twitter posts
-- @Apple - https://twitter.com/Apple <!-- We then looked for the same information from Apple but found that since the Twitter account was hacked on the 15th July 2020, Apple have not been keeping tweets on their Twitter page. (Swider, Matt (2020), TechRadar - https://www.techradar.com/news/twitter-hack-2020)  -->
-- @tim_cook - https://twitter.com/tim_cook <!-- We then looked to the CEO of Apple as it was deemed most likely that he would be using the offical hashtags as deemed by Apple's marketing team, which led us to the hashatg #iphone12. -->
 
-<!-- We also did some sample searches of other hashtags like S20 and S20FE using the advanced Twitter search on the website to determine how relevant the hashtag was. We did this simply by examining after how spread the dates were from the first 25 tweets. This research further supported our findings on the iphone12, samsungs20 and samungs20fe hashtags. -->
-<!-- We came to the conclusion that it was better to use hashtags over actual profiles, both business or individual, so that we would get a wide range of opions for a fairer analysis. -->
-
-
-!!! Pictures of the phones in colours that match graphs to associate?
+- @SamsungMobile - https://twitter.com/SamsungMobile 
+- @Apple - https://twitter.com/Apple 
+- @tim_cook - https://twitter.com/tim_cook 
 
 <!--- End of Slide 02 ------------------------------------------------------------------------------------------------------>
 
@@ -193,7 +147,7 @@ knitr::include_graphics(c("./Images/Logos/apple_logo.png", "./Images/Logos/samsu
 - Users were marked as potential bots
 - User country was extracted from the location of their profile
 - Tweets were marked as potential spam
-- Product features were extracted from the tweet text
+- Product features extracted from the tweets
   + Display, Battery, Camera, Price, and 5G Capability
 - An overall sentiment score was calculated for each tweet
 
@@ -214,7 +168,10 @@ knitr::include_graphics(c("./Images/Logos/apple_logo.png", "./Images/Logos/samsu
 
 --->
 
-```{r Overview of Data Extracted}
+
+
+```{r Overview of Data Extracted, echo=FALSE, message=FALSE, warning=FALSE}
+
 total_tweets <- nrow(tweets)
 
 tweets_summary <- tweets %>%
@@ -262,19 +219,7 @@ users_summary <- users %>%
 
 --->
 
-```{r Time_Series_Plots, echo=FALSE}
-tweets %>% 
-  filter(product == 'Galaxy S20 FE' | product == 'iPhone12') %>%
-  group_by(product, is_retweet) %>%
-  ts_plot('days', trim = 1) + 
-  theme_minimal() +
-  facet_grid(product ~ .) +
-  labs(x = NULL, y = NULL,
-       title = "Frequency of Twitter Statuses",
-       subtitle = "Twitter status counts aggregated using 1-day intervals by product",
-       caption = "Source: Data collected from Twitter's REST API via rtweet") +
-  theme(plot.title = element_text(face = 'bold'))
-```
+
 
 <!--- End of Slide 05 ------------------------------------------------------------------------------------------------------>
 
