@@ -26,12 +26,12 @@ libs <- c('readr', 'dplyr', 'tidyverse', 'tidyr', 'tidytext', 'modelr', 'stringr
 invisible(lapply(libs, library, character.only = TRUE))
 
 # SET WORKING DIRECTORY -----------------------------------------------------------------------------------------------------
-setwd("C:/Users/willo/SynologyDrive/Documents - Will/Qualifications/!MSc Data Science/!Courses/1 MATH513 Big Data and Social Network/Assessment/MATH513-Group-Work/practical") # Will
+# setwd("C:/Users/willo/SynologyDrive/Documents - Will/Qualifications/!MSc Data Science/!Courses/1 MATH513 Big Data and Social Network/Assessment/MATH513-Group-Work/practical") # Will
 #setwd("") # Tania
 #setwd("~/Development/Repositories/MATH513-Group-Work/practical") # Alex
 
 # IMPORT DATA ---------------------------------------------------------------------------------------------------------------
-tweets <- read_csv("./data/cleaned-tweets.csv") #Load in tweets from the csv file.
+tweets <- read_csv("../data/cleaned-tweets.csv") #Load in tweets from the csv file.
 ```
 
 <!-- 
