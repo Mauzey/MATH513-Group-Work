@@ -257,7 +257,7 @@ users_summary <- users %>%
 
 --->
 
-```{r Time_Series_Plots, echo=FALSE, fig.width=8, fig.height=4.5}
+```{r Time_Series_Plots, echo=FALSE, fig.width=8, fig.height=4.5, error=TRUE}
 
 library(lubridate)
 
@@ -271,7 +271,6 @@ tweets %>% group_by(product, is_retweet) %>%
        subtitle = "Twitter status counts aggregated using 1-day intervals",
        caption = "Source: Data collected from Twitter's REST API via rtweet") +
   theme(plot.title = element_text(face = 'bold'))
-
 
 
 tweet_df <- tweets %>% mutate(date_created = as.Date(ymd_hms(tweets$created_at)))
