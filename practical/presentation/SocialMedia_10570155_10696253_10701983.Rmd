@@ -244,7 +244,7 @@ users_summary <- users %>%
 
 --->
 
-```{r Time Series Plots}
+```{r Time Series Plots, echo=FALSE, fig.width=8, fig.height=4.5}
 
 tweets$product <- as.factor(tweets$product)  # Factorize product column
 
