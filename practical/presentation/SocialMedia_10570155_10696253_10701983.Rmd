@@ -24,10 +24,16 @@ users <- read_csv("../data/cleaned-users.csv")
 
 ## Introduction
 
-<!--- OVERVIEW
+<!--- 
+
+OVERVIEW
+
   Speaker notes are kept in comments to hide from presentation unless the comment is in a code chunck
+  
   Code requires you to have the csv data set that is available from the following GitHub repository: https://github.com/Mauzey/MATH513-Group-Work
-  Extraction code has been left in the GitHub and not embedded here as per discussion with Luciana
+  
+  Extraction code and most of the cleaning/feature engineering code has been left in the GitHub and not embedded here as per discussion with Luciana to avoid overwhelming the rMarkdown file. 
+  
 -->
 
 - Samsung and Apple
@@ -41,6 +47,7 @@ users <- read_csv("../data/cleaned-users.csv")
 - Rstudio
 - RTweet
 - Twitter Developer API
+- GitHub
 
 ```{r Logos, echo=FALSE, fig.align="center", fig.cap="", fig.show='hold', out.width="15%"}
 knitr::include_graphics(c("./Images/Logos/apple_logo.png", "./Images/Logos/samsung_logo.jpg", "./Images/Logos/rstudio_logo.png", "./Images/Logos/twitter_logo.png"))
@@ -48,10 +55,15 @@ knitr::include_graphics(c("./Images/Logos/apple_logo.png", "./Images/Logos/samsu
 ```
 
 <!--- SPEAKER NOTES
+
 Chosen as competing businesses due to the current releases of their flagship phones meaning data would be available.
+
 We chose to gather some tweets on the S20 to give us some comparable information for sentiment analysis. This allowed us to show the usefulness of the analysis process and outcomes as Samsung had supposedly listened to its fan base when developing the S20 Fan Edition.
+
 Allowed us access to the twitter data to analyse.
-To allow us to work on various parts of the project and keep an up to date record of changes as a team
+
+To allow us to work on various parts of the project and keep an up to date record of changes as a team.
+
 --->
 
 <!--- End of Slide 01 ------------------------------------------------------------------------------------------------------>
@@ -66,37 +78,38 @@ To allow us to work on various parts of the project and keep an up to date recor
 ## Research
 
 <!--- SPEAKER NOTES:
+  
+  Twitter provides its data via a number of APIs and after the Cambridge Analytica 'data breach' is one of the few who has not limited the data provided through APIs according to Dr. Wasim Ahmed from Newcastle University. Michelle Young of Chat Bots Life.com stated in 2017 that unlike other platforms, almost every user's tweets are pullable and public. The API is vast and allows a multitude of queries and filters to be performed. Twitter data can be a large door into the insights of the general public and combined with the openness and the generous rate limiting of Twitter’s API, it can produce powerful results.
 
   From the Samsung Mobile page we identified that the hastags #GalaxyS20 and #GalaxyS20FE were the offical hashtags used by Samsung in their Twitter posts.
   
   We then looked for the same information from Apple but found that since the Twitter account was hacked on the 15th July 2020, Apple have not been keeping tweets on their Twitter page. (Swider, Matt (2020), TechRadar - https://www.techradar.com/news/twitter-hack-2020).
   
-  We then looked to the CEO of Apple as it was deemed most likely that he would be using the offical hashtags as deemed by Apple's marketing team, which led us to the hashatg #iphone12.
+  We then looked to the CEO of Apple as it was deemed most likely that he would be using the offical hashtags as deemed by Apple's marketing team, which led us to the hashtag #iphone12.
   
   We also did some sample searches of other hashtags like S20 and S20FE using the advanced Twitter search on the website to determine how relevant the hashtag was.
   
   We did this simply by examining after how spread the dates were from the first 25 tweets. This research further supported our findings on the iphone12, samsungs20 and samungs20fe hashtags.
   
-  We came to the conclusion that it was better to use hashtags over actual profiles, both business or individual, so that we would get a wide range of opions for a fairer analysis.
+  We came to the conclusion that it was better to use hashtags over actual profiles, both business or individual, so that we would get a wide range of options for a fairer analysis.
 
 --->
 
 
 **Choosing Twitter for Analysis**
 
-  !!! Why did we choose Twitter data ## Ref needed ##
-
-- Twitter data provides up to date information for companies to analyse for customer feedback
-- Data can provide useful information to guide product teams when analysed correctly
-
-  <!-- Need to reference the Twitter accounts that we used to determine the #hashtags that we chose --->
-
+- Open API Access compared to others
+- Almost all data is public
+- Advanced filtering and queries
+- Generous Rate limiting
 
 **Hashtags**
 
-- @SamsungMobile - https://twitter.com/SamsungMobile 
-- @Apple - https://twitter.com/Apple 
-- @tim_cook - https://twitter.com/tim_cook 
+- @SamsungMobile - [https://twitter.com/SamsungMobile](https://twitter.com/SamsungMobile)
+- @Apple - [https://twitter.com/Apple](https://twitter.com/Apple) 
+- @tim_cook - [https://twitter.com/tim_cook](https://twitter.com/tim_cook)
+
+
 
 <!--- End of Slide 02 ------------------------------------------------------------------------------------------------------>
 
@@ -237,7 +250,7 @@ users_summary <- users %>%
 
 <!--- SPEAKER NOTES:
 
-  Due to the limitations of the free version of the Twitter API we pulled as much data as we could over the last month. 
+  Due to the limitations of the free version of the Twitter API we pulled as much data as we could over the last month utilising the 30 day premium feature.
   The release date for the S20FE was the 2nd October 2020 and for the iPhone12 was the 23rd October 2020.
   This limitation meant that the tweets we pulled are about 3 weeks after the release date for the S20FE and 1 week after the iPhone release.
   From the graph, you can see that we managed to gather a reasonable amount of tweets over the month of November.
@@ -265,9 +278,6 @@ tweets %>% group_by(product, is_retweet) %>%
 
 
 
-
-
-
 ## Results - Sentiment Analysis
 
 **Overview of sentiment analysis**
@@ -278,16 +288,30 @@ tweets %>% group_by(product, is_retweet) %>%
 
 
 
-## Results - Sentiment Analysis
-
-GRAPH HERE
-
+<!--- Slide  ------------------------------------------------------------------------------------------------------------->
+## Results - Sentiment Globally - Iphone12
 
 
+<!--- End of Slide  ------------------------------------------------------------------------------------------------------>
 
-## Results - Sentiment Analysis
 
-GRAPH HERE
+
+
+
+<!--- Slide  ------------------------------------------------------------------------------------------------------------->
+## Results - Sentiment Globally - S20FE
+
+
+
+
+<!--- End of Slide 06 ------------------------------------------------------------------------------------------------------>
+
+
+<!--- Slide 06 ------------------------------------------------------------------------------------------------------------->
+## Results - Sentiment Globally - S20
+
+
+<!--- End of Slide 06 ------------------------------------------------------------------------------------------------------>
 
 
 
@@ -335,22 +359,26 @@ Look at mentions of apple in samsung and vice versa
 - Data can provide useful information to guide product teams when analysed correctly
 
 
-
-
-
 ## References
 
-- Twitter (2020) *API Documentation* Available at: [https://developer.twitter.com/en/docs/twitter-api](https://developer.twitter.com/en/docs/twitter-api) (Accessed: 10 October 2020)
-
-- RStudio (2020) *R Markdown Cheat Sheet* Available at: [https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf](https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf) (Accessed: 10 October 2020)
-
-- RStudio (2014) *R Markdown Reference Guide* Available at: [https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf](https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf) (Accessed: 10 October 2020)
+- Ahmed, Wasim (2019) *Using Twitter as a data source: an overview of social media research tools* Available at: [https://blogs.lse.ac.uk/impactofsocialsciences/2019/06/18/using-twitter-as-a-data-source-an-overview-of-social-media-research-tools-2019/](https://blogs.lse.ac.uk/impactofsocialsciences/2019/06/18/using-twitter-as-a-data-source-an-overview-of-social-media-research-tools-2019/) (Accessed: 07 December 2020)
 
 - Dalla Valle, Luciana (2020) *MATH513 Lecture and Tutorial Code* Available at: [https://dle.plymouth.ac.uk/course/view.php?id=49628](https://dle.plymouth.ac.uk/course/view.php?id=49628) (Accessed:  2020)
 
 - Fuchs, Matti (2018) *Doing your first sentiment analysis in R with Sentimentr* Available at: [https://towardsdatascience.com/doing-your-first-sentiment-analysis-in-r-with-sentimentr-167855445132](https://towardsdatascience.com/doing-your-first-sentiment-analysis-in-r-with-sentimentr-167855445132) (Accessed: 06 December 2020)
   
 - Rinker, Tyler (2020)  *R Documentation - sentiment_by* Available at:  [https://www.rdocumentation.org/packages/sentimentr/versions/2.7.1/topics/sentiment_by](https://www.rdocumentation.org/packages/sentimentr/versions/2.7.1/topics/sentiment_by) (Accessed: 06 December 2020)
+
+- RStudio (2020) *R Markdown Cheat Sheet* Available at: [https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf](https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf) (Accessed: 10 October 2020)
+
+- RStudio (2014) *R Markdown Reference Guide* Available at: [https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf](https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf) (Accessed: 10 October 2020)
+
+
+## References
+
+- Twitter (2020) *API Documentation* Available at: [https://developer.twitter.com/en/docs/twitter-api](https://developer.twitter.com/en/docs/twitter-api) (Accessed: 10 October 2020)
+
+- Young, Michelle (2017) *Twitter Data Mining: A Guide to Big Data Analytics Using Python* Available at: [https://chatbotslife.com/twitter-data-mining-a-guide-to-big-data-analytics-using-python-4efc8ccfa219](https://chatbotslife.com/twitter-data-mining-a-guide-to-big-data-analytics-using-python-4efc8ccfa219) (Accessed: 07 December 2020)
 
 ```{r}
 
