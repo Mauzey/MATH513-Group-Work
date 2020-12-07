@@ -49,19 +49,9 @@ OVERVIEW
 - Twitter Developer API
 - GitHub
 
-<<<<<<< HEAD
-# SET WORKING DIRECTORY -----------------------------------------------------------------------------------------------------
-# setwd("C:/Users/willo/SynologyDrive/Documents - Will/Qualifications/!MSc Data Science/!Courses/1 MATH513 Big Data and Social Network/Assessment/MATH513-Group-Work/practical") # Will
-#setwd("") # Tania
-#setwd("~/Development/Repositories/MATH513-Group-Work/practical") # Alex
-
-# IMPORT DATA ---------------------------------------------------------------------------------------------------------------
-tweets <- read_csv("../data/cleaned-tweets.csv") #Load in tweets from the csv file.
-=======
 ```{r Logos, echo=FALSE, fig.align="center", fig.cap="", fig.show='hold', out.width="15%"}
 knitr::include_graphics(c("./Images/Logos/apple_logo.png", "./Images/Logos/samsung_logo.jpg", "./Images/Logos/rstudio_logo.png", "./Images/Logos/twitter_logo.png"))
 
->>>>>>> 7c31d4edd9ca2b74ed218adf0b464d05919617e1
 ```
 
 <!--- SPEAKER NOTES
@@ -70,7 +60,6 @@ Chosen as competing businesses due to the current releases of their flagship pho
 
 We chose to gather some tweets on the S20 to give us some comparable information for sentiment analysis. This allowed us to show the usefulness of the analysis process and outcomes as Samsung had supposedly listened to its fan base when developing the S20 Fan Edition.
 
-Allowed us access to the twitter data to analyse.
 
 To allow us to work on various parts of the project and keep an up to date record of changes as a team.
 
