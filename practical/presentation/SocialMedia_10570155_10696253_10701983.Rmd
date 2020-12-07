@@ -22,16 +22,18 @@ OVERVIEW
 knitr::opts_chunk$set(include = FALSE)
 
 # IMPORT DEPENDENCIES -------------------------------------------------------------------------------------------------------
-libs <- c('readr', 'dplyr', 'tidyverse', 'tidyr', 'tidytext', 'modelr', 'stringr', 'rtweet','knitr', 'ggplot2', 'ggthemes')
+libs <- c('readr', 'dplyr', 'tidyverse', 'tidyr', 'tidytext', 'modelr', 'stringr', 'rtweet','knitr', 'ggplot2', 'ggthemes',
+          'scales', 'knitr')
 invisible(lapply(libs, library, character.only = TRUE))
 
 # SET WORKING DIRECTORY -----------------------------------------------------------------------------------------------------
-setwd("C:/Users/willo/SynologyDrive/Documents - Will/Qualifications/!MSc Data Science/!Courses/1 MATH513 Big Data and Social Network/Assessment/MATH513-Group-Work/practical") # Will
+#setwd("C:/Users/willo/SynologyDrive/Documents - Will/Qualifications/!MSc Data Science/!Courses/1 MATH513 Big Data and Social Network/Assessment/MATH513-Group-Work/practical") # Will
 #setwd("") # Tania
 #setwd("~/Development/Repositories/MATH513-Group-Work/practical") # Alex
 
 # IMPORT DATA ---------------------------------------------------------------------------------------------------------------
-tweets <- read_csv("./data/cleaned-tweets.csv") #Load in tweets from the csv file.
+tweets <- read_csv("../data/cleaned-tweets.csv") #Load in tweets from the csv file.
+users <- read_csv("../data/cleaned-users.csv")
 ```
 
 <!-- 
@@ -75,9 +77,15 @@ marketing interest (Apple, Samsung)
 
 
 
-<!--- ## SLIDE 01 ## --->
+<!--- Slide 01 ------------------------------------------------------------------------------------------------------------->
 
 ## Introduction
+
+<!--- SPEAKER NOTES:
+
+  ...
+
+--->
 
 - Samsung and Apple <!-- Chosen as competing businesses due to the current releases of their flagship phones meaning data would be available. --->
 - Flagship phones chosen
@@ -96,13 +104,23 @@ marketing interest (Apple, Samsung)
 knitr::include_graphics(c("images/logos/apple_logo.png",    "images/logos/samsung_logo.jpg",    "images/logos/rstudio_logo.png",     "images/logos/twitter_logo.png"))
 ```
 
+<!--- End of Slide 01 ------------------------------------------------------------------------------------------------------>
 
 
 
 
-<!--- ## SLIDE 02 ## --->
- 
+
+
+<!--- Slide 02 ------------------------------------------------------------------------------------------------------------->
+
 ## Research
+
+<!--- SPEAKER NOTES:
+
+  ...
+
+--->
+
 
 **Chosing Twitter for Analysis**
 
@@ -125,42 +143,124 @@ knitr::include_graphics(c("images/logos/apple_logo.png",    "images/logos/samsun
 
 !!! Pictures of the phones in colours that match graphs to associate?
 
+<!--- End of Slide 02 ------------------------------------------------------------------------------------------------------>
 
 
 
 
-<!--- ## SLIDE 03 ## --->
- 
-## Data Collected
 
-**Data Frame (Tweet Count)**
+
+<!--- Slide 03 ------------------------------------------------------------------------------------------------------------->
+
+## Data Cleaning and Feature Engineering
+
+<!--- SPEAKER NOTES:
+
+  - We removed duplicate entries for both the tweet and user data
+  
+  - The tweet text and user bios were stripped of:
+    - Links
+    - Hash-tags
+    - Emojis
+    - User mentions
+    
+  - We marked users as bots depending on:
+    - Whether the source of their tweets identified them as a bot, using keywords
+    - Whether their user bio identified them as a bot, using keywords
+    
+  - User locations varied to the point where they couldn't be plotted:
+    - We used the 'country code' package to identify the country of a user
+  
+  - We marked tweets as spam depending on:
+    - Whether the tweet text identified it a spam, using keywords
+    - Whether the author of the tweet was previously marked as a bot
+  
+  - We extracted the following product features from the tweet text:
+    - Display, Camera, Battery, Price, and 5G Capability
+  
+  - We calculated a sentiment score for each tweet by:
+    - Getting sentiment for each word in the tweet, and averaging the results
+
+--->
+
+**Data Cleaning**
+
+- Duplicate tweet and user observations were removed
+- Tweet text and user bios were cleaned
+
+**Feature Engineering**
+
+- Certain users were marked as potential bots
+- User country was extracted from the location of their profile
+- Product features were extracted from the tweet text
+  + Display, Battery, Camera, Price, and 5G Capability
+- An overall sentiment score was calculated for each tweet
+
+<!--- End of Slide 03 ------------------------------------------------------------------------------------------------------>
+
+
+
+
+
+
+<!--- Slide 04 ------------------------------------------------------------------------------------------------------------->
+
+## Summary of Collected Data
+
+<!--- SPEAKER NOTES:
+
+  ...
+
+--->
+
 ```{r Overview of Data Extracted}
-feature_sentiment_data <- select(tweets, product, mentioned_features, avg_sentiment, sd_sentiment) # Extract relevant information
-feature_sentiment_data <- separate(feature_sentiment_data, col = mentioned_features, into = paste0('feature', 1:5), sep = ', ') # Separate 'mentioned_features' column
-feature_sentiment <- pivot_longer(feature_sentiment_data,cols = names(feature_sentiment_data)[which(grepl('feature', names(feature_sentiment_data)))]) # Pivot feature columns
-feature_sentiment %>% count(product, value) #Count of tweet data
-feature_sentiment %>% count(product)
+total_tweets <- nrow(tweets)
 
+tweets_summary <- tweets %>%
+  group_by(product) %>%  # Group by product
+  summarise(n_tweets = length(status_id),  # Number of tweets
+            percent_spam = percent(length(which(potential_spam == T))/n_tweets),  # % spam tweets
+            percent_features = percent(length(which(!is.na(mentioned_features)))/n_tweets)  # % of tweets with mentioned features
+  ) %>%
+  rename('Product' = product, 'Number of Tweets' = n_tweets,
+         '% Spam Tweets' = percent_spam,'% Feature Tweets' = percent_features)
+
+users_summary <- users %>%
+  summarise(n_users = length(user_id),  # Number of unique users
+            percent_bots = '>1%',  # % of bot users (actual value = 0.00442)
+            n_countries = length(unique(country))  # Number of unique countries
+  ) %>%
+  rename('Number of Users' = n_users, '% Bot Users' = percent_bots, 'Unique Countries' = n_countries)
 ```
 
-!!!!! Need to push the above into a useable data frame with grouping by product (y axis) and feature (x axis)
+**Total Tweets:** `r total_tweets`
 
-74,000 Tweets
+**Total Features:** `5 (Display, Battery, Camera, Price, and 5G)`
 
-XXXX mentioned features
+`r kable(tweets_summary, caption = "Summary of Tweet Data")`
 
-Total for features
-|Product | Sentiment Scores|
-|S20 | 3,480 sentiment scores|
-|S20FE | 6,302 sentiment scores|
-|iPhone12 | 2,470 sentiment scores|
+`r kable(users_summary, caption = "Summary of User Data")`
+
+<!--- End of Slide 04 ------------------------------------------------------------------------------------------------------>
 
 
 
 
-<!--- ## SLIDE 04 ## --->
- 
+
+
+<!--- Slide 05 ------------------------------------------------------------------------------------------------------------->
+
 ## Results - Time Series
+
+<!--- SPEAKER NOTES:
+
+  Due to the limitations of the free version of the Twitter API we pulled as much data as we could over the last month. 
+  The release date for the S20FE was the 2nd October 2020 and for the iPhone12 was the 23rd October 2020.
+  This limitation meant that the tweets we pulled are about 3 weeks after the release date for the S20FE and 1 week after the iPhone release.
+  From the graph, you can see that we managed to gather a reasonable amount of tweets over the month of November.
+
+--->
+
 ```{r Time_Series_Plots, echo=FALSE}
 tweets %>% 
   filter(product == 'Galaxy S20 FE' | product == 'iPhone12') %>%
@@ -175,18 +275,13 @@ tweets %>%
   theme(plot.title = element_text(face = 'bold'))
 ```
 
-<!-- 
-  Due to the limitations of the free version of the Twitter API we pulled as much data as we could over the last month. 
-  The release date for the S20FE was the 2nd October 2020 and for the iPhone12 was the 23rd October 2020.
-  This limitation meant that the tweets we pulled are about 3 weeks after the release date for the S20FE and 1 week after the iPhone release.
-  From the graph, you can see that we managed to gather a reasonable amount of tweets over the month of November.
-
--->
+<!--- End of Slide 05 ------------------------------------------------------------------------------------------------------>
 
 
 
 
-<!--- ## SLIDE 05 ## --->
+
+
 
 ## Results - Sentiment Analysis
 
