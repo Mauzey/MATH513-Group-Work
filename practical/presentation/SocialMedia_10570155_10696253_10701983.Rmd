@@ -101,7 +101,7 @@ marketing interest (Apple, Samsung)
 - Github <!-- To allow us to work on various parts of the project and keep an up to date record of changes as a team --->
 
 ```{r Logos, echo=FALSE, out.width="15%", fig.align = "center", fig.show='hold', fig.cap=""}
-knitr::include_graphics(c("./images/logos/apple_logo.png", "./images/logos/samsung_logo.jpg", "./images/logos/rstudio_logo.png",     "./images/logos/twitter_logo.png"))
+knitr::include_graphics(c("./Images/Logos/apple_logo.png", "./Images/Logos/samsung_logo.jpg", "./Images/Logos/rstudio_logo.png",     "./Images/Logos/twitter_logo.png"))
 ```
 
 <!--- End of Slide 01 ------------------------------------------------------------------------------------------------------>
