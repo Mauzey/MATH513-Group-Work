@@ -243,39 +243,31 @@ users_summary <- users %>%
 
 
 
-
 <!--- Slide 05 ------------------------------------------------------------------------------------------------------------->
 
 ## Time Periods for Data Collection
 
 <!--- SPEAKER NOTES:
 
-  The normal twitter function allowed us to pull data from the last 6-9 days. We decided that just after the release date of the phones would be the best time to examine the public opinion.
+  The normal twitter function allowed us to pull data from the last 6-9 days. We decided that just after the release date of the phones would be the best time to examine the public's opinion.
 
-  Due to the limitations of this search, we utilised the full archive premium feature to pull tweets relating to the S20. 
+  Due to the limitations of the general search, we utilised the full archive premium feature to pull tweets relating to the S20, seen here in red. 
   
-  However there was a mistake that led to the tweets being pulled a little earlier than the release date as seen by the red line on the graph. 
+  However, there was a mistake that led to the tweets being pulled a little earlier than the release date as seen by the red vertical line on the graph. 
   
-  we pulled as much data as we could over the last 30 days utilising the 30 day premium feature.
+  We leanrt from this and corrected our code and pulled as much data as we could for the other two phone using the premium 30 day function.
   
-  This limitation meant that the tweets we pulled are about 3 weeks after the release date for the S20FE and 1 week after the iPhone release.
+  The 30 day limitation meant that the tweets we pulled are about 3 weeks after the release date for the S20FE, seen in green and 1 week after the iPhone seen in blue.
   
-  From the graph, you can see that we managed to gather a reasonable amount of tweets over the month of November for both.
-
-  You can also see the tweets for the S20 shown in red at the top whose release date was much earlier in the year where we used the Full Archive function. However
+  From the graph, you can see that we managed to gather a reasonable amount of tweets over the month of November for both these phones.
 
 --->
 
 ```{r echo=FALSE, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4.5}
 tweets$product <- as.factor(tweets$product)  # Factorize product column
 
-#df=data.frame(c(as.POSIXct(as.Date("2020-03-06")),
-                    as.POSIXct(as.Date("2020-10-02")), 
-                    as.POSIXct(as.Date("2020-10-23"))))
-
 tweets %>% group_by(product, is_retweet) %>%
   ts_plot('days', trim = 1) +
-  facet_grid(product ~ .) +
   labs(x = NULL, y = NULL,
        title = "Frequency of Twitter Statuses",
        subtitle = "Twitter status counts aggregated using 1-day intervals",
@@ -285,11 +277,14 @@ tweets %>% group_by(product, is_retweet) %>%
   theme_bw() +
   theme(plot.title = element_text(face = 'bold'),
         strip.text.y = element_blank()) + 
-  #geom_vline(xintercept = as.POSIXct(as.Date("2020-03-06")))
-  #geom_vline(mapping=aes(xintercept=df), color="black") 
+  geom_vline(xintercept = as.POSIXct(as.Date("2020-03-06")), colour = "red") +
+  geom_vline(xintercept = as.POSIXct(as.Date("2020-10-02")), colour = "green") +
+  geom_vline(xintercept = as.POSIXct(as.Date("2020-10-23")), colour = "blue") +
+  facet_grid(product ~ .)
 ```
 
 <!--- End of Slide 05 ------------------------------------------------------------------------------------------------------>
+
 
 
 
@@ -300,26 +295,26 @@ tweets %>% group_by(product, is_retweet) %>%
 
 <!-- SPEAKER NOTES
 
-We decided to perform sentiment analysis both generally for each model and 
-for 5 most often mentioned features: Camera, 5G, Display, Price and Battery.
-For sentiment analysis we used R package 'sentimentr' which instead of calculating
-sentiment scores for each word, calculates average sentiment for a group of sentences which would be more suitable for our case since technically we're analyzing the feedback (in form of tweets, each tweet consists of 1 or more whole sentences) on each feature for each of the 3 products.
+  We decided to perform sentiment analysis both generally for each model and 
+  for 5 most often mentioned features: Camera, 5G, Display, Price and Battery.
 
-This slide demonstrates the overall sentiment for each product. As you can see,
-Galaxy s20 FE has the highest mean sentiment. Even though we're comparing the latest
-2 products - iphone12 and galaxy s20 fe, we included sentiment for s20 as well in 
-order to demonstrate how much it has improved. Which is to be expected
-since the whole idea behind S20 FE is that Samsung took their customer's 
-feedback into consideration and implemented some minor and major changes for features like display, price, battery.
+  For sentiment analysis, we used the 'sentimentr' package which calculates average sentiment for a group of sentences instead of calculating sentiment scores for individual words. This was more suitable for our analysis since we're analysing the feedback (in form of tweets, each tweet consists of 1 or more whole sentences) on each feature for each of the 3 products.
+
+  This slide demonstrates the overall sentiment for each product. 
+
+  As you can see, the Galaxy S20FE, seen in purple, has the highest mean sentiment.
+
+  The idea behind the release of the S20FE is that Samsung took their customer's feedback into consideration and implemented some changes for features like display, price, battery. 
+  
+  This can be seen by the S20FE having a higher mean sentiment than the S20 seen here in turquoise.
 
 -->
 
 ```{r include=FALSE}
 # Calculate the mean sentiment for each product
-mean_sentiment <- tweets %>%
-  group_by(product) %>%
-  summarize(mean_sentiment = signif(mean(avg_sentiment), 6))
-
+mean_sentiment <- tweets %>% 
+                            group_by(product) %>%
+                            summarize(mean_sentiment = signif(mean(avg_sentiment), 6))  
 ```
 
 ```{r echo=FALSE, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4.5}
@@ -357,6 +352,7 @@ tweets %>%
 
 
 
+
 <!--- Slide 07 ------------------------------------------------------------------------------------------------------------->
 
 ## Results - Sentiment Analysis - Features
@@ -366,34 +362,15 @@ tweets %>%
 !!Overview of sentiment analysis##
 
 
-Samsung's improvement of particular features which gathered feedback from customers who purchased S20 and S20 Ultra can be clearly seen from the following boxplots that
-demonstrate sentiments for products of both Samsung and Apple grouped by features. We can observe that the sentiment for all the S20 FE's features except for camera, is higher than of S20, not mentioning that it's higher than of iphone12 in display, price and battery categories. 
+Samsung's improvement of particular features which gathered feedback from customers who purchased S20 and S20 Ultra can be clearly seen from the following boxplots that demonstrate sentiments for products of both Samsung and Apple grouped by features. 
+We can observe that the sentiment for all the S20 FE's features except for camera, is higher than of S20, not mentioning that it's higher than of iphone12 in display, price and battery categories.
 Which is again pretty logical considering that Samsung equipps their new flagships with displays which have refresh rate of 120 Hz and 140 Hz.
 
-#T-TEST
-
-#we can run the t-test if :
-# when the two groups of samples (A and B), being compared, are normally distributed.
-# This can be checked using Shapiro-Wilk test.
-#
-# and when the variances of the two groups are equal.
-# This can be checked using F-test.
-
-#If we were to perform t-test, we'd do it on sentiment values for tweets related to
-#each model we're using, regardless of whether it's related to any feature or not
-
-#first let's plot them and see if the tweets sentiments for each model are normally
-#distributed. package for sentiments used - 'sentimentr'
-
-
-
-!!Choice of feature to analyse**
 --->
 
 ```{r include=FALSE}
 # SENTIMENT ANALYSIS - Product Features -------------------------------------------------------------------------------------
-
-#For features analysis we'll be using a different package called "sentimentr"
+#For features analysis we'll be using a different package to the lectures called "sentimentr"
 
 #Find more info about it here:https://towardsdatascience.com/sentiment-analysis-in-r-good-vs-not-good-handling-negations-2404ec9ff2ae
 
@@ -509,14 +486,33 @@ mapCountryData(S20_matched,
 
 ```
 
+<!--- End of Slide 08 ------------------------------------------------------------------------------------------------------------->
+
+
+
+
+
+<!--- Slide 09 ------------------------------------------------------------------------------------------------------------->
+## Statistical Test - T-Test
 
 <!---
-!!!SOMEONE PLEASE PUT IT SOMEWHERE IN ANY SLIDE, THIS IS T-TEST
+
+  We can run the t-test if :
+  # when the two groups of samples (A and B), being compared, are normally distributed.
+  # This can be checked using Shapiro-Wilk test.
+  #
+  # and when the variances of the two groups are equal.
+  # This can be checked using F-test.
+
+  #If we were to perform t-test, we'd do it on sentiment values for tweets related to
+  #each model we're using, regardless of whether it's related to any feature or not
+
+  #first let's plot them and see if the tweets sentiments for each model are normally
+  #distributed. package for sentiments used - 'sentimentr'
+
 --->
 
 ```{r include=FALSE, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4.5} 
-
-
 feature_sentiment_data %>%
   ggplot(aes(x=avg_sentiment, group=product, fill=product)) +
   geom_density(adjust=1.5, alpha = .9) +
@@ -533,82 +529,137 @@ feature_sentiment_data %>%
   labs(x = "Average Sentiment",
        y = "Density",
        title = "Density Plots for Overall Sentiments of 3 Products")
-
 ```
 
-
-!!!!! STOCK PRICE VS SENTIMENT
-
+<!--- End of Slide 09 ------------------------------------------------------------------------------------------------------>
 
 
 
-## Improvements & Further Study
-
-**Improvements**
-
-Google Maps API to have region filter
-
-Look at mentions of apple in samsung and vice versa
 
 
+<!--- Additional Slides??
 
+SLIDE START
+
+  ##STOCK PRICE VS SENTIMENT
+
+    REASON FOR REMOVAL
+      Needed to be cut to save time and slide numbers
+
+    SPEAKER NOTES
+      We wanted to determine if there was a correlation between the stock price and the current sentiment of the public's opinion on Twitter.
+      We decided to use a regression analysis to determine this and see if we could predict future stock price based on the current sentiment.7
+
+    SLIDE INFO
+      - Regression analysis used
+      - P value = 
+
+      !INSERT CODE CHUNK HERE
+
+END OF SLIDE
+
+
+
+SLIDE START
 
 ## Issues and overcoming them
 
-- Extraction by date
-- Duplication
-- Time limits
-- Foreign languages
-- 
+  REASON FOR REMOVAL
+    Most information is already in other slides so this seem redundant.
+
+  SPEAKER NOTES
+    Date refinement on Twitter Premium API functions only
+      Dev suite allowed limited access to full archive and 30 day extraction features
+    Tweets are pulled from date to backwards to date to
+      Pull tweets in a controlled manner using weeks and days
+    Possible duplication if we extracted at the same time
+      Full archive and 30 day extraction allowed for refinement of dates and pull tweets back to 2006
+    Extraction limited to 18k per 15mins
+      Controlled pull of tweets with date refinement over time as retry on rate limit did not function a expected
+    Foreign languages
+      Filter by language of 'en' applied to only pull English tweets
+
+  SLIDE INFO
+    - Extraction by date
+    - Duplication
+    - Time limits
+    - Foreign languages
+
+END OF SLIDE
+
+END OF ADDITIONAL/REMOVED SLIDES -->
 
 
-<!--
-- Date refinement on Twitter Premium API functions only
-  + Dev suite allowed limited access to full archive and 30 day extraction features
-- Tweets are pulled from date to backwards to date to
-  + Pull tweets in a controlled manner using weeks and days
-- Possible duplication if we extracted at the same time
-  + Full archive and 30 day extraction allowed for refinement of dates and pull tweets back to 2006
-- Extraction limited to 18k per 15mins
-  + Controlled pull of tweets with date refinement over time as retry on rate limit did not function a expected
-- Foreign languages
-  + Filter by language of 'en' applied to only pull English tweets
+
+
+
+<!--- Slide XX ------------------------------------------------------------------------------------------------------------->
+
+## Improvements & Further Study
+
+<!-- SPEAKER NOTES
+
+  It would be useful to utilise the Google Maps API to have region filter on the tweets so we could focus the collection of data.
+
 
 -->
 
+**Improvements**
 
+- Google Maps API 
+- Look at mentions of apple in samsung and vice versa
+
+
+
+<!--- End of Slide XX ------------------------------------------------------------------------------------------------------>
+
+
+
+
+
+<!--- Slide XX ------------------------------------------------------------------------------------------------------------->
 
 ## Conclusions
 
-- Twitter data provides up to date information for companies to analyse for customer feedback
+<!-- SPEAKER NOTES
 
+-->
+
+- Twitter data provides up to date information for companies to analyse for customer feedback
 - Data can provide useful information to guide product teams when analysed correctly
 
+<!--- End of Slide XX ------------------------------------------------------------------------------------------------------>
+
+
+
+
+
+<!--- Slide XX ------------------------------------------------------------------------------------------------------------->
 
 ## References
 
-- Ahmed, Wasim (2019) *Using Twitter as a data source: an overview of social media research tools* Available at: [https://blogs.lse.ac.uk/impactofsocialsciences/2019/06/18/using-twitter-as-a-data-source-an-overview-of-social-media-research-tools-2019/](https://blogs.lse.ac.uk/impactofsocialsciences/2019/06/18/using-twitter-as-a-data-source-an-overview-of-social-media-research-tools-2019/) (Accessed: 07 December 2020)
+- Ahmed, Wasim (2019). *Using Twitter as a data source: an overview of social media research tools* Available at: [https://blogs.lse.ac.uk/impactofsocialsciences/2019/06/18/using-twitter-as-a-data-source-an-overview-of-social-media-research-tools-2019/](https://blogs.lse.ac.uk/impactofsocialsciences/2019/06/18/using-twitter-as-a-data-source-an-overview-of-social-media-research-tools-2019/) (Accessed: 07 December 2020)
 
-- Dalla Valle, Luciana (2020) *MATH513 Lecture and Tutorial Code* Available at: [https://dle.plymouth.ac.uk/course/view.php?id=49628](https://dle.plymouth.ac.uk/course/view.php?id=49628) (Accessed:  2020)
+- Dalla Valle, Luciana (2020). *MATH513 Lecture and Tutorial Code* Available at: [https://dle.plymouth.ac.uk/course/view.php?id=49628](https://dle.plymouth.ac.uk/course/view.php?id=49628) (Accessed: 01 October 2020)
 
 - Fuchs, Matti (2018) *Doing your first sentiment analysis in R with Sentimentr* Available at: [https://towardsdatascience.com/doing-your-first-sentiment-analysis-in-r-with-sentimentr-167855445132](https://towardsdatascience.com/doing-your-first-sentiment-analysis-in-r-with-sentimentr-167855445132) (Accessed: 06 December 2020)
   
-- Rinker, Tyler (2020)  *R Documentation - sentiment_by* Available at:  [https://www.rdocumentation.org/packages/sentimentr/versions/2.7.1/topics/sentiment_by](https://www.rdocumentation.org/packages/sentimentr/versions/2.7.1/topics/sentiment_by) (Accessed: 06 December 2020)
+- Rinker, Tyler (2020). *R Documentation - sentiment_by* Available at:  [https://www.rdocumentation.org/packages/sentimentr/versions/2.7.1/topics/sentiment_by](https://www.rdocumentation.org/packages/sentimentr/versions/2.7.1/topics/sentiment_by) (Accessed: 06 December 2020)
 
-- RStudio (2020) *R Markdown Cheat Sheet* Available at: [https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf](https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf) (Accessed: 10 October 2020)
+- R Core Team (2020). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria. Available at: [https://www.R-project.org/](https://www.R-project.org/)
 
-- RStudio (2014) *R Markdown Reference Guide* Available at: [https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf](https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf) (Accessed: 10 October 2020)
+- RStudio (2020). *R Markdown Cheat Sheet* Available at: [https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf](https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf) (Accessed: 10 October 2020)
+
+- RStudio (2014). *R Markdown Reference Guide* Available at: [https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf](https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf) (Accessed: 10 October 2020)
+
+- Twitter (2020). *API Documentation* Available at: [https://developer.twitter.com/en/docs/twitter-api](https://developer.twitter.com/en/docs/twitter-api) (Accessed: 10 October 2020)
+
+- Young, Michelle (2017). *Twitter Data Mining: A Guide to Big Data Analytics Using Python* Available at: [https://chatbotslife.com/twitter-data-mining-a-guide-to-big-data-analytics-using-python-4efc8ccfa219](https://chatbotslife.com/twitter-data-mining-a-guide-to-big-data-analytics-using-python-4efc8ccfa219) (Accessed: 07 December 2020)
+
+<!--- End of Slide XX ------------------------------------------------------------------------------------------------------>
 
 
-## References
 
-- Twitter (2020) *API Documentation* Available at: [https://developer.twitter.com/en/docs/twitter-api](https://developer.twitter.com/en/docs/twitter-api) (Accessed: 10 October 2020)
 
-- Young, Michelle (2017) *Twitter Data Mining: A Guide to Big Data Analytics Using Python* Available at: [https://chatbotslife.com/twitter-data-mining-a-guide-to-big-data-analytics-using-python-4efc8ccfa219](https://chatbotslife.com/twitter-data-mining-a-guide-to-big-data-analytics-using-python-4efc8ccfa219) (Accessed: 07 December 2020)
 
-```{r}
-
-citation()
-
-```
-
+<!-- END OF SLIDE SHOW -->
