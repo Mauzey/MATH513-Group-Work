@@ -495,7 +495,7 @@ mapCountryData(S20FE_matched,
 ```
 
 
-!!!SOMEONE PLEASE PUT IT WHERE IN A SLIDE, THIS IS T-TEST
+!!!SOMEONE PLEASE PUT IT SOMEWHERE IN ANY SLIDE, THIS IS T-TEST
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4.5} 
 
