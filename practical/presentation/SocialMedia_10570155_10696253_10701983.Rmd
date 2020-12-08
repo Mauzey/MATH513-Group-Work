@@ -36,6 +36,19 @@ OVERVIEW
   
 -->
 
+
+<!--- SPEAKER NOTES - WILL
+
+  Samsung and Apple were chosen as our competing businesses due to the recent release of their flagship phones, the S20FE and iPhone12. This meant we would have access to sufficient relevant data on Twitter to perform analysis on.
+
+  We chose to gather some extra tweets relating to the S20 to give us some comparable information for sentiment analysis and to determine if there was any improvement in sentiment from the S20 to the S20FE from the public. 
+
+  We utilised RStudio in combination with the rTweet package to extra and analyse the data from the Twitter Developer API
+
+  To allow us to work professionally and on various parts of the project as a group we decided to break up the code into sections and utilise GitHub to keep a track on the project.
+
+--->
+
 - Samsung and Apple
 - Flagship phones chosen
   + S20FE
@@ -53,18 +66,6 @@ OVERVIEW
 knitr::include_graphics(c("./Images/Logos/apple_logo.png", "./Images/Logos/samsung_logo.jpg", "./Images/Logos/rstudio_logo.png", "./Images/Logos/twitter_logo.png"))
 ```
 
-<!--- SPEAKER NOTES
-
-  Samsung and Apple were chosen as our competing businesses due to the recent release of their flagship phones, the S20FE and iPhone12. This meant we would have access to sufficient relevant data on Twitter to perform analysis on.
-
-  We chose to gather some extra tweets relating to the S20 to give us some comparable information for sentiment analysis and to determine if there was any improvement in sentiment from the S20 to the S20FE from the public. 
-
-  We utilised RStudio in combination with the rTweet package to extra and analyse the data from the Twitter Developer API
-
-  To allow us to work professionally and on various parts of the project as a group we decided to break up the code into sections and utilise GitHub to keep a track on the project.
-
---->
-
 <!--- End of Slide 01 ------------------------------------------------------------------------------------------------------>
 
 
@@ -75,7 +76,7 @@ knitr::include_graphics(c("./Images/Logos/apple_logo.png", "./Images/Logos/samsu
 
 ## Research
 
-<!--- SPEAKER NOTES:
+<!--- SPEAKER NOTES: - WILL
   
   Twitter provides its data through a number of APIs and after the Cambridge Analytica 'data breach', is one of the few social media platforms that has not limited the data provided through APIs, according to Dr. Wasim Ahmed from Newcastle University (2019).
   
@@ -122,7 +123,7 @@ knitr::include_graphics(c("./Images/Logos/apple_logo.png", "./Images/Logos/samsu
 
 ## Data Cleaning and Feature Engineering
 
-<!--- SPEAKER NOTES:
+<!--- SPEAKER NOTES - Alex
 
   - We removed duplicate entries for both the tweet and user data
     - Duplicate tweets were collected due to overlapping data collection periods
@@ -142,7 +143,7 @@ knitr::include_graphics(c("./Images/Logos/apple_logo.png", "./Images/Logos/samsu
     - ...and whether the user's bio identified them as a bot, this also used keywords
 
   - The raw user locations varied because twitter allows custom locations (such as 'on a mountain' or 'earth'):
-    - We used the 'country code' package to extract countries in order to make them usable in analysis
+    - We used the 'country code' package to extract countries in order to make them usable in analysis and had 25% of tweets with a location
     
   - Tweets were marked as potential spam based on:
     - Whether the tweet text identified it as spam, through the use of keywords
@@ -185,7 +186,7 @@ knitr::include_graphics(c("./Images/Logos/apple_logo.png", "./Images/Logos/samsu
 
 ## Summary of Collected Data
 
-<!--- SPEAKER NOTES:
+<!--- SPEAKER NOTES- ALEX
 
   - After data cleaning, we were left with about 74,000 tweets and 5 extracted features
   
@@ -247,7 +248,7 @@ users_summary <- users %>%
 
 ## Time Periods for Data Collection
 
-<!--- SPEAKER NOTES:
+<!--- SPEAKER NOTES - Will
 
   The normal twitter function allowed us to pull data from the last 6-9 days. We decided that just after the release date of the phones would be the best time to examine the public's opinion.
 
@@ -293,7 +294,7 @@ tweets %>% group_by(product, is_retweet) %>%
 
 ## Results - Sentiment Analysis - All Tweets
 
-<!-- SPEAKER NOTES
+<!-- SPEAKER NOTES - Tania
 
   We decided to perform sentiment analysis both generally for each model and 
   for 5 most often mentioned features: Camera, 5G, Display, Price and Battery.
@@ -317,7 +318,7 @@ mean_sentiment <- tweets %>%
                             summarize(mean_sentiment = signif(mean(avg_sentiment), 6))  
 ```
 
-```{r echo=FALSE, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4.5}
+```{r echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=5}
 # Plot the distribution of sentiment for tweets for all models
 tweets %>%
   filter(potential_spam == F) %>%
@@ -357,7 +358,7 @@ tweets %>%
 
 ## Results - Sentiment Analysis - Features
 
-<!--- SPEAKER NOTES
+<!--- SPEAKER NOTES - Tania
 
 !!Overview of sentiment analysis##
 
@@ -423,7 +424,18 @@ feature_sentiment %>%
 
 
 <!--- Slide 08 ------------------------------------------------------------------------------------------------------------->
-## Results - Sentiment Globally
+## Results - Global Sentiment By Product
+
+<!-- SPEAKER NOTES - Alex
+
+  This analysis shows us three main things:
+    that our data set may be too small to cover the sentiment globally as evidenced by the white regions seen on the maps
+
+    where the colours are lighter we may need to improve marketing and brand image
+    
+    where there are darker areas for competitors, extra attention should be taken in those regions to improve brand awareness and public sentiment   
+
+-->
 
 ```{r include=FALSE}
 
@@ -457,7 +469,7 @@ S20_matched <- geo_sentiment %>%
 
 ```
 
-```{r echo=FALSE, warning=FALSE, message=FALSE, fig.align="center", fig.cap="", fig.show='hold', out.width='40%'}
+```{r echo=FALSE, warning=FALSE, message=FALSE, fig.align="center", fig.cap="", fig.show='hold', out.width='45%'}
 
 # Plot the average sentiment for tweets regarding the iPhone12, for each country
 mapCountryData(iPhone12_matched,
@@ -475,7 +487,7 @@ mapCountryData(S20FE_matched,
 
 ```
 
-```{r echo=FALSE, warning=FALSE, message=FALSE, out.width='40%', fig.align='center'}
+```{r echo=FALSE, warning=FALSE, message=FALSE, out.width='45%', fig.align='center'}
 
 # Plot the average sentiment for tweets regarding the S20, for each country
 mapCountryData(S20_matched,
@@ -495,24 +507,23 @@ mapCountryData(S20_matched,
 <!--- Slide 09 ------------------------------------------------------------------------------------------------------------->
 ## Statistical Test - T-Test
 
-<!---
+<!--- SPEAKER NOTES - Tania
 
-  We can run the t-test if :
-  # when the two groups of samples (A and B), being compared, are normally distributed.
-  # This can be checked using Shapiro-Wilk test.
-  #
-  # and when the variances of the two groups are equal.
-  # This can be checked using F-test.
+  We can run the t-test when the groups of samples being compared, are normally distributed and when the variances of the groups are equal.
 
-  #If we were to perform t-test, we'd do it on sentiment values for tweets related to
-  #each model we're using, regardless of whether it's related to any feature or not
+  This can be checked using Shapiro-Wilk's test. The test should be performed on sentiment values for tweets related to each model we're analysing, regardless of whether it's related to any feature or not.
 
-  #first let's plot them and see if the tweets sentiments for each model are normally
-  #distributed. package for sentiments used - 'sentimentr'
+  Since our data set is too large, over 5,000 entries, we performed an Anderson-Darling's test and Kolmogorov-Smirnov test since these test do not have an entry limitiation .
+ 
+  P values for both tests were less then 0.05 which confirms numerically that our data is not normally distributed.
+
+  This is demonstrated by the density plots seen on the slide.
+  
+  Hence, the t-test is not applicable with this data set.
 
 --->
 
-```{r include=FALSE, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4.5} 
+```{r echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4.5} 
 feature_sentiment_data %>%
   ggplot(aes(x=avg_sentiment, group=product, fill=product)) +
   geom_density(adjust=1.5, alpha = .9) +
@@ -608,8 +619,8 @@ END OF ADDITIONAL/REMOVED SLIDES -->
 
 - Google Maps API 
 - Look at mentions of apple in samsung and vice versa
-
-
+- Examination of average income and sentiment by region
+- Increased number of tweets with more targeted dates before and after the release dates
 
 <!--- End of Slide XX ------------------------------------------------------------------------------------------------------>
 
@@ -625,8 +636,18 @@ END OF ADDITIONAL/REMOVED SLIDES -->
 
 -->
 
-- Twitter data provides up to date information for companies to analyse for customer feedback
+- Twitter data provides up to date information for companies to analyse customer feedback
 - Data can provide useful information to guide product teams when analysed correctly
+- With the world map data, which can be broken down into more specific regions, we can see key areas that need to have more targeted marketing or improve marketing to increase the sentiment
+
+
+**Apple**
+
+
+
+
+**Samsung**
+BTS
 
 <!--- End of Slide XX ------------------------------------------------------------------------------------------------------>
 
@@ -645,6 +666,8 @@ END OF ADDITIONAL/REMOVED SLIDES -->
 - Fuchs, Matti (2018) *Doing your first sentiment analysis in R with Sentimentr* Available at: [https://towardsdatascience.com/doing-your-first-sentiment-analysis-in-r-with-sentimentr-167855445132](https://towardsdatascience.com/doing-your-first-sentiment-analysis-in-r-with-sentimentr-167855445132) (Accessed: 06 December 2020)
   
 - Rinker, Tyler (2020). *R Documentation - sentiment_by* Available at:  [https://www.rdocumentation.org/packages/sentimentr/versions/2.7.1/topics/sentiment_by](https://www.rdocumentation.org/packages/sentimentr/versions/2.7.1/topics/sentiment_by) (Accessed: 06 December 2020)
+
+## References
 
 - R Core Team (2020). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria. Available at: [https://www.R-project.org/](https://www.R-project.org/)
 
