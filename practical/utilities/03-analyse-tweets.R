@@ -18,6 +18,7 @@ library(tidytext)
 library(ggthemes)
 library(sentimentr) #for 'SENTIMENT ANALYSIS - Product Features' section
 library(rworldmap)
+library(nortest)
 
 # SET WORKING DIRECTORY -----------------------------------------------------------------------------------------------------
 
@@ -732,5 +733,38 @@ iphone12_vals <- feature_sentiment_data %>%
 vals <- list(s20 = s20_vals, s20fe = s20fe_vals, iphone12 = iphone12_vals)
 
 
+#KOLMOGOROV-SMIRNOV
+
+ks.test(x=vals$s20, y='pnorm')
+# data:  vals$s20
+# D = 0.40721, p-value < 2.2e-16
+# alternative hypothesis: two-sided
+
+ks.test(x=vals$s20fe, y='pnorm')
+# data:  vals$s20fe
+# D = 0.45695, p-value < 2.2e-16
+# alternative hypothesis: two-sided
+
+ks.test(x=vals$iphone12, y='pnorm')
+# data:  vals$iphone12
+# D = 0.40272, p-value < 2.2e-16
+# alternative hypothesis: two-sided
+
+#ANDERSON-DARLING normality test
+
+ad.test(vals$s20)
+# data:  vals$s20
+# A = 396.71, p-value < 2.2e-16
+
+ad.test(vals$s20fe)
+# data:  vals$s20fe
+# A = 660.69, p-value < 2.2e-16
+
+ad.test(vals$iphone12)
+# data:  vals$iphone12
+# A = 687.88, p-value < 2.2e-16
+
 t.test(vals$s20fe, vals$iphone12)
 t.test(vals$s20fe, vals$s20)
+
+
