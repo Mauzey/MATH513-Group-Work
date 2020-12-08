@@ -28,9 +28,9 @@ users <- read_csv("../data/cleaned-users.csv")
 
 OVERVIEW
 
-  Speaker notes are kept in comments to hide from presentation unless the comment is in a code chunck
+  Speaker notes are kept in comments to hide from presentation unless the comment is in a code chunk which will be in place to keep a track of the code execution and purpose.
   
-  Code requires you to have the csv data set that is available from the following GitHub repository: https://github.com/Mauzey/MATH513-Group-Work
+  Code requires you to have the csv data set that is available from the following GitHub repository: https://github.com/Mauzey/MATH513-Group-Work.
   
   Extraction code and most of the cleaning/feature engineering code has been left in the GitHub and not embedded here as per discussion with Luciana to avoid overwhelming the rMarkdown file. 
   
@@ -51,27 +51,21 @@ OVERVIEW
 
 ```{r Logos, echo=FALSE, fig.align="center", fig.cap="", fig.show='hold', out.width="15%"}
 knitr::include_graphics(c("./Images/Logos/apple_logo.png", "./Images/Logos/samsung_logo.jpg", "./Images/Logos/rstudio_logo.png", "./Images/Logos/twitter_logo.png"))
-
 ```
 
 <!--- SPEAKER NOTES
 
-Chosen as competing businesses due to the current releases of their flagship phones meaning data would be available.
+  Samsung and Apple were chosen as our competing businesses due to the recent release of their flagship phones, the S20FE and iPhone12. This meant we would have access to sufficient relevant data on Twitter to perform analysis on.
 
-We chose to gather some tweets on the S20 to give us some comparable information for sentiment analysis. 
+  We chose to gather some extra tweets relating to the S20 to give us some comparable information for sentiment analysis and to determine if there was any improvement in sentiment from the S20 to the S20FE from the public. 
 
-This allowed us to show the usefulness of the analysis process and outcomes as Samsung had supposedly listened to its fan base when developing the S20 Fan Edition.
+  We utilised RStudio in combination with the rTweet package to extra and analyse the data from the Twitter Developer API
 
-
-#### SHIT REWRITE
-Allowed us access to the twitter data to analyse.
-
-To allow us to work on various parts of the project and keep an up to date record of changes as a team.
+  To allow us to work professionally and on various parts of the project as a group we decided to break up the code into sections and utilise GitHub to keep a track on the project.
 
 --->
 
 <!--- End of Slide 01 ------------------------------------------------------------------------------------------------------>
-
 
 
 
@@ -83,19 +77,25 @@ To allow us to work on various parts of the project and keep an up to date recor
 
 <!--- SPEAKER NOTES:
   
-  Twitter provides its data via a number of APIs and after the Cambridge Analytica 'data breach' is one of the few who has not limited the data provided through APIs according to Dr. Wasim Ahmed from Newcastle University. Michelle Young of Chat Bots Life.com stated in 2017 that unlike other platforms, almost every user's tweets are pullable and public. The API is vast and allows a multitude of queries and filters to be performed. Twitter data can provide insights into the general public's opinions and combined with the openness and the generous rate limiting of Twitter’s API, it can produce powerful results.
+  Twitter provides its data through a number of APIs and after the Cambridge Analytica 'data breach', is one of the few social media platforms that has not limited the data provided through APIs, according to Dr. Wasim Ahmed from Newcastle University (2019).
+  
+  Twitter data can provide insights into the general public's opinions and combined with the openness and the generous rate limiting of Twitter’s API, it can produce powerful results. (Michelle Young Chat Bots Life.com, 2017)
 
-  Regarding the hastags we chose we looked to the Samsung Mobile page abd identified that the hastags #GalaxyS20 and #GalaxyS20FE were the offical hashtags used by Samsung in their Twitter posts.
+  For our hastags, we looked to the Samsung Mobile page and identified that the hastags #GalaxyS20 and #GalaxyS20FE were the offical hashtags used by Samsung.
   
-  We then looked for the same information from Apple but found that since the Twitter account was hacked on the 15th July 2020, Apple have not been keeping tweets on their Twitter page. (Swider, Matt (2020), TechRadar - https://www.techradar.com/news/twitter-hack-2020).
+  We then looked for the same information from Apple but found that since the Twitter account was hacked in July (15h July 2020), Apple have not been keeping tweets on their Twitter page. (Swider, Matt (2020), TechRadar - https://www.techradar.com/news/twitter-hack-2020).
   
-  We then looked to the CEO of Apple as it was deemed most likely that he would be using the offical hashtags as deemed by Apple's marketing team, which led us to the hashtag #iphone12.
+  We decided to look to the CEO of Apple, Tim Cook, as we thought he would most likely be using the offical hashtag as deemed by Apple's marketing team, which led us to the hashtag #iPhone12.
   
-  We also did some sample searches of other hashtags like S20 and S20FE using the advanced Twitter search on the website to determine how relevant the hashtag was.
+  We came to the conclusion that it was better to use hashtags instead of pulling data from profiles, either business or individual. This was to ensure we would get a wide range of opinions for a fairer analysis of the publics sentiment.
+
+--->
+
+<!--- EXTRA NOTES (Cut from speaker notes to save time):
+
+  We performed some sample searches of other hashtags like S20 and S20FE using the advanced Twitter search, on the website, to determine how relevant the hashtag was.
   
-  ####REWRITE We did this simply by examining after how spread the dates were from the first 25 tweets. This research further supported our findings on the iphone12, samsungs20 and samungs20fe hashtags.
-  
-  We came to the conclusion that it was better to use hashtags over actual profiles, both business or individual, so that we would get a wide range of options for a fairer analysis.
+  We went through search results and examined the difference between the date of the latest tweet and the date of the 25th tweet in the list. This identified whether a hashatag was being used by the public and this further supported our findings that the hastags iphone12, samsungs20 and samungs20fe were the best to pull data.
 
 --->
 
@@ -118,7 +118,6 @@ To allow us to work on various parts of the project and keep an up to date recor
 
 
 
-
 <!--- Slide 03 ------------------------------------------------------------------------------------------------------------->
 
 ## Data Cleaning and Feature Engineering
@@ -127,7 +126,7 @@ To allow us to work on various parts of the project and keep an up to date recor
 
   - We removed duplicate entries for both the tweet and user data
     - Duplicate tweets were collected due to overlapping data collection periods
-      - We started with about 110,000 tweets, and ended up with roughly 74,000
+      - We started with about 110,000 tweets, and ended up with roughly 74,000 tweets
       
     - Duplicate users were collected because one user can post many tweets
       - Again, we started with about 110,000 users (one for each tweet), that went down to roughly 35,000 unique users
@@ -251,17 +250,31 @@ users_summary <- users %>%
 
 <!--- SPEAKER NOTES:
 
-  Due to the limitations of the free version of the Twitter API we pulled as much data as we could over the last month utilising the 30 day premium feature.
+  The normal twitter function allowed us to pull data from the last 6-9 days. We decided that just after the release date of the phones would be the best time to examine the public opinion.
+
+  Due to the limitations of this search, we utilised the full archive premium feature to pull tweets relating to the S20. 
+  
+  However there was a mistake that led to the tweets being pulled a little earlier than the release date as seen by the red line on the graph. 
+  
+  we pulled as much data as we could over the last 30 days utilising the 30 day premium feature.
+  
   This limitation meant that the tweets we pulled are about 3 weeks after the release date for the S20FE and 1 week after the iPhone release.
-  From the graph, you can see that we managed to gather a reasonable amount of tweets over the month of November.
+  
+  From the graph, you can see that we managed to gather a reasonable amount of tweets over the month of November for both.
+
+  You can also see the tweets for the S20 shown in red at the top whose release date was much earlier in the year where we used the Full Archive function. However
 
 --->
 
 ```{r echo=FALSE, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4.5}
 tweets$product <- as.factor(tweets$product)  # Factorize product column
 
+#df=data.frame(c(as.POSIXct(as.Date("2020-03-06")),
+                    as.POSIXct(as.Date("2020-10-02")), 
+                    as.POSIXct(as.Date("2020-10-23"))))
+
 tweets %>% group_by(product, is_retweet) %>%
-  ts_plot('days', trim = 1) + theme_minimal() +
+  ts_plot('days', trim = 1) +
   facet_grid(product ~ .) +
   labs(x = NULL, y = NULL,
        title = "Frequency of Twitter Statuses",
@@ -269,8 +282,11 @@ tweets %>% group_by(product, is_retweet) %>%
        caption = "Source: Data collected from Twitter's REST API via rtweet",
        color = "Product",
        linetype = "Retweet") +
+  theme_bw() +
   theme(plot.title = element_text(face = 'bold'),
-        strip.text.y = element_blank())
+        strip.text.y = element_blank()) + 
+  #geom_vline(xintercept = as.POSIXct(as.Date("2020-03-06")))
+  #geom_vline(mapping=aes(xintercept=df), color="black") 
 ```
 
 <!--- End of Slide 05 ------------------------------------------------------------------------------------------------------>
@@ -283,6 +299,7 @@ tweets %>% group_by(product, is_retweet) %>%
 ## Results - Sentiment Analysis - All Tweets
 
 <!-- SPEAKER NOTES
+
 We decided to perform sentiment analysis both generally for each model and 
 for 5 most often mentioned features: Camera, 5G, Display, Price and Battery.
 For sentiment analysis we used R package 'sentimentr' which instead of calculating
@@ -295,9 +312,7 @@ order to demonstrate how much it has improved. Which is to be expected
 since the whole idea behind S20 FE is that Samsung took their customer's 
 feedback into consideration and implemented some minor and major changes for features like display, price, battery.
 
-
 -->
-
 
 ```{r include=FALSE}
 # Calculate the mean sentiment for each product
@@ -426,10 +441,6 @@ feature_sentiment %>%
 
 ```
 
-
-
-
-
 <!--- End of Slide 07 ------------------------------------------------------------------------------------------------------>
 
 
@@ -469,7 +480,7 @@ S20_matched <- geo_sentiment %>%
 
 ```
 
-```{r echo=FALSE, warning=FALSE, message=FALSE, out.width='45%'}
+```{r echo=FALSE, warning=FALSE, message=FALSE, fig.align="center", fig.cap="", fig.show='hold', out.width='40%'}
 
 # Plot the average sentiment for tweets regarding the iPhone12, for each country
 mapCountryData(iPhone12_matched,
@@ -486,7 +497,8 @@ mapCountryData(S20FE_matched,
                nameColumnToPlot = 'avg_sentiment', catMethod = 'pretty')
 
 ```
-```{r echo=FALSE, warning=FALSE, message=FALSE, out.width='45%', fig.align='center'}
+
+```{r echo=FALSE, warning=FALSE, message=FALSE, out.width='40%', fig.align='center'}
 
 # Plot the average sentiment for tweets regarding the S20, for each country
 mapCountryData(S20_matched,
@@ -572,8 +584,6 @@ Look at mentions of apple in samsung and vice versa
 
 - Data can provide useful information to guide product teams when analysed correctly
 
-
-!!!! WILL TO LOOK AT REDUCING FONT SIZE
 
 ## References
 
