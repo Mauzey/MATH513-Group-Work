@@ -68,15 +68,12 @@ tweets %>% group_by(product, is_retweet) %>%
 tweets %>% filter(product == 'Galaxy S20 FE' | product == 'iPhone12') %>%
   group_by(product, is_retweet) %>%
   ts_plot('days', trim = 1) + theme_minimal() +
-    facet_grid(product ~ .) +
-    labs(x = NULL, y = NULL,
-         title = "Frequency of Twitter Statuses",
-         subtitle = "Twitter status counts aggregated using 1-day intervals",
-         caption = "Source: Data collected from Twitter's REST API via rtweet",
-         color = "Product",
-         linetype = "Retweet") +
-    theme(plot.title = element_text(face = 'bold'),
-          strip.text.y = element_blank())
+  facet_grid(product ~ .) +
+  labs(x = NULL, y = NULL,
+       title = "Frequency of Twitter Statuses",
+       subtitle = "Twitter status counts aggregated using 1-day intervals",
+       caption = "Source: Data collected from Twitter's REST API via rtweet") +
+  theme(plot.title = element_text(face = 'bold'))
 
 # SENTIMENT ANALYSIS - PREPARATION ------------------------------------------------------------------------------------------
 
@@ -146,11 +143,11 @@ iPhone12_words %>%
   head(30) %>%
   mutate(word = reorder(word, n)) %>%
   ggplot(aes(x = word, y = n)) + theme_minimal() + coord_flip() +
-    geom_col(fill = 'lightgoldenrod3', colour = 'darkgoldenrod4') +
-    labs(x = "Unique Words", y = "Frequency",
-         title = "Top 30 Most Popular Words in iPhone12 Tweets") +
-    theme(axis.title = element_text(face = 'bold'),
-          axis.text.y = element_text(size = 12))
+  geom_col(fill = 'lightgoldenrod3', colour = 'white') +
+  labs(x = "Unique Words", y = "Frequency",
+       title = "Top 30 Most Popular Words in iPhone12 Tweets") +
+  theme(axis.title = element_text(face = 'bold'),
+        axis.text.y = element_text(size = 12))
 
 
 # Get sentiment scores for iPhone12 words
@@ -163,13 +160,13 @@ iPhone12_bing_count <- iPhone12_words %>%
 iPhone12_bing_count %>% group_by(sentiment) %>%
   top_n(10) %>% ungroup() %>%
   ggplot(aes(x = word, y = n, fill = sentiment)) + theme_minimal() + coord_flip() +
-    geom_col(show.legend = F) +
-    facet_wrap(~ sentiment, scales = 'free_y') +
-    labs(x = NULL, y = "Sentiment",
-         title = "Most Common Positive and Negative Words in iPhone12 Tweets") +
-    theme(axis.text = element_text(size = 11, colour = 'black'),
-          axis.title = element_text(size = 11, colour = 'black'),
-          title = element_text(size = 12))
+  geom_col(show.legend = F) +
+  facet_wrap(~ sentiment, scales = 'free_y') +
+  labs(x = NULL, y = "Sentiment",
+       title = "Most Common Positive and Negative Words in iPhone12 Tweets") +
+  theme(axis.text = element_text(size = 11, colour = 'black'),
+        axis.title = element_text(size = 11, colour = 'black'),
+        title = element_text(size = 12))
 
 rm(iPhone12_bing_count)  # Remove vars from memory to keep the environment tidy
 
@@ -185,14 +182,14 @@ mean_iPhone12_sentiment <- tweets %>%
 tweets %>%
   filter(potential_spam == F & product == 'iPhone12') %>%
   ggplot(aes(x = avg_sentiment)) + theme_minimal() +
-    geom_histogram(aes(y = ..density..), fill = 'lightgoldenrod3', colour = 'darkgoldenrod4') +
-    geom_vline(xintercept = mean_iPhone12_sentiment) +
-    geom_text(aes(x = mean_iPhone12_sentiment, y = Inf, label = paste('Mean: ', mean_iPhone12_sentiment)),
-              vjust = 2, hjust = -0.1) +
-    labs(x = "Sentiment Score", y = "Density",
-         title = "Distribution of Sentiment Scores Across iPhone12 Tweets",
-         caption = "Source: Data collected from Twitter's REST API via rtweet") +
-    theme(plot.title = element_text(face = 'bold'))
+  geom_histogram(aes(y = ..density..), fill = 'lightgoldenrod3', colour = 'brown') +
+  geom_vline(xintercept = mean_iPhone12_sentiment) +
+  geom_text(aes(x = mean_iPhone12_sentiment, y = Inf, label = paste('Mean: ', mean_iPhone12_sentiment)),
+            vjust = 2, hjust = -0.1) +
+  labs(x = "Sentiment Score", y = "Density",
+       title = "Distribution of Sentiment Scores Across iPhone12 Tweets",
+       caption = "Source: Data collected from Twitter's REST API via rtweet") +
+  theme(plot.title = element_text(face = 'bold'))
 
 rm(mean_iPhone12_sentiment)  # Remove vars from memory to keep the environment tidy
 
@@ -204,11 +201,11 @@ S20_words %>%
   head(30) %>%
   mutate(word = reorder(word, n)) %>%
   ggplot(aes(x = word, y = n)) + theme_minimal() + coord_flip() +
-    geom_col(fill = 'turquoise', colour = 'turquoise4') +
-    labs(x = "Unique Words", y = "Frequency",
-         title = "Top 30 Most Popular Words in Galaxy S20 Tweets") +
-    theme(axis.title = element_text(face = 'bold'),
-          axis.text.y = element_text(size = 12))
+  geom_col(fill = 'turquoise', colour = 'white') +
+  labs(x = "Unique Words", y = "Frequency",
+       title = "Top 30 Most Popular Words in Galaxy S20 Tweets") +
+  theme(axis.title = element_text(face = 'bold'),
+        axis.text.y = element_text(size = 12))
 
 
 # Get sentiment scores for Galaxy S20 words
@@ -221,13 +218,13 @@ S20_bing_count <- S20_words %>%
 S20_bing_count %>% group_by(sentiment) %>%
   top_n(10) %>% ungroup() %>%
   ggplot(aes(x = word, y = n, fill = sentiment)) + theme_minimal() + coord_flip() +
-    geom_col(show.legend = F) +
-    facet_wrap(~ sentiment, scales = 'free_y') +
-    labs(x = NULL, y = "Sentiment",
-         title = "Most Common Positive and Negative Words in Galaxy S20 Tweets") +
-    theme(axis.text = element_text(size = 11, colour = 'black'),
-          axis.title = element_text(size = 11, colour = 'black'),
-          title = element_text(size = 12))
+  geom_col(show.legend = F) +
+  facet_wrap(~ sentiment, scales = 'free_y') +
+  labs(x = NULL, y = "Sentiment",
+       title = "Most Common Positive and Negative Words in Galaxy S20 Tweets") +
+  theme(axis.text = element_text(size = 11, colour = 'black'),
+        axis.title = element_text(size = 11, colour = 'black'),
+        title = element_text(size = 12))
 
 
 # Calculate the mean sentiment for tweets regarding the Galaxy S20
@@ -241,7 +238,7 @@ mean_S20_sentiment <- tweets %>%
 tweets %>%
   filter(potential_spam == F & product == 'Galaxy S20') %>%
   ggplot(aes(x = avg_sentiment)) + theme_minimal() +
-  geom_histogram(aes(y = ..density..), fill = 'turquoise', colour = 'turquoise4') +
+  geom_histogram(aes(y = ..density..), fill = 'lightgoldenrod3', colour = 'brown') +
   geom_vline(xintercept = mean_S20_sentiment) +
   geom_text(aes(x = mean_S20_sentiment, y = Inf, label = paste('Mean: ', mean_S20_sentiment)),
             vjust = 2, hjust = -0.1) +
@@ -260,11 +257,11 @@ S20FE_words %>%
   head(30) %>%
   mutate(word = reorder(word, n)) %>%
   ggplot(aes(x = word, y = n)) + theme_minimal() + coord_flip() +
-    geom_col(fill = 'mediumpurple1', colour = 'mediumpurple4') +
-    labs(x = "Unique Words", y = "Frequency",
-         title = "Top 30 Most Popular Words in Galaxy S20 FE Tweets") +
-    theme(axis.title = element_text(face = 'bold'),
-          axis.text.y = element_text(size = 12))
+  geom_col(fill = 'mediumpurple1', colour = 'white') +
+  labs(x = "Unique Words", y = "Frequency",
+       title = "Top 30 Most Popular Words in Galaxy S20 FE Tweets") +
+  theme(axis.title = element_text(face = 'bold'),
+        axis.text.y = element_text(size = 12))
 
 
 # Get sentiment scores for Galaxy S20 FE words
@@ -277,13 +274,13 @@ S20FE_bing_count <- S20FE_words %>%
 S20FE_bing_count %>% group_by(sentiment) %>%
   top_n(10) %>% ungroup() %>%
   ggplot(aes(x = word, y = n, fill = sentiment)) + theme_minimal() + coord_flip() +
-    geom_col(show.legend = F) +
-    facet_wrap(~ sentiment, scales = 'free_y') +
-    labs(x = NULL, y = "Sentiment",
-         title = "Most Common Positive and Negative Words in Galaxy S20 FE Tweets") +
-    theme(axis.text = element_text(size = 11, colour = 'black'),
-          axis.title = element_text(size = 11, colour = 'black'),
-          title = element_text(size = 12))
+  geom_col(show.legend = F) +
+  facet_wrap(~ sentiment, scales = 'free_y') +
+  labs(x = NULL, y = "Sentiment",
+       title = "Most Common Positive and Negative Words in Galaxy S20 FE Tweets") +
+  theme(axis.text = element_text(size = 11, colour = 'black'),
+        axis.title = element_text(size = 11, colour = 'black'),
+        title = element_text(size = 12))
 
 
 # Calculate the mean sentiment for tweets regarding the Galaxy S20 FE
@@ -297,7 +294,7 @@ mean_S20FE_sentiment <- tweets %>%
 tweets %>%
   filter(potential_spam == F & product == 'Galaxy S20 FE') %>%
   ggplot(aes(x = avg_sentiment)) + theme_minimal() +
-  geom_histogram(aes(y = ..density..), fill = 'mediumpurple1', colour = 'mediumpurple4') +
+  geom_histogram(aes(y = ..density..), fill = 'lightgoldenrod3', colour = 'brown') +
   geom_vline(xintercept = mean_S20FE_sentiment) +
   geom_text(aes(x = mean_S20FE_sentiment, y = Inf, label = paste('Mean: ', mean_S20FE_sentiment)),
             vjust = 2, hjust = -0.1) +
@@ -315,35 +312,30 @@ mean_sentiment <- tweets %>%
   group_by(product) %>%
   summarize(mean_sentiment = signif(mean(avg_sentiment), 6))
 
-# Plot the distribution of sentiment for tweets for all models
+# Plot the distribution of sentiment for iPhone12 tweets vs. Galaxy S20 FE tweets
 tweets %>%
-  filter(potential_spam == F) %>%
+  filter(potential_spam == F & (product == 'Galaxy S20 FE' | product == 'iPhone12')) %>%
   ggplot(aes(x = avg_sentiment, fill = product)) + theme_minimal() +
-    geom_histogram(aes(y = ..density..), colour = 'black') +
+  geom_histogram(aes(y = ..density..), colour = 'black') +
   
-    # Vertical lines for each product
-    geom_vline(data = filter(mean_sentiment, product == 'iPhone12'), aes(xintercept = mean_sentiment)) +
-    geom_vline(data = filter(mean_sentiment, product == 'Galaxy S20 FE'), aes(xintercept = mean_sentiment)) +
-  geom_vline(data = filter(mean_sentiment, product == 'Galaxy S20'), aes(xintercept = mean_sentiment)) +
-    # Mean sentiment text for each product
-    geom_text(data = filter(mean_sentiment, product == 'iPhone12'),
-              aes(x = mean_sentiment, y = Inf, label = paste('Mean: ', mean_sentiment), vjust = 2, hjust = -0.1)) +
-    geom_text(data = filter(mean_sentiment, product == 'Galaxy S20 FE'),
-              aes(x = mean_sentiment, y = Inf, label = paste('Mean: ', mean_sentiment), vjust = 2, hjust = -0.1)) +
-    geom_text(data = filter(mean_sentiment, product == 'Galaxy S20'),
+  # Vertical lines for each product
+  geom_vline(data = filter(mean_sentiment, product == 'iPhone12'), aes(xintercept = mean_sentiment)) +
+  geom_vline(data = filter(mean_sentiment, product == 'Galaxy S20 FE'), aes(xintercept = mean_sentiment)) +
+  
+  # Mean sentiment text for each product
+  geom_text(data = filter(mean_sentiment, product == 'iPhone12'),
+            aes(x = mean_sentiment, y = Inf, label = paste('Mean: ', mean_sentiment), vjust = 2, hjust = -0.1)) +
+  geom_text(data = filter(mean_sentiment, product == 'Galaxy S20 FE'),
             aes(x = mean_sentiment, y = Inf, label = paste('Mean: ', mean_sentiment), vjust = 2, hjust = -0.1)) +
   
-    facet_grid(product ~ .) +
-    scale_fill_manual(values = c('iPhone12' = 'lightgoldenrod3', 
-                                 'Galaxy S20 FE' = 'mediumpurple1',
-                                 'Galaxy S20' = 'turquoise')) +
-    labs(x = "Sentiment Score", y = "Density",
-         title = "Distribution of Sentiment Scores Across Tweets Related to All the Models",
-         caption = "Source: Data collected from Twitter's REST API via rtweet",
-         fill = "Product: ") +
-    theme(legend.position = 'bottom',
-          plot.title = element_text(face = 'bold'),
-          strip.text.y = element_blank())
+  facet_grid(product ~ .) +
+  scale_fill_manual(values = c('iPhone12' = 'lightgoldenrod3', 'Galaxy S20 FE' = 'mediumpurple1')) +
+  labs(x = "Sentiment Score", y = "Density",
+       title = "Distribution of Sentiment Scores Across Galaxy S20 FE and iPhone 12 Tweets",
+       caption = "Source: Data collected from Twitter's REST API via rtweet",
+       fill = "Product: ") +
+  theme(legend.position = 'bottom',
+        plot.title = element_text(face = 'bold'))
 
 rm(mean_sentiment)  # Remove vars from memory to keep the environment tidy
 
@@ -400,8 +392,8 @@ feature_sentiment_stat %>%
   facet_wrap(. ~ value) +
   theme_bw() +
   scale_color_manual(values = c("iPhone12" = "lightgoldenrod3", 
-                               "Galaxy S20" = "turquoise",
-                               "Galaxy S20 FE" = "mediumpurple1"),) +
+                                "Galaxy S20" = "turquoise",
+                                "Galaxy S20 FE" = "mediumpurple1"),) +
   scale_y_continuous(name = "Average Sentiment Score", limits = c(0,1)) +
   theme(axis.title.x=element_blank(), 
         axis.text.x=element_blank(),
@@ -418,8 +410,8 @@ feature_sentiment_stat %>%
   facet_wrap(. ~ value) +
   theme_bw() +
   scale_fill_manual(values = c("iPhone12" = "lightgoldenrod3", 
-                                "Galaxy S20" = "turquoise",
-                                "Galaxy S20 FE" = "mediumpurple1"),) +
+                               "Galaxy S20" = "turquoise",
+                               "Galaxy S20 FE" = "mediumpurple1"),) +
   scale_y_continuous(name = "Average Sentiment Score", limits = c(0,1)) +
   theme(axis.title.x=element_blank(), 
         axis.text.x=element_blank(),
@@ -474,8 +466,8 @@ feature_sentiment %>%
   facet_wrap(. ~ value) +
   theme_bw() +
   scale_color_manual(values = c("iPhone12" = "lightgoldenrod3", 
-                               "Galaxy S20" = "turquoise",
-                               "Galaxy S20 FE" = "mediumpurple1"),) +
+                                "Galaxy S20" = "turquoise",
+                                "Galaxy S20 FE" = "mediumpurple1"),) +
   scale_y_continuous(name = "Sentiment Score") +
   theme(axis.title.x=element_blank(), 
         axis.text.x=element_blank(),
@@ -494,7 +486,7 @@ stat_iphone12 <- feature_sentiment %>%
   filter(product == "iPhone12") %>% 
   summarise(sd = sd(avg_sentiment),
             mean = mean(avg_sentiment))
-  
+
 stat_s20fe <- feature_sentiment %>% 
   filter(product == "Galaxy S20 FE")%>% 
   summarise(sd = sd(avg_sentiment),
@@ -673,75 +665,3 @@ mapCountryData(S20FE_matched,
                borderCol = 'gray40',
                colourPalette = c('thistle', 'mediumpurple2', 'purple4'),
                nameColumnToPlot = 'avg_sentiment', catMethod = 'pretty')
-
-
-#T-TEST
-
-#we can run the t-test if :
-# when the two groups of samples (A and B), being compared, are normally distributed. 
-# This can be checked using Shapiro-Wilk test.
-# 
-# and when the variances of the two groups are equal. 
-# This can be checked using F-test.
-
-#If we were to perform t-test, we'd do it on sentiment values for tweets related to 
-#each model we're using, regardless of whether it's related to any feature or not
-
-#first let's plot them and see if the tweets sentiments for each model are normally 
-#distributed. package for sentiments used - 'sentimentr'
-
-library(hrbrthemes)
-library(viridis)
-
-# The diamonds dataset is natively available with R.
-
-
-#p2
-
-# vals %>% 
-#   group_by()
-# ggdensity(vals$s20, main = "Density plot of tweets sentiments",
-#             xlab = "Sentiments range")
-# 
-
-
-feature_sentiment_data %>%
-  ggplot(aes(x=avg_sentiment, group=product, fill=product)) +
-  geom_density(adjust=1.5) +
-  theme_bw() +
-  facet_wrap(~product) +
-  scale_fill_manual(values = c("Galaxy S20" = "turquoise",
-                               "Galaxy S20 FE" = "mediumpurple1",
-                               "iPhone12" = "lightgoldenrod3")) +
-  theme(
-    legend.position="none",
-    panel.spacing = unit(0.1, "lines"),
-    axis.ticks.x=element_blank()
-  ) 
-
-
-
-feature_sentiment_data %>%
-  ggplot(aes(x=avg_sentiment, group=product, fill=product)) +
-  geom_density(adjust=1.5, alpha=.3) +
-  theme_bw() +
-  scale_fill_manual(values = c("Galaxy S20" = "turquoise",
-                               "Galaxy S20 FE" = "mediumpurple1",
-                               "iPhone12" = "lightgoldenrod3"))
-
-#T-TEST
-
-s20fe_vals <- feature_sentiment_data %>% 
-  filter(product=="Galaxy S20 FE") %>% .$avg_sentiment
-
-s20_vals <- feature_sentiment_data %>% 
-  filter(product=="Galaxy S20") %>% .$avg_sentiment
-
-iphone12_vals <- feature_sentiment_data %>% 
-  filter(product=="iPhone12") %>% .$avg_sentiment
-
-vals <- list(s20 = s20_vals, s20fe = s20fe_vals, iphone12 = iphone12_vals)
-
-
-t.test(vals$s20fe, vals$iphone12)
-t.test(vals$s20fe, vals$s20)

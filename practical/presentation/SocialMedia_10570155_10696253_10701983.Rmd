@@ -261,14 +261,16 @@ users_summary <- users %>%
 tweets$product <- as.factor(tweets$product)  # Factorize product column
 
 tweets %>% group_by(product, is_retweet) %>%
-  ts_plot('days', trim = 1) + 
-  theme_bw() +
+  ts_plot('days', trim = 1) + theme_minimal() +
   facet_grid(product ~ .) +
   labs(x = NULL, y = NULL,
        title = "Frequency of Twitter Statuses",
        subtitle = "Twitter status counts aggregated using 1-day intervals",
-       caption = "Source: Data collected from Twitter's REST API via rtweet") +
-  theme(plot.title = element_text(face = 'bold'))
+       caption = "Source: Data collected from Twitter's REST API via rtweet",
+       color = "Product",
+       linetype = "Retweet") +
+  theme(plot.title = element_text(face = 'bold'),
+        strip.text.y = element_blank())
 ```
 
 <!--- End of Slide 05 ------------------------------------------------------------------------------------------------------>
@@ -287,31 +289,41 @@ tweets %>% group_by(product, is_retweet) %>%
 
 !!!! TANIA TO INSERT GRAPH SHOWING SENTIMENT OF ALL TWEETS
 
-```{r}
-# Plot the distribution of sentiment for iPhone12 tweets vs. Galaxy S20 FE tweets
+```{r include=FALSE}
+# Calculate the mean sentiment for each product
+mean_sentiment <- tweets %>%
+  group_by(product) %>%
+  summarize(mean_sentiment = signif(mean(avg_sentiment), 6))
+
+```
+```{r echo=FALSE, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4.5}
+# Plot the distribution of sentiment for tweets for all models
 tweets %>%
-  filter(potential_spam == F & (product == 'Galaxy S20 FE' | product == 'iPhone12')) %>%
+  filter(potential_spam == F) %>%
   ggplot(aes(x = avg_sentiment, fill = product)) + theme_minimal() +
     geom_histogram(aes(y = ..density..), colour = 'black') +
-  
-    # Vertical lines for each product
     geom_vline(data = filter(mean_sentiment, product == 'iPhone12'), aes(xintercept = mean_sentiment)) +
     geom_vline(data = filter(mean_sentiment, product == 'Galaxy S20 FE'), aes(xintercept = mean_sentiment)) +
-    
+  geom_vline(data = filter(mean_sentiment, product == 'Galaxy S20'), aes(xintercept = mean_sentiment)) +
     # Mean sentiment text for each product
     geom_text(data = filter(mean_sentiment, product == 'iPhone12'),
               aes(x = mean_sentiment, y = Inf, label = paste('Mean: ', mean_sentiment), vjust = 2, hjust = -0.1)) +
     geom_text(data = filter(mean_sentiment, product == 'Galaxy S20 FE'),
               aes(x = mean_sentiment, y = Inf, label = paste('Mean: ', mean_sentiment), vjust = 2, hjust = -0.1)) +
-    
+    geom_text(data = filter(mean_sentiment, product == 'Galaxy S20'),
+            aes(x = mean_sentiment, y = Inf, label = paste('Mean: ', mean_sentiment), vjust = 2, hjust = -0.1)) +
+  
     facet_grid(product ~ .) +
-    scale_fill_manual(values = c('iPhone12' = 'lightgoldenrod3', 'Galaxy S20 FE' = 'mediumpurple1')) +
+    scale_fill_manual(values = c('iPhone12' = 'lightgoldenrod3', 
+                                 'Galaxy S20 FE' = 'mediumpurple1',
+                                 'Galaxy S20' = 'turquoise')) +
     labs(x = "Sentiment Score", y = "Density",
-         title = "Distribution of Sentiment Scores Across Galaxy S20 FE and iPhone 12 Tweets",
+         title = "Distribution of Sentiment Scores Across Tweets Related to All the Models",
          caption = "Source: Data collected from Twitter's REST API via rtweet",
          fill = "Product: ") +
     theme(legend.position = 'bottom',
-          plot.title = element_text(face = 'bold'))
+          plot.title = element_text(face = 'bold'),
+          strip.text.y = element_blank())
 ```
 
 <!--- End of Slide 06 ------------------------------------------------------------------------------------------------------>
@@ -463,7 +475,7 @@ mapCountryData(S20_matched,
 
 <!--- End of Slide 08 ------------------------------------------------------------------------------------------------------>
 
-!!!!! TANIA TO PUT IN SLIDE ABOUT total_tweets
+!!!!! TANIA TO PUT IN SLIDE ABOUT T-TEST
 
 
 
