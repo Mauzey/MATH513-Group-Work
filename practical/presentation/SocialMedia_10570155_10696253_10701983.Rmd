@@ -85,7 +85,7 @@ To allow us to work on various parts of the project and keep an up to date recor
   
   Twitter provides its data via a number of APIs and after the Cambridge Analytica 'data breach' is one of the few who has not limited the data provided through APIs according to Dr. Wasim Ahmed from Newcastle University. Michelle Young of Chat Bots Life.com stated in 2017 that unlike other platforms, almost every user's tweets are pullable and public. The API is vast and allows a multitude of queries and filters to be performed. Twitter data can provide insights into the general public's opinions and combined with the openness and the generous rate limiting of Twitter’s API, it can produce powerful results.
 
-  Regarding the hastags we chose we looked to the  Samsung Mobile page abd identified that the hastags #GalaxyS20 and #GalaxyS20FE were the offical hashtags used by Samsung in their Twitter posts.
+  Regarding the hastags we chose we looked to the Samsung Mobile page abd identified that the hastags #GalaxyS20 and #GalaxyS20FE were the offical hashtags used by Samsung in their Twitter posts.
   
   We then looked for the same information from Apple but found that since the Twitter account was hacked on the 15th July 2020, Apple have not been keeping tweets on their Twitter page. (Swider, Matt (2020), TechRadar - https://www.techradar.com/news/twitter-hack-2020).
   
@@ -99,7 +99,6 @@ To allow us to work on various parts of the project and keep an up to date recor
 
 --->
 
-
 **Choosing Twitter for Analysis**
 
 - Open API Access compared to others
@@ -112,8 +111,6 @@ To allow us to work on various parts of the project and keep an up to date recor
 - @SamsungMobile - [https://twitter.com/SamsungMobile](https://twitter.com/SamsungMobile)
 - @Apple - [https://twitter.com/Apple](https://twitter.com/Apple) 
 - @tim_cook - [https://twitter.com/tim_cook](https://twitter.com/tim_cook)
-
-
 
 <!--- End of Slide 02 ------------------------------------------------------------------------------------------------------>
 
@@ -255,14 +252,12 @@ users_summary <- users %>%
 <!--- SPEAKER NOTES:
 
   Due to the limitations of the free version of the Twitter API we pulled as much data as we could over the last month utilising the 30 day premium feature.
-  The release date for the S20FE was the 2nd October 2020 and for the iPhone12 was the 23rd October 2020.
   This limitation meant that the tweets we pulled are about 3 weeks after the release date for the S20FE and 1 week after the iPhone release.
   From the graph, you can see that we managed to gather a reasonable amount of tweets over the month of November.
 
 --->
 
 ```{r echo=FALSE, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4.5}
-
 tweets$product <- as.factor(tweets$product)  # Factorize product column
 
 tweets %>% group_by(product, is_retweet) %>%
@@ -274,27 +269,79 @@ tweets %>% group_by(product, is_retweet) %>%
        subtitle = "Twitter status counts aggregated using 1-day intervals",
        caption = "Source: Data collected from Twitter's REST API via rtweet") +
   theme(plot.title = element_text(face = 'bold'))
-
 ```
 
 <!--- End of Slide 05 ------------------------------------------------------------------------------------------------------>
 
 
 
-## Results - Sentiment Analysis
+
+<!--- Slide 06 ------------------------------------------------------------------------------------------------------------->
+
+## Results - Sentiment Analysis - All Tweets
+
+<!-- SPEAKER NOTES
+
+
+-->
+
+!!!! TANIA TO INSERT GRAPH SHOWING SENTIMENT OF ALL TWEETS
+
+```{r}
+# Plot the distribution of sentiment for iPhone12 tweets vs. Galaxy S20 FE tweets
+tweets %>%
+  filter(potential_spam == F & (product == 'Galaxy S20 FE' | product == 'iPhone12')) %>%
+  ggplot(aes(x = avg_sentiment, fill = product)) + theme_minimal() +
+    geom_histogram(aes(y = ..density..), colour = 'black') +
+  
+    # Vertical lines for each product
+    geom_vline(data = filter(mean_sentiment, product == 'iPhone12'), aes(xintercept = mean_sentiment)) +
+    geom_vline(data = filter(mean_sentiment, product == 'Galaxy S20 FE'), aes(xintercept = mean_sentiment)) +
+    
+    # Mean sentiment text for each product
+    geom_text(data = filter(mean_sentiment, product == 'iPhone12'),
+              aes(x = mean_sentiment, y = Inf, label = paste('Mean: ', mean_sentiment), vjust = 2, hjust = -0.1)) +
+    geom_text(data = filter(mean_sentiment, product == 'Galaxy S20 FE'),
+              aes(x = mean_sentiment, y = Inf, label = paste('Mean: ', mean_sentiment), vjust = 2, hjust = -0.1)) +
+    
+    facet_grid(product ~ .) +
+    scale_fill_manual(values = c('iPhone12' = 'lightgoldenrod3', 'Galaxy S20 FE' = 'mediumpurple1')) +
+    labs(x = "Sentiment Score", y = "Density",
+         title = "Distribution of Sentiment Scores Across Galaxy S20 FE and iPhone 12 Tweets",
+         caption = "Source: Data collected from Twitter's REST API via rtweet",
+         fill = "Product: ") +
+    theme(legend.position = 'bottom',
+          plot.title = element_text(face = 'bold'))
+```
+
+<!--- End of Slide 06 ------------------------------------------------------------------------------------------------------>
+
+
+
+
+<!--- Slide 07 ------------------------------------------------------------------------------------------------------------->
+
+## Results - Sentiment Analysis - Features
+
+<!--- SPEAKER NOTES
+
+!!Overview of sentiment analysis##
+
+Boxplot only looks at sentiment of tweets that contained one of the 5 key features that we wanted to examine. 
+
+
+
+!!Choice of feature to analyse**
+--->
 
 ```{r include=FALSE}
 # SENTIMENT ANALYSIS - Product Features -------------------------------------------------------------------------------------
 
 #For features analysis we'll be using a different package called "sentimentr"
 
-#Find more info about it here:
-#https://towardsdatascience.com/sentiment-analysis-in-r-good-vs-not-good-handling-negations-2404ec9ff2ae
+#Find more info about it here:https://towardsdatascience.com/sentiment-analysis-in-r-good-vs-not-good-handling-negations-2404ec9ff2ae
 
-# “sentimentr attempts to take into account valence shifters 
-# (i.e., negators, amplifiers (intensifiers), de-amplifiers (downtoners), 
-# and adversative conjunctions) while maintaining speed. Simply put, 
-# sentimentr is an augmented dictionary lookup.”
+# “sentimentr attempts to take into account valence shifters # (i.e., negators, amplifiers (intensifiers), de-amplifiers (downtoners), # and adversative conjunctions) while maintaining speed. Simply put, # sentimentr is an augmented dictionary lookup.”
 
 # Compute overall sentiment score for each tweet using sentimentr
 
@@ -305,8 +352,7 @@ feature_sentiment_data <- select(tweets, product, mentioned_features, avg_sentim
 feature_sentiment_data <- separate(feature_sentiment_data, col = mentioned_features, into = paste0('feature', 1:5), sep = ', ')
 
 # Pivot feature columns
-feature_sentiment <- pivot_longer(feature_sentiment_data,
-                                  cols = names(feature_sentiment_data)[which(grepl('feature', names(feature_sentiment_data)))])
+feature_sentiment <- pivot_longer(feature_sentiment_data, cols = names(feature_sentiment_data)[which(grepl('feature', names(feature_sentiment_data)))])
 
 # Remove NAs and whitespace
 feature_sentiment <- feature_sentiment %>%
@@ -339,16 +385,13 @@ feature_sentiment %>%
 
 ```
 
-<!---
-**Overview of sentiment analysis**
-
-
-**Choice of feature to analyse**
---->
+<!--- End of Slide 07 ------------------------------------------------------------------------------------------------------>
 
 
 
-<!--- Slide  ------------------------------------------------------------------------------------------------------------->
+
+
+<!--- Slide 08 ------------------------------------------------------------------------------------------------------------->
 ## Results - Sentiment Globally
 
 ```{r include=FALSE}
@@ -385,7 +428,7 @@ S20_matched <- geo_sentiment %>%
 ```
 
 
-######## NEED TO PLOT 3 GRAPHS ON ONE SLIDE
+!!!!!!  NEED TO PLOT 3 GRAPHS ON ONE SLIDE
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4.5}
 
@@ -418,7 +461,13 @@ mapCountryData(S20_matched,
                nameColumnToPlot = 'avg_sentiment', catMethod = 'pretty')
 ```
 
-<!--- End of Slide 06 ------------------------------------------------------------------------------------------------------>
+<!--- End of Slide 08 ------------------------------------------------------------------------------------------------------>
+
+!!!!! TANIA TO PUT IN SLIDE ABOUT total_tweets
+
+
+
+!!!!! STOCK PRICE VS SENTIMENT
 
 
 
@@ -465,6 +514,8 @@ Look at mentions of apple in samsung and vice versa
 
 - Data can provide useful information to guide product teams when analysed correctly
 
+
+!!!! WILL TO LOOK AT REDUCING FONT SIZE
 
 ## References
 
