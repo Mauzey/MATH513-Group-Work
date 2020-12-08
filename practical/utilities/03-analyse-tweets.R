@@ -690,24 +690,10 @@ mapCountryData(S20FE_matched,
 #first let's plot them and see if the tweets sentiments for each model are normally 
 #distributed. package for sentiments used - 'sentimentr'
 
-library(hrbrthemes)
-library(viridis)
-
-# The diamonds dataset is natively available with R.
-
-
-#p2
-
-# vals %>% 
-#   group_by()
-# ggdensity(vals$s20, main = "Density plot of tweets sentiments",
-#             xlab = "Sentiments range")
-# 
-
 
 feature_sentiment_data %>%
   ggplot(aes(x=avg_sentiment, group=product, fill=product)) +
-  geom_density(adjust=1.5) +
+  geom_density(adjust=1.5, alpha = .9) +
   theme_bw() +
   facet_wrap(~product) +
   scale_fill_manual(values = c("Galaxy S20" = "turquoise",
@@ -717,8 +703,10 @@ feature_sentiment_data %>%
     legend.position="none",
     panel.spacing = unit(0.1, "lines"),
     axis.ticks.x=element_blank()
-  ) 
-
+  ) +
+  labs(x = "Average Sentiment",
+       y = "Density",
+       title = "Density Plots for Overall Sentiments of 3 Products")
 
 
 feature_sentiment_data %>%
@@ -727,7 +715,8 @@ feature_sentiment_data %>%
   theme_bw() +
   scale_fill_manual(values = c("Galaxy S20" = "turquoise",
                                "Galaxy S20 FE" = "mediumpurple1",
-                               "iPhone12" = "lightgoldenrod3"))
+                               "iPhone12" = "lightgoldenrod3")) +
+  labs(fill = "Product")
 
 #T-TEST
 
