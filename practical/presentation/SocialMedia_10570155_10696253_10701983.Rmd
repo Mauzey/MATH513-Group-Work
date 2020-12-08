@@ -2,7 +2,7 @@
 title: "MATH513 Practical Presentation"
 author: "10570155, 10696253, 10701983"
 date: "10/12/2020"
-output: 
+output:
   beamer_presentation: 
     theme: Boadilla
     colortheme: beaver
@@ -438,7 +438,6 @@ feature_sentiment %>%
 ## Results - Sentiment Globally
 
 ```{r include=FALSE}
-# SENTIMENT ANALYSIS - Geographical Data ------------------------------------------------------------------------------------
 
 # Get the 'user_id' and 'country' of users with valid country values
 geo_users <- users %>%
@@ -470,10 +469,7 @@ S20_matched <- geo_sentiment %>%
 
 ```
 
-
-!!!!!!  NEED TO PLOT 3 GRAPHS ON ONE SLIDE
-
-```{r echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4.5}
+```{r echo=FALSE, warning=FALSE, message=FALSE, out.width='45%'}
 
 # Plot the average sentiment for tweets regarding the iPhone12, for each country
 mapCountryData(iPhone12_matched,
@@ -481,9 +477,6 @@ mapCountryData(iPhone12_matched,
                borderCol = 'gray40',
                colourPalette = c('lightgoldenrod', 'goldenrod2', 'darkgoldenrod4'),
                nameColumnToPlot = 'avg_sentiment', catMethod = 'pretty')
-```
-
-```{r echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4.5}
 
 # Plot the average sentiment for tweets regarding the S20 FE, for each country
 mapCountryData(S20FE_matched,
@@ -493,11 +486,23 @@ mapCountryData(S20FE_matched,
                nameColumnToPlot = 'avg_sentiment', catMethod = 'pretty')
 
 ```
+```{r echo=FALSE, warning=FALSE, message=FALSE, out.width='45%', fig.align='center'}
+
+# Plot the average sentiment for tweets regarding the S20, for each country
+mapCountryData(S20_matched,
+               mapTitle = "Galaxy S20 Sentiment by Country",
+               borderCol = 'gray40',
+               colourPalette = c('paleturquoise', 'mediumturquoise', 'turquoise4'),
+               nameColumnToPlot = 'avg_sentiment', catMethod = 'pretty')
+
+```
 
 
+<!---
 !!!SOMEONE PLEASE PUT IT SOMEWHERE IN ANY SLIDE, THIS IS T-TEST
+--->
 
-```{r echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4.5} 
+```{r include=FALSE, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4.5} 
 
 
 feature_sentiment_data %>%
