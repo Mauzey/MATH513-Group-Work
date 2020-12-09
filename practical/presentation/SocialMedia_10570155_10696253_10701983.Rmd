@@ -309,7 +309,7 @@ users_summary <- users %>%
   and 
   for 5 of the most often mentioned features: Camera, 5G, Display, Price and Battery.
 
-  For sentiment analysis, we used the 'sentimentr' package which calculates average sentiment for a group of sentences instead for individual words. This was more suitable for our analysis since we're analysing the feedback in the form of tweets where each tweet consists of 1 or more whole sentences on each feature for each of the 3 products.
+  We used the 'sentimentr' package which calculates average sentiment for a group of sentences instead for individual words. This was more suitable for our analysis since each tweet consists of 1 or more whole sentences on each feature for each of the 3 products. This reduces scewed data , for example the phrase 'not so good' could be seen as positive instead of negative as not would be a stop word.
 
   This slide demonstrates the overall sentiment for each product. 
 
@@ -565,7 +565,106 @@ feature_sentiment_data %>%
 <!--- End of Slide 09 ------------------------------------------------------------------------------------------------------>
 
 
-<!--- Additional Slides??
+
+
+
+<!--- Slide XX ------------------------------------------------------------------------------------------------------------->
+## Conclusions
+
+<!-- SPEAKER NOTES
+  From our analysis we can draw the following conclusions:
+
+    Historical twitter data can be used effectively to analsye the public opinions and sentiments about a particular topic. 
+    
+    Due to the nature of Twitter data being current, it is therefore possible for businesses like Samsung and Apple to perform live analysis of the public's opinion around the release of a new product to get instant feedback and determine the ealy success of the release.
+
+    The sentiment analsysis performed shows that the extra development and improvement of the S20FE over the S20 did lead to an increase in sentiments scores. 
+
+    Feature sentiment analysis demonstrated that while the overall sentiment was higher for the S20FE there were some areas where there was a physical change to the device but no noticeable increase in sentiment.
+    
+    This can be seen when examining the sentiment towards the battery where it has remained similar or the camera where the decreased physical performance has led to a lower sentiment score.  
+
+
+
+-->
+Twitter data useful
+Region 
+
+- Twitter data provides up to date information for companies to analyse customer feedback
+- Data can provide useful information to guide product teams when analysed correctly
+- With the world map data, which can be broken down into more specific regions, we can see key areas that need to have more targeted marketing or improve marketing to increase the sentiment
+
+
+**Apple**
+
+
+
+
+**Samsung**
+BTS
+
+<!--- End of Slide XX ------------------------------------------------------------------------------------------------------>
+
+
+
+
+
+<!--- Slide XX ------------------------------------------------------------------------------------------------------------->
+
+## Improvements & Further Study
+
+<!-- SPEAKER NOTES
+
+  It would be useful to utilise the Google Maps API to have region filter on the tweets so we could focus the collection of data.
+
+
+-->
+
+**Improvements**
+
+- Google Maps API 
+- Look at mentions of apple in samsung and vice versa
+- Examination of average income and sentiment by region
+- Increased number of tweets with more targeted dates before and after the release dates
+
+<!--- End of Slide XX ------------------------------------------------------------------------------------------------------>
+
+
+
+
+
+<!--- Slide XX ------------------------------------------------------------------------------------------------------------->
+
+## References
+
+- Ahmed, Wasim (2019). *Using Twitter as a data source: an overview of social media research tools* Available at: [https://blogs.lse.ac.uk/impactofsocialsciences/2019/06/18/using-twitter-as-a-data-source-an-overview-of-social-media-research-tools-2019/](https://blogs.lse.ac.uk/impactofsocialsciences/2019/06/18/using-twitter-as-a-data-source-an-overview-of-social-media-research-tools-2019/) (Accessed: 07 December 2020)
+
+- Dalla Valle, Luciana (2020). *MATH513 Lecture and Tutorial Code* Available at: [https://dle.plymouth.ac.uk/course/view.php?id=49628](https://dle.plymouth.ac.uk/course/view.php?id=49628) (Accessed: 01 October 2020)
+
+- Fuchs, Matti (2018) *Doing your first sentiment analysis in R with Sentimentr* Available at: [https://towardsdatascience.com/doing-your-first-sentiment-analysis-in-r-with-sentimentr-167855445132](https://towardsdatascience.com/doing-your-first-sentiment-analysis-in-r-with-sentimentr-167855445132) (Accessed: 06 December 2020)
+  
+- Rinker, Tyler (2020). *R Documentation - sentiment_by* Available at:  [https://www.rdocumentation.org/packages/sentimentr/versions/2.7.1/topics/sentiment_by](https://www.rdocumentation.org/packages/sentimentr/versions/2.7.1/topics/sentiment_by) (Accessed: 06 December 2020)
+
+## References
+
+- R Core Team (2020). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria. Available at: [https://www.R-project.org/](https://www.R-project.org/)
+
+- RStudio (2020). *R Markdown Cheat Sheet* Available at: [https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf](https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf) (Accessed: 10 October 2020)
+
+- RStudio (2014). *R Markdown Reference Guide* Available at: [https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf](https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf) (Accessed: 10 October 2020)
+
+- Swider, Matt (2020). *Twitter hack exploits Apple, Elon Musk and other prominent accounts* Available at: [https://www.techradar.com/news/twitter-hack-2020](https://www.techradar.com/news/twitter-hack-2020) (Accessed: 10 October 2020
+
+- Twitter (2020). *API Documentation* Available at: [https://developer.twitter.com/en/docs/twitter-api](https://developer.twitter.com/en/docs/twitter-api) (Accessed: 10 October 2020)
+
+- Young, Michelle (2017). *Twitter Data Mining: A Guide to Big Data Analytics Using Python* Available at: [https://chatbotslife.com/twitter-data-mining-a-guide-to-big-data-analytics-using-python-4efc8ccfa219](https://chatbotslife.com/twitter-data-mining-a-guide-to-big-data-analytics-using-python-4efc8ccfa219) (Accessed: 07 December 2020)
+
+<!--- End of Slide XX ------------------------------------------------------------------------------------------------------>
+
+<!-- END OF SLIDE SHOW -->
+
+
+<!--- ADDITIONAL SLIDES
 
 SLIDE START
 
@@ -576,7 +675,7 @@ SLIDE START
 
     SPEAKER NOTES
       We wanted to determine if there was a correlation between the stock price and the current sentiment of the public's opinion on Twitter.
-      We decided to use a regression analysis to determine this and see if we could predict future stock price based on the current sentiment.7
+      We decided to use a regression analysis to determine this and see if we could predict future stock price based on the current sentiment.
 
     SLIDE INFO
       - Regression analysis used
@@ -585,6 +684,9 @@ SLIDE START
       !INSERT CODE CHUNK HERE
 
 END OF SLIDE
+
+
+
 
 
 SLIDE START
@@ -771,6 +873,9 @@ SLIDE START
 END OF SLIDE
 
 
+
+
+
 SLIDE START
 
   ##SENTIMENT DENSITY PLOTS ALL 3 IN 1 + ACTUAL KOLMOGOROV-SMIRNOV AND ANDERSON-DARLING TESTS
@@ -826,7 +931,7 @@ SLIDE START
     # alternative hypothesis: two-sided
 
     #ANDERSON-DARLING normality test
-
+    
     library(nortest) #we need this library for this test
     ad.test(vals$s20)
     # data:  vals$s20
@@ -846,137 +951,7 @@ SLIDE START
 
 END OF SLIDE
 
-SLIDE START
 
-## Issues and overcoming them
-
-  REASON FOR REMOVAL
-    Most information is already in other slides so this seem redundant.
-
-  SPEAKER NOTES
-    Date refinement on Twitter Premium API functions only
-      Dev suite allowed limited access to full archive and 30 day extraction features
-    Tweets are pulled from date to backwards to date to
-      Pull tweets in a controlled manner using weeks and days
-    Possible duplication if we extracted at the same time
-      Full archive and 30 day extraction allowed for refinement of dates and pull tweets back to 2006
-    Extraction limited to 18k per 15mins
-      Controlled pull of tweets with date refinement over time as retry on rate limit did not function a expected
-    Foreign languages
-      Filter by language of 'en' applied to only pull English tweets
-
-  SLIDE INFO
-    - Extraction by date
-    - Duplication
-    - Time limits
-    - Foreign languages
-
-END OF SLIDE
-
-END OF ADDITIONAL/REMOVED SLIDES -->
-
-
-
-
-<!--- Slide XX ------------------------------------------------------------------------------------------------------------->
-## Conclusions
-
-<!-- SPEAKER NOTES
-
--->
-
-- Twitter data provides up to date information for companies to analyse customer feedback
-- Data can provide useful information to guide product teams when analysed correctly
-- With the world map data, which can be broken down into more specific regions, we can see key areas that need to have more targeted marketing or improve marketing to increase the sentiment
-
-
-**Apple**
-
-
-
-
-**Samsung**
-BTS
-
-<!--- End of Slide XX ------------------------------------------------------------------------------------------------------>
-
-
-
-
-
-<!--- Slide XX ------------------------------------------------------------------------------------------------------------->
-
-## Improvements & Further Study
-
-<!-- SPEAKER NOTES
-
-  It would be useful to utilise the Google Maps API to have region filter on the tweets so we could focus the collection of data.
-
-
--->
-
-**Improvements**
-
-- Google Maps API 
-- Look at mentions of apple in samsung and vice versa
-- Examination of average income and sentiment by region
-- Increased number of tweets with more targeted dates before and after the release dates
-
-<!--- End of Slide XX ------------------------------------------------------------------------------------------------------>
-
-
-
-
-
-<!--- Slide XX ------------------------------------------------------------------------------------------------------------->
-
-## References
-
-- Ahmed, Wasim (2019). *Using Twitter as a data source: an overview of social media research tools* Available at: [https://blogs.lse.ac.uk/impactofsocialsciences/2019/06/18/using-twitter-as-a-data-source-an-overview-of-social-media-research-tools-2019/](https://blogs.lse.ac.uk/impactofsocialsciences/2019/06/18/using-twitter-as-a-data-source-an-overview-of-social-media-research-tools-2019/) (Accessed: 07 December 2020)
-
-- Dalla Valle, Luciana (2020). *MATH513 Lecture and Tutorial Code* Available at: [https://dle.plymouth.ac.uk/course/view.php?id=49628](https://dle.plymouth.ac.uk/course/view.php?id=49628) (Accessed: 01 October 2020)
-
-- Fuchs, Matti (2018) *Doing your first sentiment analysis in R with Sentimentr* Available at: [https://towardsdatascience.com/doing-your-first-sentiment-analysis-in-r-with-sentimentr-167855445132](https://towardsdatascience.com/doing-your-first-sentiment-analysis-in-r-with-sentimentr-167855445132) (Accessed: 06 December 2020)
-  
-- Rinker, Tyler (2020). *R Documentation - sentiment_by* Available at:  [https://www.rdocumentation.org/packages/sentimentr/versions/2.7.1/topics/sentiment_by](https://www.rdocumentation.org/packages/sentimentr/versions/2.7.1/topics/sentiment_by) (Accessed: 06 December 2020)
-
-## References
-
-- R Core Team (2020). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria. Available at: [https://www.R-project.org/](https://www.R-project.org/)
-
-- RStudio (2020). *R Markdown Cheat Sheet* Available at: [https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf](https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf) (Accessed: 10 October 2020)
-
-- RStudio (2014). *R Markdown Reference Guide* Available at: [https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf](https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf) (Accessed: 10 October 2020)
-
-- Swider, Matt (2020). *Twitter hack exploits Apple, Elon Musk and other prominent accounts* Available at: [https://www.techradar.com/news/twitter-hack-2020](https://www.techradar.com/news/twitter-hack-2020) (Accessed: 10 October 2020
-
-- Twitter (2020). *API Documentation* Available at: [https://developer.twitter.com/en/docs/twitter-api](https://developer.twitter.com/en/docs/twitter-api) (Accessed: 10 October 2020)
-
-- Young, Michelle (2017). *Twitter Data Mining: A Guide to Big Data Analytics Using Python* Available at: [https://chatbotslife.com/twitter-data-mining-a-guide-to-big-data-analytics-using-python-4efc8ccfa219](https://chatbotslife.com/twitter-data-mining-a-guide-to-big-data-analytics-using-python-4efc8ccfa219) (Accessed: 07 December 2020)
-
-<!--- End of Slide XX ------------------------------------------------------------------------------------------------------>
-
-
-<!--- Additional Slides??
-
-SLIDE START
-
-  ##STOCK PRICE VS SENTIMENT
-
-    REASON FOR REMOVAL
-      Needed to be cut to save time and slide numbers
-
-    SPEAKER NOTES
-      We wanted to determine if there was a correlation between the stock price and the current sentiment of the public's opinion on Twitter.
-      We decided to use a regression analysis to determine this and see if we could predict future stock price based on the current sentiment.
-
-    SLIDE INFO
-      - Regression analysis used
-      - P value = 
-
-      !INSERT CODE CHUNK HERE
-
-END OF SLIDE
 
 
 
@@ -1007,7 +982,7 @@ SLIDE START
 
 END OF SLIDE
 
+
+
+
 END OF ADDITIONAL/REMOVED SLIDES -->
-
-
-<!-- END OF SLIDE SHOW -->
