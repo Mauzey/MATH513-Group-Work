@@ -45,7 +45,7 @@ OVERVIEW
 -->
 
 
-<!--- SPEAKER NOTES - WILL
+<!--- SPEAKER NOTES
 
   Hi, today we will be discussing the result from the strategic analysis of Twitter data for Samsung and Apple. 
 
@@ -90,7 +90,7 @@ knitr::include_graphics(c("./Images/Logos/apple_logo.png", "./Images/Logos/samsu
 
 ## Research
 
-<!--- SPEAKER NOTES: - WILL
+<!--- SPEAKER NOTES
   
   Twitter provides its data through a number of APIs and after the Cambridge Analytica 'data breach', is one of the few social 
   media platforms that has not limited the data provided through it's API. (Ahemd, Dr. Wasim (2019))
@@ -149,7 +149,7 @@ knitr::include_graphics(c("./Images/Logos/apple_logo.png", "./Images/Logos/samsu
 
 ## Time Periods for Data Collection
 
-<!--- SPEAKER NOTES - Will
+<!--- SPEAKER NOTES
 
   The standard rtweet function allowed us to pull data from the last 6-9 days. We decided that just after the release date of the 
   phones would be the best time to examine the public's opinion.
@@ -201,7 +201,7 @@ tweets$product <- as.factor(tweets$product)  # Factorize product column
 
 ## Data Cleaning and Feature Engineering
 
-<!--- SPEAKER NOTES - Alex
+<!--- SPEAKER NOTES
 
   Once the data had been collected, we cleaned it and engineered a selection of features to enable a more in-depth analysis.
 
@@ -257,7 +257,7 @@ tweets$product <- as.factor(tweets$product)  # Factorize product column
 
 ## Summary of Data 
 
-<!--- SPEAKER NOTES- ALEX
+<!--- SPEAKER NOTES
 
   - This is a quick summary of our collected data:
   
@@ -318,7 +318,7 @@ users_summary <- users %>%
 
 ## Results - Sentiment Analysis - All Tweets
 
-<!-- SPEAKER NOTES - Tania
+<!-- SPEAKER NOTES
 
   We decided to perform sentiment analysis for each model. 
 
@@ -379,7 +379,7 @@ tweets %>%
 
 ## Results - Sentiment Analysis - Features
 
-<!--- SPEAKER NOTES - Tania
+<!--- SPEAKER NOTES
 
   We then examined sentiment for the 5 most mentioned features which can be seen in boxplot on the slide.
 
@@ -444,7 +444,7 @@ feature_sentiment %>%
 
 ## Results - Global Sentiment By Product
 
-<!-- SPEAKER NOTES - Alex
+<!-- SPEAKER NOTES
 
   - Looking at the global sentiment data, we can conclude three things:
   
@@ -533,7 +533,7 @@ mapCountryData(S20_matched,
 
 ## Statistical Test - T-Test
 
-<!--- SPEAKER NOTES - Tania
+<!--- SPEAKER NOTES
 
   We can run the t-test when the groups of samples being compared, are normally distributed and when the variances of the groups 
   are equal.
