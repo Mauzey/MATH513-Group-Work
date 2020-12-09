@@ -12,12 +12,13 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
-# IMPORT DEPENDENCIES -------------------------------------------------------------------------------------------------------
-libs <- c('readr', 'dplyr', 'tidyverse', 'tidyr', 'tidytext', 'modelr', 'stringr', 'rtweet', 'ggplot2', 'ggthemes','scales', 'knitr', 'rworldmap', 'lubridate')
+# Import dependencies
+libs <- c('readr', 'dplyr', 'tidyverse', 'tidyr', 'tidytext', 'modelr', 'stringr', 'rtweet', 'ggplot2', 'ggthemes','scales',
+          'knitr', 'rworldmap', 'lubridate', 'nortest')
 invisible(lapply(libs, library, character.only = TRUE))
 
-# IMPORT DATA ---------------------------------------------------------------------------------------------------------------
-tweets <- read_csv("../data/cleaned-tweets.csv") #Load in tweets from the csv file.
+# Import data
+tweets <- read_csv("../data/cleaned-tweets.csv")
 users <- read_csv("../data/cleaned-users.csv")
 ```
 
@@ -28,11 +29,14 @@ users <- read_csv("../data/cleaned-users.csv")
 
 OVERVIEW
 
-  Speaker notes are kept in comments to hide from presentation unless the comment is in a code chunk which will be in place to keep a track of the code execution and purpose.
+  Speaker notes are kept in comments to hide from presentation unless the comment is in a code chunk which will be in place to 
+  keep a track of the code execution and purpose.
   
-  Code requires you to have the csv data set that is available from the following GitHub repository: https://github.com/Mauzey/MATH513-Group-Work.
+  Code requires you to have the csv data set that is available from the following GitHub repository:
+    https://github.com/Mauzey/MATH513-Group-Work.
   
-  Extraction code and most of the cleaning/feature engineering code has been left in the GitHub and not embedded here as per discussion with Luciana to avoid overwhelming the rMarkdown file. 
+  Extraction code and most of the cleaning/feature engineering code has been left in the GitHub and not embedded here as per 
+  discussion with Luciana to avoid overwhelming the rMarkdown file. 
   
 -->
 
@@ -41,13 +45,16 @@ OVERVIEW
 
   Hi, today we will be discussing the result from the strategic analysis of Twitter data. 
 
-  Samsung and Apple were chosen as our competing businesses due to the recent release of their flagship phones, the S20FE and iPhone12. This meant we would have access to sufficient relevant data on Twitter to perform analysis upon.
+  Samsung and Apple were chosen as our competing businesses due to the recent release of their flagship phones, the S20FE and 
+  iPhone12. This meant we would have access to sufficient relevant data on Twitter to perform analysis upon.
 
-  We chose to gather some extra tweets relating to the S20 to give us some comparable information for sentiment analysis and to determine if there was any improvement in sentiment from the S20 to the S20FE from the public's viewpoint. 
+  We chose to gather some extra tweets relating to the S20 to give us some comparable information for sentiment analysis and to 
+  determine if there was any improvement in sentiment from the S20 to the S20FE from the public's viewpoint. 
 
-  We utilised RStudio in combination with the rTweet package to extract and analyse the data from the Twitter Developer API.
+  We utilized RStudio in combination with the 'rTweet' package to extract and analyze the data from the Twitter Developer API.
 
-  To allow us to work professionally and on various parts of the project as a group, we decided to break up the code into sections and utilise GitHub to keep track on the project.
+  To allow us to work professionally and on various parts of the project as a group, we decided to break up the code into 
+  sections and utilize GitHub to keep track on the project.
 
 --->
 
@@ -74,31 +81,41 @@ knitr::include_graphics(c("./Images/Logos/apple_logo.png", "./Images/Logos/samsu
 
 
 
+
 <!--- Slide 02 ------------------------------------------------------------------------------------------------------------->
 
 ## Research
 
 <!--- SPEAKER NOTES: - WILL
   
-  Twitter provides its data through a number of APIs and after the Cambridge Analytica 'data breach', is one of the few social media platforms that has not limited the data provided through APIs (Ahemd, Dr. Wasim (2019))
+  Twitter provides its data through a number of APIs and after the Cambridge Analytica 'data breach', is one of the few social 
+  media platforms that has not limited the data provided through APIs (Ahemd, Dr. Wasim (2019))
   
-  Twitter data can provide insights into the public's opinions and combined with the openness and the generous rate limiting of Twitter’s API, it can produce powerful results. (Young, Michelle (2017))
+  Twitter data can provide insights into the public's opinions and combined with the openness and the generous rate limiting of 
+  Twitter’s API, it can produce powerful results. (Young, Michelle (2017))
 
-  We came to the conclusion that it was better to use hashtags instead of pulling data from profiles. This was to ensure we would get a wide range of opinions for a fairer analysis of the public's sentiment.
+  We came to the conclusion that it was better to use hash-tags instead of pulling data from profiles. This was to ensure we would 
+  get a wide range of opinions for a fairer analysis of the public's sentiment.
 
-  For our hashtags, we looked to the Samsung Mobile page and identified that the hashtags #GalaxyS20 and #GalaxyS20FE were the offical hashtags used by Samsung.
+  For our hash-tags, we looked to the Samsung Mobile page and identified that the hash-tags '#GalaxyS20' and '#GalaxyS20FE' were 
+  the official hash-tags used by Samsung.
   
-  We then looked for the same information from Apple but found that since the Twitter account was hacked in July, Apple have not been keeping tweets on their Twitter page. (Swider, Matt (2020), TechRadar - https://www.techradar.com/news/twitter-hack-2020))
+  We then looked for the same information from Apple but found that since the Twitter account was hacked in July, Apple have not 
+  been keeping tweets on their Twitter page. (Swider, Matt (2020), TechRadar - https://www.techradar.com/news/twitter-hack-2020))
   
-  We decided to look to the CEO of Apple, Tim Cook, as we thought he would most likely be using the offical hashtag as deemed by Apple's marketing team, which led us to the hashtag #iPhone12.
+  We decided to look to the CEO of Apple, Tim Cook, as we thought he would most likely be using the official hash-tag as deemed by 
+  Apple's marketing team, which led us to the hash-tag '#iPhone12'.
 
 --->
 
 <!--- EXTRA NOTES (Cut from speaker notes to save time):
 
-  We performed some sample searches of other hashtags like S20 and S20FE using the advanced Twitter search, on the website, to determine how relevant the hashtag was.
+  We performed some sample searches of other hash-tags like S20 and S20FE using the advanced Twitter search, on the website, to 
+  determine how relevant the hash-tag was.
   
-  We went through search results and examined the difference between the date of the latest tweet and the date of the 25th tweet in the list. This identified whether a hashatag was being used by the public and this further supported our findings that the hastags iphone12, samsungs20 and samungs20fe were the best to pull data.
+  We went through search results and examined the difference between the date of the latest tweet and the date of the 25th tweet 
+  in the list. This identified whether a hash-tag was being used by the public and this further supported our findings that the 
+  hash-tags '#iPhone12', '#SamsungS20' and '#SamsungS20FE' were the best to pull data.
 
 --->
 
@@ -129,17 +146,23 @@ knitr::include_graphics(c("./Images/Logos/apple_logo.png", "./Images/Logos/samsu
 
 <!--- SPEAKER NOTES - Will
 
-  The normal twitter function allowed us to pull data from the last 6-9 days. We decided that just after the release date of the phones would be the best time to examine the public's opinion.
+  The normal twitter function allowed us to pull data from the last 6-9 days. We decided that just after the release date of the 
+  phones would be the best time to examine the public's opinion.
 
-  Due to the limitations of the general search, we utilised the full archive premium feature to pull tweets relating to the S20, seen here in red. 
+  Due to the limitations of the general search, we utilized the full archive premium feature to pull tweets relating to the S20, 
+  seen here in red. 
   
-  However, there was a mistake that led to the tweets being pulled a little earlier than the release date as seen by the red vertical line on the graph. 
+  However, there was a mistake that led to the tweets being pulled a little earlier than the release date as seen by the red 
+  vertical line on the graph. 
   
-  We leanrt from this and corrected our code and pulled as much data as we could for the other two phone usings the premium 30 day function.
+  We learned from this and corrected our code and pulled as much data as we could for the other two phone using the premium 30 
+  day function.
   
-  The 30 day limitation meant that the tweets we pulled are about 3 weeks after the release date for the S20FE, seen in green and 1 week after the iPhone seen in blue.
+  The 30 day limitation meant that the tweets we pulled are about 3 weeks after the release date for the S20FE, seen in green and 
+  1 week after the iPhone seen in blue.
   
-  From the graph, you can see that we managed to gather a reasonable amount of tweets and retweets over the month of November for both these phones.
+  From the graph, you can see that we managed to gather a reasonable amount of tweets and re-tweets over the month of November 
+  for both these phones.
 
 --->
 
@@ -147,23 +170,19 @@ knitr::include_graphics(c("./Images/Logos/apple_logo.png", "./Images/Logos/samsu
 tweets$product <- as.factor(tweets$product)  # Factorize product column
 
  tweets %>% group_by(product, is_retweet) %>%
-  ts_plot('days', trim = 1) +
+  ts_plot('days', trim = 1) + theme_bw() + facet_grid(product ~ .) +
+  geom_vline(xintercept = as.POSIXct(as.Date("2020-03-06")), colour = "turquoise") +
+  geom_vline(xintercept = as.POSIXct(as.Date("2020-10-02")), colour = "mediumpurple1") +
+  geom_vline(xintercept = as.POSIXct(as.Date("2020-10-23")), colour = "lightgoldenrod3") +
+  scale_color_manual(values = c("Galaxy S20" = "turquoise", "Galaxy S20 FE" = "mediumpurple1", "iPhone12" = "lightgoldenrod3")) +
   labs(x = NULL, y = NULL,
        title = "Frequency of Twitter Statuses",
        subtitle = "Twitter status counts aggregated using 1-day intervals",
        caption = "Source: Data collected from Twitter's REST API via rtweet",
        color = "Product",
        linetype = "Retweet") +
-  theme_bw() +
   theme(plot.title = element_text(face = 'bold'),
-        strip.text.y = element_blank()) + 
-  geom_vline(xintercept = as.POSIXct(as.Date("2020-03-06")), colour = "turquoise") +
-  geom_vline(xintercept = as.POSIXct(as.Date("2020-10-02")), colour = "mediumpurple1") +
-  geom_vline(xintercept = as.POSIXct(as.Date("2020-10-23")), colour = "lightgoldenrod3") +
-  facet_grid(product ~ .) +
-  scale_color_manual(values = c("Galaxy S20" = "turquoise",
-                               "Galaxy S20 FE" = "mediumpurple1",
-                               "iPhone12" = "lightgoldenrod3"))
+        strip.text.y = element_blank())
 ```
 
 <!--- End of Slide 03 ------------------------------------------------------------------------------------------------------>
@@ -233,7 +252,6 @@ tweets$product <- as.factor(tweets$product)  # Factorize product column
 
 
 <!--- Slide 05 ------------------------------------------------------------------------------------------------------------->
-
 
 ## Summary of Data 
 
@@ -323,34 +341,34 @@ users_summary <- users %>%
 
 ```{r include=FALSE}
 # Calculate the mean sentiment for each product
-mean_sentiment <- tweets %>% 
-                            group_by(product) %>%
-                            summarize(mean_sentiment = signif(mean(avg_sentiment), 6))  
+mean_sentiment <- tweets %>%
+  group_by(product) %>%
+  summarize(mean_sentiment = signif(mean(avg_sentiment), 6))  
 ```
 
-```{r echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=5.5}
+```{r echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4.5}
 # Plot the distribution of sentiment for tweets for all models
 tweets %>%
   filter(potential_spam == F) %>%
-  ggplot(aes(x = avg_sentiment, fill = product)) + theme_minimal() +
+  ggplot(aes(x = avg_sentiment, fill = product)) + theme_minimal() + facet_grid(product ~ .) +
     geom_histogram(aes(y = ..density..), colour = 'black') +
+  
+    # Vertical lines for each product
     geom_vline(data = filter(mean_sentiment, product == 'iPhone12'), aes(xintercept = mean_sentiment)) +
     geom_vline(data = filter(mean_sentiment, product == 'Galaxy S20 FE'), aes(xintercept = mean_sentiment)) +
-  geom_vline(data = filter(mean_sentiment, product == 'Galaxy S20'), aes(xintercept = mean_sentiment)) +
+    geom_vline(data = filter(mean_sentiment, product == 'Galaxy S20'), aes(xintercept = mean_sentiment)) +
     # Mean sentiment text for each product
     geom_text(data = filter(mean_sentiment, product == 'iPhone12'),
               aes(x = mean_sentiment, y = Inf, label = paste('Mean: ', mean_sentiment), vjust = 2, hjust = -0.1)) +
     geom_text(data = filter(mean_sentiment, product == 'Galaxy S20 FE'),
               aes(x = mean_sentiment, y = Inf, label = paste('Mean: ', mean_sentiment), vjust = 2, hjust = -0.1)) +
     geom_text(data = filter(mean_sentiment, product == 'Galaxy S20'),
-            aes(x = mean_sentiment, y = Inf, label = paste('Mean: ', mean_sentiment), vjust = 2, hjust = -0.1)) +
+              aes(x = mean_sentiment, y = Inf, label = paste('Mean: ', mean_sentiment), vjust = 2, hjust = -0.1)) +
   
-    facet_grid(product ~ .) +
-    scale_fill_manual(values = c('iPhone12' = 'lightgoldenrod3', 
-                                 'Galaxy S20 FE' = 'mediumpurple1',
-                                 'Galaxy S20' = 'turquoise')) +
+    scale_fill_manual(values = c('iPhone12' = 'lightgoldenrod3', 'Galaxy S20 FE' = 'mediumpurple1', 'Galaxy S20' = 'turquoise')) +
     labs(x = "Sentiment Score", y = "Density",
-         title = "Distribution of Sentiment Scores Across Tweets Related to All the Models",
+         title = "Distribution of Sentiment Score Across Tweets",
+         subtitle = "Tweets faceted by product",
          caption = "Source: Data collected from Twitter's REST API via rtweet",
          fill = "Product: ") +
     theme(legend.position = 'bottom',
@@ -387,13 +405,7 @@ tweets %>%
 
 ```{r include=FALSE}
 # SENTIMENT ANALYSIS - Product Features -------------------------------------------------------------------------------------
-#For features analysis we'll be using a different package to the lectures called "sentimentr"
-
-#Find more info about it here:https://towardsdatascience.com/sentiment-analysis-in-r-good-vs-not-good-handling-negations-2404ec9ff2ae
-
-# “sentimentr attempts to take into account valence shifters # (i.e., negators, amplifiers (intensifiers), de-amplifiers (downtoners), # and adversative conjunctions) while maintaining speed. Simply put, # sentimentr is an augmented dictionary lookup.”
-
-# Compute overall sentiment score for each tweet using sentimentr
+# Compute overall sentiment score for each tweet using the 'sentimentr' package
 
 # Extract relevant information
 feature_sentiment_data <- select(tweets, product, mentioned_features, avg_sentiment, sd_sentiment)
@@ -402,7 +414,9 @@ feature_sentiment_data <- select(tweets, product, mentioned_features, avg_sentim
 feature_sentiment_data <- separate(feature_sentiment_data, col = mentioned_features, into = paste0('feature', 1:5), sep = ', ')
 
 # Pivot feature columns
-feature_sentiment <- pivot_longer(feature_sentiment_data, cols = names(feature_sentiment_data)[which(grepl('feature', names(feature_sentiment_data)))])
+feature_sentiment <- pivot_longer(
+  feature_sentiment_data, cols = names(feature_sentiment_data)[which(grepl('feature', names(feature_sentiment_data)))]
+)
 
 # Remove NAs and whitespace
 feature_sentiment <- feature_sentiment %>%
@@ -415,23 +429,20 @@ feature_sentiment_stat <- feature_sentiment %>%
 ```
 
 ```{r echo=FALSE, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4.5}
-#BOXPLOT
+
 feature_sentiment %>% 
   group_by(product) %>%
-  ggplot(aes(x = product, y = avg_sentiment, color = product)) +
-  geom_hline(yintercept = 0)+
-  geom_boxplot() +
-  facet_wrap(. ~ value) +
-  theme_bw() +
-  scale_color_manual(values = c("iPhone12" = "lightgoldenrod3", 
-                               "Galaxy S20" = "turquoise",
-                               "Galaxy S20 FE" = "mediumpurple1"),) +
-  scale_y_continuous(name = "Sentiment Score") +
-  theme(axis.title.x=element_blank(), 
-        axis.text.x=element_blank(),
-        axis.ticks.x=element_blank()) +
-  labs(title = "Sentiment Score of 5 Features for Each of the Phone Models",
-       color = "Phone Model")
+  ggplot(aes(x = product, y = avg_sentiment, color = product)) + theme_bw() + facet_wrap(. ~ value) +
+    geom_boxplot() + geom_hline(yintercept = 0) +
+    scale_color_manual(values = c('iPhone12' = 'lightgoldenrod3', 'Galaxy S20' = 'turquoise', 'Galaxy S20 FE' = 'mediumpurple1')) +
+    scale_y_continuous(name = "Sentiment Score") +
+    labs(title = "Distribution of Sentiment Score Across Tweets",
+         subtitle = "Tweets faceted by mentioned product features",
+         caption = "Source: Data collected from Twitter's REST API via rtweet",
+         color = "Phone Model") +
+    theme(axis.title.x = element_blank(), 
+          axis.text.x = element_blank(),
+          axis.ticks.x = element_blank())
 
 ```
 
@@ -440,6 +451,7 @@ feature_sentiment %>%
 
 
 <!--- Slide 08 ------------------------------------------------------------------------------------------------------------->
+
 ## Results - Global Sentiment By Product
 
 <!-- SPEAKER NOTES - Alex
@@ -489,7 +501,7 @@ S20_matched <- geo_sentiment %>%
 
 ```
 
-```{r echo=FALSE, warning=FALSE, message=FALSE, fig.align="center", fig.cap="", fig.show='hold', out.width='45%'}
+```{r echo=FALSE, warning=FALSE, message=FALSE, fig.align='center', fig.cap='', fig.show='hold', out.width='45%'}
 
 # Plot the average sentiment for tweets regarding the iPhone12, for each country
 mapCountryData(iPhone12_matched,
@@ -525,15 +537,19 @@ mapCountryData(S20_matched,
 
 
 <!--- Slide 09 ------------------------------------------------------------------------------------------------------------->
+
 ## Statistical Test - T-Test
 
 <!--- SPEAKER NOTES - Tania
 
-  We can run the t-test when the groups of samples being compared, are normally distributed and when the variances of the groups are equal.
+  We can run the t-test when the groups of samples being compared, are normally distributed and when the variances of the groups 
+  are equal.
 
-  This can be checked using Shapiro-Wilk's test. The test should be performed on sentiment values for tweets related to each model we're analysing, regardless of whether it's related to any feature or not.
+  This can be checked using Shapiro-Wilk's test. The test should be performed on sentiment values for tweets related to each 
+  model we're analyzing, regardless of whether it's related to any feature or not.
 
-  Since our data set is too large, over 5,000 entries, we performed an Anderson-Darling's test and Kolmogorov-Smirnov test since these test do not have an entry limitiation .
+  Since our data set is too large, over 5,000 entries, we performed an Anderson-Darling's test and Kolmogorov-Smirnov test since 
+  these test do not have an entry limitiation .
  
   P values for both tests were less then 0.05 which confirms numerically that our data is not normally distributed.
 
@@ -543,6 +559,7 @@ mapCountryData(S20_matched,
 
 --->
 
+<<<<<<< Updated upstream
 ```{r echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4.5} 
 data <- data.frame(feature_sentiment_data)
 
@@ -563,6 +580,65 @@ ggplot(data, aes(x=avg_sentiment, group=product, fill=product)) +
        title = "Density Plots for Overall Sentiments of 3 Products")+
   geom_vline(xintercept = 0 , colour = "black", linetype="dashed")+
   #scale_x_continuous(breaks=as.numeric(c("-2", "-1", "0", "1", "2")))
+=======
+```{r echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4.5}
+
+s20fe_vals <- tweets %>% 
+  filter(product=="Galaxy S20 FE") %>% .$avg_sentiment
+
+s20_vals <- tweets %>% 
+  filter(product=="Galaxy S20") %>% .$avg_sentiment
+
+iphone12_vals <- tweets %>% 
+  filter(product=="iPhone12") %>% .$avg_sentiment
+
+vals <- list(s20 = s20_vals, s20fe = s20fe_vals, iphone12 = iphone12_vals)
+
+
+#KOLMOGOROV-SMIRNOV
+
+ks.test(x=vals$s20, y='pnorm')
+# data:  vals$s20
+# D = 0.40721, p-value < 2.2e-16
+# alternative hypothesis: two-sided
+
+ks.test(x=vals$s20fe, y='pnorm')
+# data:  vals$s20fe
+# D = 0.45695, p-value < 2.2e-16
+# alternative hypothesis: two-sided
+
+ks.test(x=vals$iphone12, y='pnorm')
+# data:  vals$iphone12
+# D = 0.40272, p-value < 2.2e-16
+# alternative hypothesis: two-sided
+
+#ANDERSON-DARLING normality test
+
+ad.test(vals$s20)
+# data:  vals$s20
+# A = 396.71, p-value < 2.2e-16
+
+ad.test(vals$s20fe)
+# data:  vals$s20fe
+# A = 660.69, p-value < 2.2e-16
+
+ad.test(vals$iphone12)
+# data:  vals$iphone12
+# A = 687.88, p-value < 2.2e-16
+
+t.test(vals$s20fe, vals$iphone12)
+t.test(vals$s20fe, vals$s20)
+
+feature_sentiment_data %>%
+  ggplot(aes(x=avg_sentiment, group=product, fill=product)) + theme_bw() + facet_wrap(~ product) +
+    geom_density(adjust=1.5, alpha = .9) +
+    scale_fill_manual(values = c('Galaxy S20' = 'turquoise', 'Galaxy S20 FE' = 'mediumpurple1', 'iPhone12' = 'lightgoldenrod3')) +
+    labs(x = "Average Sentiment", y = "Density",
+         title = "Density Plots for Overall Sentiments of 3 Products") +
+    theme(legend.position = "none",
+          panel.spacing = unit(0.1, 'lines'),
+          axis.ticks.x = element_blank())
+>>>>>>> Stashed changes
 ```
 
 <!--- End of Slide 09 ------------------------------------------------------------------------------------------------------>
@@ -572,6 +648,7 @@ ggplot(data, aes(x=avg_sentiment, group=product, fill=product)) +
 
 
 <!--- Slide XX ------------------------------------------------------------------------------------------------------------->
+
 ## Conclusions
 
 <!-- SPEAKER NOTES
