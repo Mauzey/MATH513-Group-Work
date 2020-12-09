@@ -613,7 +613,7 @@ S20 <- c('2.2e-16', '2.2e-16')
 S20FE <- c('2.2e-16', '2.2e-16')
 i12 <- c('2.2e-16', '2.2e-16')
 
-stat_results <- data.frame(test, S20, S20Fe, i12)
+stat_results <- data.frame(test, S20, S20FE, i12)
 
 Welch_Ttest_S20Fe_Iphone12 <- t.test(vals$s20fe, vals$iphone12)
 Welch_Ttest_S20Fe_S20 <- t.test(vals$s20fe, vals$s20)
