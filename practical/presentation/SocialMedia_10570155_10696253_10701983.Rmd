@@ -267,7 +267,7 @@ users_summary <- users %>%
 ```{r echo=FALSE, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4.5}
 tweets$product <- as.factor(tweets$product)  # Factorize product column
 
-tweets %>% group_by(product, is_retweet) %>%
+ tweets %>% group_by(product, is_retweet) %>%
   ts_plot('days', trim = 1) +
   labs(x = NULL, y = NULL,
        title = "Frequency of Twitter Statuses",
@@ -278,10 +278,13 @@ tweets %>% group_by(product, is_retweet) %>%
   theme_bw() +
   theme(plot.title = element_text(face = 'bold'),
         strip.text.y = element_blank()) + 
-  geom_vline(xintercept = as.POSIXct(as.Date("2020-03-06")), colour = "red") +
-  geom_vline(xintercept = as.POSIXct(as.Date("2020-10-02")), colour = "green") +
-  geom_vline(xintercept = as.POSIXct(as.Date("2020-10-23")), colour = "blue") +
-  facet_grid(product ~ .)
+  geom_vline(xintercept = as.POSIXct(as.Date("2020-03-06")), colour = "turquoise") +
+  geom_vline(xintercept = as.POSIXct(as.Date("2020-10-02")), colour = "mediumpurple1") +
+  geom_vline(xintercept = as.POSIXct(as.Date("2020-10-23")), colour = "lightgoldenrod3") +
+  facet_grid(product ~ .) +
+  scale_color_manual(values = c("Galaxy S20" = "turquoise",
+                               "Galaxy S20 FE" = "mediumpurple1",
+                               "iPhone12" = "lightgoldenrod3"))
 ```
 
 <!--- End of Slide 05 ------------------------------------------------------------------------------------------------------>
@@ -570,6 +573,263 @@ SLIDE START
 END OF SLIDE
 
 
+SLIDE START
+
+  ##WORD FREQUENCY 
+
+    REASON FOR REMOVAL
+      Needed to be cut to save time and slide numbers
+
+    SPEAKER NOTES
+      We wanted to identify the most commonly used words to BLAH BLAH BLAH
+
+    SLIDE INFO
+      - blah
+      - blah
+
+    CODE:
+      # Filter out spam
+      tweets_no_spam <- tweets %>% filter(potential_spam == F)
+
+      extract_words <- function(data) {
+        return(data %>%
+                select(stripped_text) %>%
+                mutate(tweet_number = row_number()) %>%
+                unnest_tokens(word, stripped_text)
+        )
+      }
+      iPhone12_words<- extract_words(tweets_no_spam %>% filter(product == 'Galaxy S20'))
+      S20_words <- extract_words(tweets_no_spam %>% filter(product == 'Galaxy S20 FE'))
+      S20FE_words <- extract_words(tweets_no_spam %>% filter(product == 'iPhone12'))
+      rm(tweets_no_spam, extract_words)  # Remove vars from memory to keep the environment tidy
+
+      # Remove stop words
+      data('stop_words')
+      iPhone12_words <- iPhone12_words %>% anti_join(stop_words)
+      S20_words <- S20_words %>% anti_join(stop_words)
+      S20FE_words <- S20FE_words %>% anti_join(stop_words)
+      rm(stop_words)  # Remove vars from memory to keep the environment tidy
+
+      # Remove custom stop words
+      custom_stop_words <- data.frame(word = c('iphone12', 'iphone', 'apple', '12', 'iphone12pro', 'iphone12promax', 'max', 'min',
+                                              'iphone12mini', 'series', 'ios', 'tim_cook', 'uf449', '5544', 'uf525uf525uf525',
+                                              'tgfamilyuf64whats', 'stevewoz', '18iphone12', 'timcook', 'ios14', 'pro', 'appleevent',
+                                              'id', 'mini', 'phone', 'amazon', 'pick', 'buy', 'shop', 'iphone11', '20',
+                                              'appleiphone12', '11', 'free', 'cashback', 'limited', '0001f525', 'giveaway', 'amp',
+                                              'bauxyvcr2z', 'fe0f', '393c', '3e32', '0001f449', '0001f64c', '2063', '0001f64f', 'win',
+                                              '5', '4', '3', '1', '20b9', '2764', '18', '0001f447', '2796', 'pqsilf3aj0',
+                                              'galaxys20', 'galaxy', 'samsung', 's20', 'di', 'ini', 'ultra', 'indonesia', 'pake',
+                                              'uf60dsemua', 'timur', 'kok', 'java', 'djambil', 'bukan', 'bondowoso', 'samsungmobilesa',
+                                              'expressoshow', 'galaxys20ultra', 'pre', 'uf32fget', 'introducing', 'renders',
+                                              'samsungindia', 'official', 'smartphone', 'unpacked2020', 'galaxys20fe', 'phone',
+                                              'swiss', 'jawa', 'diambil', 'galaxys20plus', 'mobile', 'galaxys20fultra5g', 'uf60d',
+                                              'samsungevent', 'fe', '2020', 'samsunggalaxy', 'unpacked', 'galaxyzflip', 'day', 'check',
+                                              'galaxyunpacked', 'leaked', 'de', 'en', 'samsungmobile', '0001f60d', '0001f49c',
+                                              '0001f31f', 'contestalert', 'season', 'mintknow', 'btsus', 'moreu', '0001f4b0',
+                                              'withugalaxys20feuin', 'jiminukeeps', 'bts', 'galaxys20fesuperfan', 'withgalaxy', 'fe',
+                                              'galaxybuds', 'madeforfans', 's20fecamerafan', 'uf49a', 'teamgalaxy', 'galaxyxbts',
+                                              '0001f49a', '3e30', '613c', '15', 'semua', 'invebuybmf', 'winner', 'san', 'francisco',
+                                              'makes', 'learn', 'apply', 'wfvkmdrti2', 'active2', 'tlch6y0bsp', '30x', 'buds', '0e2d',
+                                              '0001f48e', '3x', '383c', 'foto', '0001f499', 'india', 'retweet', 'password', 'usdt',
+                                              '_cook', 'newly', '_problem', '0e01', '2', '0001f3fb', 'variant', 'unlock', 'locked',
+                                              'reset', 'recovery', 'passcode', 'review', 'launched', 'past', 'time', 'join', 'drop',
+                                              'pair', 'w7gnpkkvxi', 'shout', '0e32', 'nov', 'collection', 'winter', 'draw', 'dec',
+                                              '3kwjjkvz8o', '2744', '4pm', '27', '0001f606', 'vip', '23f0', '58', '3am', '88', '26c4',
+                                              'utc', 'tmsvspi6pw', 'okb', '50,000', '6000', 'gt', 'black', '0001f4f1', 'ft', 'cosmo',
+                                              '0001f92f', 'blue', 'ares', 'unboxing', 'blason', 'fwn7ozovs7', '0001f6a8', 'follow',
+                                              'devices', 'isn', 'link', '10', 'rt', 'friday', 'store', 'close', 'space', 'glow',
+                                              'formats', 'grade', 'mode', 'cloud', 'butterfly\'s'))
+      iPhone12_words <- iPhone12_words %>% anti_join(custom_stop_words)
+      S20_words <- S20_words %>% anti_join(custom_stop_words)
+      S20FE_words <- S20FE_words %>% anti_join(custom_stop_words)
+
+      rm(custom_stop_words, word)  # Remove vars from memory to keep the environment tidy
+
+     ----------------------------------------
+
+      # Plot most frequent words in iPhone 12 tweets
+      iPhone12_words %>%
+        count(word, sort = T) %>%
+        head(30) %>%
+        mutate(word = reorder(word, n)) %>%
+        ggplot(aes(x = word, y = n)) + theme_minimal() + coord_flip() +
+          geom_col(fill = 'lightgoldenrod3', colour = 'darkgoldenrod4') +
+          labs(x = "Unique Words", y = "Frequency",
+              title = "Top 30 Most Popular Words in iPhone12 Tweets") +
+          theme(axis.title = element_text(face = 'bold'),
+                axis.text.y = element_text(size = 12))
+      
+      # Plot most frequent words in Galaxy S20 tweets
+      S20_words %>%
+        count(word, sort = T) %>%
+        head(30) %>%
+        mutate(word = reorder(word, n)) %>%
+        ggplot(aes(x = word, y = n)) + theme_minimal() + coord_flip() +
+          geom_col(fill = 'turquoise', colour = 'turquoise4') +
+          labs(x = "Unique Words", y = "Frequency",
+              title = "Top 30 Most Popular Words in Galaxy S20 Tweets") +
+          theme(axis.title = element_text(face = 'bold'),
+                axis.text.y = element_text(size = 12))
+
+
+      # Plot most frequent words in Galaxy S20 FE tweets
+      S20FE_words %>%
+        count(word, sort = T) %>%
+        head(30) %>%
+        mutate(word = reorder(word, n)) %>%
+        ggplot(aes(x = word, y = n)) + theme_minimal() + coord_flip() +
+          geom_col(fill = 'mediumpurple1', colour = 'mediumpurple4') +
+          labs(x = "Unique Words", y = "Frequency",
+              title = "Top 30 Most Popular Words in Galaxy S20 FE Tweets") +
+          theme(axis.title = element_text(face = 'bold'),
+                axis.text.y = element_text(size = 12))
+END OF SLIDE
+
+SLIDE START
+
+  ##NEGATIVE AND POSITIVE WORDS OF EACH PRODUCT
+
+    REASON FOR REMOVAL
+      Needed to be cut to save time and slide numbers
+
+    SPEAKER NOTES
+      BLAH BLAH BLAH
+
+    SLIDE INFO
+      - blah
+      - blah
+
+    CODE:
+      # Get sentiment scores for iPhone12 words
+      iPhone12_bing_count <- iPhone12_words %>%
+        inner_join(sentiments %>% filter(sentiments$word != 'matte')) %>%
+        count(word, sentiment, sort = T) %>%
+        mutate(word = reorder(word, n))
+
+      # Plot sentiment scores for iPhone12 words
+      iPhone12_bing_count %>% group_by(sentiment) %>%
+        top_n(10) %>% ungroup() %>%
+        ggplot(aes(x = word, y = n, fill = sentiment)) + theme_minimal() + coord_flip() +
+          geom_col(show.legend = F) +
+          facet_wrap(~ sentiment, scales = 'free_y') +
+          labs(x = NULL, y = "Sentiment",
+              title = "Most Common Positive and Negative Words in iPhone12 Tweets") +
+          theme(axis.text = element_text(size = 11, colour = 'black'),
+                axis.title = element_text(size = 11, colour = 'black'),
+                title = element_text(size = 12))
+
+      # Get sentiment scores for Galaxy S20 words
+      S20_bing_count <- S20_words %>%
+        inner_join(sentiments) %>%
+        count(word, sentiment, sort = T) %>%
+        mutate(word = reorder(word, n))
+
+      # Plot sentiment scores for Galaxy S20 words
+      S20_bing_count %>% group_by(sentiment) %>%
+        top_n(10) %>% ungroup() %>%
+        ggplot(aes(x = word, y = n, fill = sentiment)) + theme_minimal() + coord_flip() +
+          geom_col(show.legend = F) +
+          facet_wrap(~ sentiment, scales = 'free_y') +
+          labs(x = NULL, y = "Sentiment",
+              title = "Most Common Positive and Negative Words in Galaxy S20 Tweets") +
+          theme(axis.text = element_text(size = 11, colour = 'black'),
+                axis.title = element_text(size = 11, colour = 'black'),
+                title = element_text(size = 12))
+
+      # Get sentiment scores for Galaxy S20 FE words
+      S20FE_bing_count <- S20FE_words %>%
+        inner_join(sentiments) %>%
+        count(word, sentiment, sort = T) %>%
+        mutate(word = reorder(word, n))
+
+      # Plot sentiment scores for Galaxy S20FE words
+      S20FE_bing_count %>% group_by(sentiment) %>%
+        top_n(10) %>% ungroup() %>%
+        ggplot(aes(x = word, y = n, fill = sentiment)) + theme_minimal() + coord_flip() +
+          geom_col(show.legend = F) +
+          facet_wrap(~ sentiment, scales = 'free_y') +
+          labs(x = NULL, y = "Sentiment",
+              title = "Most Common Positive and Negative Words in Galaxy S20 FE Tweets") +
+          theme(axis.text = element_text(size = 11, colour = 'black'),
+                axis.title = element_text(size = 11, colour = 'black'),
+                title = element_text(size = 12))
+
+END OF SLIDE
+
+
+SLIDE START
+
+  ##SENTIMENT DENSITY PLOTS ALL 3 IN 1 + ACTUAL KOLMOGOROV-SMIRNOV AND ANDERSON-DARLING TESTS
+
+    REASON FOR REMOVAL
+      Needed to be cut to save time and slide numbers
+
+    SPEAKER NOTES
+      We wanted to determine if there was a correlation between the stock price and the current sentiment of the public's opinion on Twitter.
+      We decided to use a regression analysis to determine this and see if we could predict future stock price based on the current sentiment.7
+
+    SLIDE INFO
+      - Regression analysis used
+      - P value = 
+
+    CODE:
+    feature_sentiment_data %>%
+      ggplot(aes(x=avg_sentiment, group=product, fill=product)) +
+      geom_density(adjust=1.5, alpha=.3) +
+      theme_bw() +
+      scale_fill_manual(values = c("Galaxy S20" = "turquoise",
+                                  "Galaxy S20 FE" = "mediumpurple1",
+                                  "iPhone12" = "lightgoldenrod3")) +
+      labs(fill = "Product")
+
+    s20fe_vals <- feature_sentiment_data %>% 
+      filter(product=="Galaxy S20 FE") %>% .$avg_sentiment
+
+    s20_vals <- feature_sentiment_data %>% 
+      filter(product=="Galaxy S20") %>% .$avg_sentiment
+
+    iphone12_vals <- feature_sentiment_data %>% 
+      filter(product=="iPhone12") %>% .$avg_sentiment
+
+    vals <- list(s20 = s20_vals, s20fe = s20fe_vals, iphone12 = iphone12_vals)
+
+
+    #KOLMOGOROV-SMIRNOV normality test
+
+    ks.test(x=vals$s20, y='pnorm')
+    # data:  vals$s20
+    # D = 0.40721, p-value < 2.2e-16
+    # alternative hypothesis: two-sided
+
+    ks.test(x=vals$s20fe, y='pnorm')
+    # data:  vals$s20fe
+    # D = 0.45695, p-value < 2.2e-16
+    # alternative hypothesis: two-sided
+
+    ks.test(x=vals$iphone12, y='pnorm')
+    # data:  vals$iphone12
+    # D = 0.40272, p-value < 2.2e-16
+    # alternative hypothesis: two-sided
+
+    #ANDERSON-DARLING normality test
+
+    ad.test(vals$s20)
+    # data:  vals$s20
+    # A = 396.71, p-value < 2.2e-16
+
+    ad.test(vals$s20fe)
+    # data:  vals$s20fe
+    # A = 660.69, p-value < 2.2e-16
+
+    ad.test(vals$iphone12)
+    # data:  vals$iphone12
+    # A = 687.88, p-value < 2.2e-16
+
+    #T-TEST JUST IN CASE
+    t.test(vals$s20fe, vals$iphone12)
+    t.test(vals$s20fe, vals$s20)
+
+END OF SLIDE
 
 SLIDE START
 

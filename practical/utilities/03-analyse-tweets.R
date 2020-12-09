@@ -52,18 +52,26 @@ dim(users)
 # Factorize product column
 tweets$product <- as.factor(tweets$product)
 
-# All products
-tweets %>% group_by(product, is_retweet) %>%
-  ts_plot('days', trim = 1) + theme_minimal() +
-  facet_grid(product ~ .) +
+# All products timeseries
+
+  tweets %>% group_by(product, is_retweet) %>%
+  ts_plot('days', trim = 1) +
   labs(x = NULL, y = NULL,
        title = "Frequency of Twitter Statuses",
        subtitle = "Twitter status counts aggregated using 1-day intervals",
        caption = "Source: Data collected from Twitter's REST API via rtweet",
        color = "Product",
        linetype = "Retweet") +
+  theme_bw() +
   theme(plot.title = element_text(face = 'bold'),
-        strip.text.y = element_blank())
+        strip.text.y = element_blank()) + 
+  geom_vline(xintercept = as.POSIXct(as.Date("2020-03-06")), colour = "turquoise") +
+  geom_vline(xintercept = as.POSIXct(as.Date("2020-10-02")), colour = "mediumpurple1") +
+  geom_vline(xintercept = as.POSIXct(as.Date("2020-10-23")), colour = "lightgoldenrod3") +
+  facet_grid(product ~ .) +
+  scale_color_manual(values = c("Galaxy S20" = "turquoise",
+                               "Galaxy S20 FE" = "mediumpurple1",
+                               "iPhone12" = "lightgoldenrod3"))
 
 # Galaxy S20 FE vs. iPhone12
 tweets %>% filter(product == 'Galaxy S20 FE' | product == 'iPhone12') %>%
@@ -77,7 +85,9 @@ tweets %>% filter(product == 'Galaxy S20 FE' | product == 'iPhone12') %>%
          color = "Product",
          linetype = "Retweet") +
     theme(plot.title = element_text(face = 'bold'),
-          strip.text.y = element_blank())
+          strip.text.y = element_blank()) +
+    scale_color_manual(values = c("Galaxy S20 FE" = "mediumpurple1",
+                               "iPhone12" = "lightgoldenrod3"))
 
 # SENTIMENT ANALYSIS - PREPARATION ------------------------------------------------------------------------------------------
 
