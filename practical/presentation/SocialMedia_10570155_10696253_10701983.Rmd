@@ -31,7 +31,8 @@ users <- read_csv("../data/cleaned-users.csv")
 <!--- 
 
 OVERVIEW
-
+  Version Final 
+  
   Speaker notes are kept in comments to hide from presentation unless the comment is in a code chunk which will be in place to 
   keep a track of the code execution and purpose.
   
