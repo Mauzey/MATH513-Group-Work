@@ -446,7 +446,9 @@ feature_sentiment %>%
          color = "Phone Model") +
     theme(axis.title.x = element_blank(), 
           axis.text.x = element_blank(),
-          axis.ticks.x = element_blank())
+          axis.ticks.x = element_blank(),
+          plot.title = element_text(face = 'bold')
+          )
 
 ```
 
@@ -470,7 +472,7 @@ feature_sentiment %>%
 -->
 
 <!-- EXTRA SPEAKER NOTES 
-  Add in example of analysis
+
 -->
 
 ```{r include=FALSE}
@@ -608,36 +610,36 @@ iPhone_AD_Test <- ad.test(vals$iphone12)
 # data:  vals$iphone12
 # A = 687.88, p-value < 2.2e-16
 
+Welch_Ttest_S20Fe_Iphone12 <- t.test(vals$s20fe, vals$iphone12)
+Welch_Ttest_S20Fe_S20 <- t.test(vals$s20fe, vals$s20)
+
 test<- c('Kolmogorov-Smirnov Test', 'Anderson-Darling Normality Test' )
 S20 <- c('2.2e-16', '2.2e-16')
 S20FE <- c('2.2e-16', '2.2e-16')
 i12 <- c('2.2e-16', '2.2e-16')
 
-stat_results <- data.frame(test, S20, S20Fe, i12)
-
-Welch_Ttest_S20Fe_Iphone12 <- t.test(vals$s20fe, vals$iphone12)
-Welch_Ttest_S20Fe_S20 <- t.test(vals$s20fe, vals$s20)
+stat_results <- data.frame(test, S20, S20FE, i12)
 ```
-
-
 <!-- P-value is so small that it is lower than machine precision, and thus is listed as 0 if we extract from 
 the code (e.g. S20_KS_Test[2] prints 0). As such we have just typed the value for presentation purposes. -->
 
 `r kable(stat_results, caption = "Statistical Test Results")`
 
-**Density Graphs**
+```{r echo=FALSE, warning=FALSE, message=FALSE, fig.height=3.7, fig.align='center'}
 
-```{r echo=FALSE, warning=FALSE, message=FALSE, fig.height=4, fig.align='center'}
 feature_sentiment_data %>%
   ggplot(aes(x=avg_sentiment, group=product, fill=product)) + theme_bw() + facet_wrap(~ product) +
     geom_density(adjust=1.5, alpha = .9) +
     scale_fill_manual(values = c('Galaxy S20' = 'turquoise', 'Galaxy S20 FE' = 'mediumpurple1', 'iPhone12' = 'lightgoldenrod3')) +
     labs(x = "Average Sentiment", y = "Density",
-         title = "Density Plots for Overall Sentiments of 3 Products") +
+         title = "Density Plots for Overall Sentiments of 3 Products",
+         caption = "Source: Data collected from Twitter's REST API via rtweet") +
     theme(legend.position = "none",
           panel.spacing = unit(0.1, 'lines'),
-          axis.ticks.x = element_blank()) +
+          axis.ticks.x = element_blank(),
+          plot.title = element_text(face = 'bold')) +
     geom_vline(xintercept = 0 , colour = "black", linetype="dashed")
+
 ```
 
 <!--- End of Slide 09 ------------------------------------------------------------------------------------------------------>
@@ -766,7 +768,7 @@ feature_sentiment_data %>%
   
 - Rinker, Tyler (2020). *R Documentation - sentiment_by* Available at:  [https://www.rdocumentation.org/packages/sentimentr/versions/2.7.1/topics/sentiment_by](https://www.rdocumentation.org/packages/sentimentr/versions/2.7.1/topics/sentiment_by) (Accessed: 06 December 2020)
 
-- R Core Team (2020). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria. Available at: [https://www.R-project.org/](https://www.R-project.org/)
+- R Core Team (2020). *R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria.* Available at: [https://www.R-project.org/](https://www.R-project.org/)
 
 ## References
 
