@@ -202,15 +202,13 @@ tweets$product <- as.factor(tweets$product)  # Factorize product column
 
 <!--- SPEAKER NOTES - Alex
 
-  After collecting the data, we cleaned it and perform some feature engineering to enable better analysis. 
+  Once the data had been collected, we cleaned it and engineered a selection of features to enable a more in-depth analysis.
 
-  - We removed duplicate entries for both the tweet and user data
-    - Duplicate tweets were collected due to overlapping data collection periods
-      - We started with about 110,000 tweets, and ended up with roughly 74,000 tweets
-      
-    - Duplicate users were collected because one user can post many tweets
-      - Again, we started with about 110,000 users (one for each tweet), that went down to roughly 35,000 unique users
+  - We removed duplicate tweet and user observations. Duplicate tweets occurred due to overlapping data acquisition periods and 
+  duplicate users because one user is able to post many tweets.
   
+  - We started with 110,000 tweets and users, and were left with 74,000 tweets and 35,000 users after data cleaning
+
   - We then stripped the tweet text and user bios of:
     - Links
     - Hash-tags
@@ -218,17 +216,16 @@ tweets$product <- as.factor(tweets$product)  # Factorize product column
     - User mentions
   
   - Users were marked as potential bots based on:
-    - Whether the source of their tweets identified them as a bot through the use of keywords
-    - ...and whether the user's bio identified them as a bot, this also used keywords
+    - Whether the source of their tweets identified them as a bot and whether the user's bio identified them as a bot
+    - ...this was done using keywords
+    
+  - Tweets were marked as potential spam based on the their text, through the user of keywords, or whether the author of the 
+    tweet had been previously marked as a bot
 
   - The raw user locations varied because twitter allows custom locations (such as 'on a mountain' or just 'earth'):
     - We used the 'country code' package to extract countries in order to make them usable in analysis and had 25% of tweets with a location that was usable.
-    
-  - Tweets were marked as potential spam based on:
-    - Whether the tweet text identified it as spam, through the use of keywords
-    - ...and whether the author of the tweet had been previously marked as a bot
   
-  Due to glitches in the rtweet package:
+  Due to issues with the data returned by the rtweet package:
   - We had to manually extract the hash-tags and features from each of the tweet's
     - These features were: The product's Display, Camera, Battery, Price, and 5G capabilities
 
@@ -261,25 +258,23 @@ tweets$product <- as.factor(tweets$product)  # Factorize product column
 
 <!--- SPEAKER NOTES- ALEX
 
-  - From the tweets we had left 
-
-  - Table 1 shows a summary of the collected tweet data grouped by product:
+  - This is a quick summary of our collected data:
   
-    - There were less tweets for the S20 than the S20 FE and iPhone 12 which is due to the constraints imposed by the Twitter API rate limits
+    - Table 1 shows a summary of the collected tweet data grouped by product:
+  
+      - There were less tweets for the S20 than the S20 FE and iPhone 12 which is due to the constraints imposed by the Twitter API rate limits
+      
+      - 13-19% of the S20 FE and iPhone12 tweets were marked as spam, compared to the 3% for the S20
+
+        - This is likely due to the tweets collected for the S20 being posted prior to the product release date
+
+      - Only 7% of iPhone12 tweets contained mentions of the chosen features, compared to roughly 20% for the S20 and S20 FE
+  
+    - Table 2 shows a summary of the user data:
+  
+      - There were about 35,000 unique users, from 163 identified countries
     
-    - 13-19% of the S20 FE and iPhone12 tweets were marked as spam, compared to the 3% for the S20
-
-Alex we may want to discuss the point below:      
-  ## change this ## This is perhaps due to the spammers focusing their efforts on newer, more relevant products in order to reach a wider audience
-  ## with this ## This is perhaps due to our tweets for the S20 being extracted before the release date.
-
-    - Only 7% of iPhone12 tweets contained mentions of the chosen features, compared to roughly 20% for the S20 and S20 FE
-  
-  - Table 2 shows a summary of the user data:
-  
-    - There were about 35,000 unique users, from 163 identified countries
-    
-    - Less than 1% of these users were marked as bots. The actual amount being 155 users
+      - Less than 1% of these users were marked as bots. The actual amount being 155 users.
     
 --->
 
@@ -450,13 +445,15 @@ feature_sentiment %>%
 
 <!-- SPEAKER NOTES - Alex
 
-  Performing the sentiment analysis globally based on regions produced three main findings:
-
-    that our data set may be too small to cover the sentiment globally as evidenced by the white regions seen on the maps which indicates no data for that region
-
-    where the colours are lighter, ie. negative sentiment, we may need to improve marketing and brand image
+  - Looking at the global sentiment data, we can conclude three things:
+  
+    - That our dataset may be too small, as evidenced by the white regions, which indicate no data for that regions.
     
-    where there are darker areas for competitors of a certain product i.e. higher positive sentiment, extra attention should be taken in those regions to improve brand awareness and public sentiment   
+    - Where the colours' shade is lighter, indicating more negative sentiment, we may need to focus more effort into marketing 
+      and brand image
+      
+    - and finally, where the colours' shades are darker, indicating an overall more positive sentiment, extra attention should 
+      be taken to maintain brand awareness and the current public sentiment
 
 -->
 
@@ -778,6 +775,9 @@ feature_sentiment_data %>%
 <!-- END OF SLIDE SHOW -->
 
 
+
+
+
 <!--- ADDITIONAL SLIDES
 
 SLIDE START
@@ -792,6 +792,9 @@ SLIDE START
       We decided to use a regression analysis to determine this and see if we could predict future stock price based on the current sentiment.
 
     SLIDE INFO
+      - Regression analysis used
+      - P value = 
+
       !INSERT CODE CHUNK HERE
 
 END OF SLIDE
@@ -812,6 +815,7 @@ SLIDE START
 
     SLIDE INFO
       Insert here
+
     CODE:
       # Filter out spam
       tweets_no_spam <- tweets %>% filter(potential_spam == F)
