@@ -104,7 +104,7 @@ knitr::include_graphics(c("./Images/Logos/apple_logo.png", "./Images/Logos/samsu
   the official hashtags used.
   
   We then looked for the same information from Apple but found that since the Twitter account was hacked in July, Apple have not 
-  been keeping tweets on their Twitter page. (Swider, Matt (2020), TechRadar - https://www.techradar.com/news/twitter-hack-2020))
+  been keeping tweets on their Twitter page. (Swider, Matt (2020))
   
   We decided to look to the CEO of Apple, Tim Cook, as he would most likely be using the official hashtag, as deemed by
   Apple's marketing team. This led us to the hashtag '#iPhone12'.
@@ -610,8 +610,6 @@ the code (e.g. S20_KS_Test[2] prints 0). As such we have just typed the value fo
 
 `r kable(stat_results, caption = "Statistical Test Results")`
 
-**Density Graphs**
-
 ```{r echo=FALSE, warning=FALSE, message=FALSE, fig.height=4, fig.align='center'}
 feature_sentiment_data %>%
   ggplot(aes(x=avg_sentiment, group=product, fill=product)) + theme_bw() + facet_wrap(~ product) +
@@ -641,17 +639,17 @@ feature_sentiment_data %>%
 
     Historical twitter data can be used effectively to analyse the public opinions and sentiments about a particular topic. 
     
-    Due to the nature of Twitter data being current, it is therefore possible for businesses like Samsung and Apple to perform live analysis of the public's opinion around the release of a new product to get instant feedback and determine its early success.
+    Due to the nature of Twitter data being current, it is therefore possible for businesses to perform live analysis of the public's opinion around the release of a new product, to get instant feedback and determine its early success.
 
   ##Apple
   
     From Apple's persepctive we would recommend the following:
 
-      The sentiment analsysis performed on all tweets shows that the extra development and improvements of the S20FE did lead to an increase in sentiment scores when compared to the S20. Thus Apple would benefit from examining it customer's opinion to help it focus its development of the next iphone. 
+      The sentiment analsysis performed on all tweets shows that the extra development and improvements of the S20FE did lead to an increase in sentiment scores when compared to the S20. Thus, Apple would benefit from examining it customer's opinion to help it focus its development of the next iphone. 
 
-      The iPhone has positive sentiment in all feature areas but was only marginally ahead of Samsung in the 5G connectivity. For battery, camera, display and price the iPhone received lower sentiment scores. These areas need further investigation which may lead to a need for more R&D or targeted marketing from Apple to improve the sentiment.  
+      The iPhone has positive sentiment in all feature areas but was only marginally ahead of Samsung in the 5G connectivity. For battery, camera, display and price, the iPhone received lower sentiment scores. These areas need further investigation which may lead to a need for more R&D or targeted marketing from Apple to improve the sentiment scores.  
 
-      The iPhone has a very positive sentiment in both Russia and the USA but is lacking in Austrailia, Canada and South America which appear to have a higher sentiment towards Samsung. These location may be key for Apple to increase its sales by converting Samsung users to Apple users.
+      The iPhone has a very positive sentiment in both Russia and America but is lacking in Australia, Canada and South America, which appear to have a higher sentiment towards Samsung. These location may be key for Apple to increase its sales by converting Samsung users.
   
   
   ##Samsung
@@ -662,9 +660,9 @@ feature_sentiment_data %>%
 
       However the increased battery life of the S20FE did not increase the sentiment significantly. This means either a larger improvement of the battery is needed or less focus in the marketing can be made on battery life. 
 
-      While the camera of the S20FE was recevied positively it was significanyly lower than that of the S20 but more importantly the iPhone12. This is counteracted by the much higher sentiment in price but is an area we would recommend that Samsung try to improve through marketing and R&D.
+      While the camera of the S20FE was recevied positively, it was significanyly lower than that of the S20 but more importantly the iPhone12. This is counteracted by the much higher sentiment in price but is an area we would recommend that Samsung try to improve through marketing and R&D.
 
-      The global sentiment shows that Samsung's has a fairly neutral if not negative sentiment in places like Russia and the US where the iPhone is seen in a very positive way. Samsung should examine it's marketing and other factors to determine why sentiment is this way.  
+      The global sentiment shows that Samsung has a fairly neutral if not negative sentiment in places like Russia and the US, where the iPhone is seen in a very positive way. Samsung should examine it's marketing and other factors to determine why sentiment is this way and see if it can improve the sentiment scores.  
 
 -->
 
@@ -722,7 +720,11 @@ feature_sentiment_data %>%
 
     Examination for example of how many time in a tweet about iPhones is another device or manufacture mentioned either positive or negatively.
 
+    Determining the average income in relation to the sentiment by region would help us identify if this was a cause of lower sentiment
 
+    An increase in the quantity of tweets would help expand the data set and hopefully include tweets to analyse for region that we had no info for.
+
+    Additional analysis of the sentiment by feature along with the actual cost of the changes in device could identify better R&D decisions.
 
 -->
 
@@ -730,7 +732,7 @@ feature_sentiment_data %>%
 - Look at mentions of Apple in Samsung and vice versa
 - Examination of average income and sentiment by region
 - Increased number of tweets with more targeted dates before and after the release dates
-- Additional analysis of the sentiment by feature along with the actual cost of the changes in device could identify better R&D decisions
+- Sentiment by feature along with the actual cost of the changes
 
 
 <!--- End of Slide XX ------------------------------------------------------------------------------------------------------>
@@ -784,9 +786,6 @@ SLIDE START
       We decided to use a regression analysis to determine this and see if we could predict future stock price based on the current sentiment.
 
     SLIDE INFO
-      - Regression analysis used
-      - P value = 
-
       !INSERT CODE CHUNK HERE
 
 END OF SLIDE
@@ -803,12 +802,10 @@ SLIDE START
       Needed to be cut to save time and slide numbers
 
     SPEAKER NOTES
-      We wanted to identify the most commonly used words to BLAH BLAH BLAH
+      We wanted to identify the most commonly used words.
 
     SLIDE INFO
-      - blah
-      - blah
-
+      Insert here
     CODE:
       # Filter out spam
       tweets_no_spam <- tweets %>% filter(potential_spam == F)
@@ -907,6 +904,10 @@ SLIDE START
                 axis.text.y = element_text(size = 12))
 END OF SLIDE
 
+
+
+
+
 SLIDE START
 
   ##NEGATIVE AND POSITIVE WORDS OF EACH PRODUCT
@@ -915,11 +916,10 @@ SLIDE START
       Needed to be cut to save time and slide numbers
 
     SPEAKER NOTES
-      BLAH BLAH BLAH
+      Insert here
 
     SLIDE INFO
-      - blah
-      - blah
+      Insert here
 
     CODE:
       # Get sentiment scores for iPhone12 words
@@ -975,85 +975,6 @@ SLIDE START
           theme(axis.text = element_text(size = 11, colour = 'black'),
                 axis.title = element_text(size = 11, colour = 'black'),
                 title = element_text(size = 12))
-
-END OF SLIDE
-
-
-
-
-
-SLIDE START
-
-  ##SENTIMENT DENSITY PLOTS ALL 3 IN 1 + ACTUAL KOLMOGOROV-SMIRNOV AND ANDERSON-DARLING TESTS
-
-    REASON FOR REMOVAL
-      Needed to be cut to save time and slide numbers
-
-    SPEAKER NOTES
-      We wanted to determine if there was a correlation between the stock price and the current sentiment of the public's opinion on Twitter.
-      We decided to use a regression analysis to determine this and see if we could predict future stock price based on the current sentiment.7
-
-    SLIDE INFO
-      - Regression analysis used
-      - P value = 
-
-    CODE:
-    feature_sentiment_data %>%
-      ggplot(aes(x=avg_sentiment, group=product, fill=product)) +
-      geom_density(adjust=1.5, alpha=.3) +
-      theme_bw() +
-      scale_fill_manual(values = c("Galaxy S20" = "turquoise",
-                                  "Galaxy S20 FE" = "mediumpurple1",
-                                  "iPhone12" = "lightgoldenrod3")) +
-      labs(fill = "Product")
-
-    s20fe_vals <- feature_sentiment_data %>% 
-      filter(product=="Galaxy S20 FE") %>% .$avg_sentiment
-
-    s20_vals <- feature_sentiment_data %>% 
-      filter(product=="Galaxy S20") %>% .$avg_sentiment
-
-    iphone12_vals <- feature_sentiment_data %>% 
-      filter(product=="iPhone12") %>% .$avg_sentiment
-
-    vals <- list(s20 = s20_vals, s20fe = s20fe_vals, iphone12 = iphone12_vals)
-
-
-    #KOLMOGOROV-SMIRNOV normality test
-
-    ks.test(x=vals$s20, y='pnorm')
-    # data:  vals$s20
-    # D = 0.40721, p-value < 2.2e-16
-    # alternative hypothesis: two-sided
-
-    ks.test(x=vals$s20fe, y='pnorm')
-    # data:  vals$s20fe
-    # D = 0.45695, p-value < 2.2e-16
-    # alternative hypothesis: two-sided
-
-    ks.test(x=vals$iphone12, y='pnorm')
-    # data:  vals$iphone12
-    # D = 0.40272, p-value < 2.2e-16
-    # alternative hypothesis: two-sided
-
-    #ANDERSON-DARLING normality test
-
-    library(nortest) #we need this library for this test
-    ad.test(vals$s20)
-    # data:  vals$s20
-    # A = 396.71, p-value < 2.2e-16
-
-    ad.test(vals$s20fe)
-    # data:  vals$s20fe
-    # A = 660.69, p-value < 2.2e-16
-
-    ad.test(vals$iphone12)
-    # data:  vals$iphone12
-    # A = 687.88, p-value < 2.2e-16
-
-    #T-TEST JUST IN CASE
-    t.test(vals$s20fe, vals$iphone12)
-    t.test(vals$s20fe, vals$s20)
 
 END OF SLIDE
 
