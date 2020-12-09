@@ -827,6 +827,7 @@ SLIDE START
 
     #ANDERSON-DARLING normality test
 
+    library(nortest) #we need this library for this test
     ad.test(vals$s20)
     # data:  vals$s20
     # A = 396.71, p-value < 2.2e-16
