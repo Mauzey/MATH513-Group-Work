@@ -18,6 +18,8 @@ libs <- c('readr', 'dplyr', 'tidyverse', 'tidyr', 'tidytext', 'modelr', 'stringr
           'knitr', 'rworldmap', 'lubridate', 'nortest')
 invisible(lapply(libs, library, character.only = TRUE))
 
+options(scipen =999) #Scientific notation
+
 # IMPORT DATA 
 tweets <- read_csv("../data/cleaned-tweets.csv") 
 users <- read_csv("../data/cleaned-users.csv")
@@ -152,16 +154,16 @@ knitr::include_graphics(c("./Images/Logos/apple_logo.png", "./Images/Logos/samsu
   phones would be the best time to examine the public's opinion.
 
   Due to the limitations of the general search, we utilised the full archive premium feature to pull tweets relating to the S20, 
-  seen here in red. 
+  seen here in turquoise. 
   
-  However, there was a mistake that led to the tweets being pulled a little earlier than the release date as seen by the red 
+  However, there was a mistake that led to the tweets being pulled a little earlier than the release date as seen by the turquoise 
   vertical line on the graph. 
   
   We learned from this and corrected our code and pulled as much data as we could for the other two phones using the premium 30 
   day function.
   
-  The 30 day limitation meant that the tweets we pulled are about 3 weeks after the release date for the S20FE, seen in green and 
-  1 week after the iPhone seen in blue.
+  The 30 day limitation meant that the tweets we pulled are about 3 weeks after the release date for the S20FE, seen in purple and 
+  1 week after the iPhone seen in gold.
   
   From the graph, you can see that we managed to gather a reasonable amount of tweets and re-tweets over the month of November 
   for both these phones.
@@ -352,7 +354,7 @@ mean_sentiment <- tweets %>%
 # Plot the distribution of sentiment for tweets for all models
 tweets %>%
   filter(potential_spam == F) %>%
-  ggplot(aes(x = avg_sentiment, fill = product)) + theme_minimal() + facet_grid(product ~ .) +
+  ggplot(aes(x = avg_sentiment, fill = product)) + theme_bw() + facet_grid(product ~ .) +
     geom_histogram(aes(y = ..density..), colour = 'black') +
   
     # Vertical lines for each product
@@ -606,27 +608,24 @@ iPhone_AD_Test <- ad.test(vals$iphone12)
 # data:  vals$iphone12
 # A = 687.88, p-value < 2.2e-16
 
+test<- c('Kolmogorov-Smirnov Test', 'Anderson-Darling Normality Test' )
+S20 <- c('2.2e-16', '2.2e-16')
+S20FE <- c('2.2e-16', '2.2e-16')
+i12 <- c('2.2e-16', '2.2e-16')
+
+stat_results <- data.frame(test, S20, S20Fe, i12)
+
 Welch_Ttest_S20Fe_Iphone12 <- t.test(vals$s20fe, vals$iphone12)
 Welch_Ttest_S20Fe_S20 <- t.test(vals$s20fe, vals$s20)
 ```
 
-**Kolmogorov-Smirnov Test**
+
 <!-- P-value is so small that it is lower than machine precision, and thus is listed as 0 if we extract from 
 the code (e.g. S20_KS_Test[2] prints 0). As such we have just typed the value for presentation purposes. -->
 
-P-values
+`r kable(stat_results, caption = "Statistical Test Results")`
 
-|S20: 2.2e-16|S20FE: 2.2e-16|iPhone: 2.2e-16|
-
-**Anderson-Darling Normality Test**
-<!-- P-value is so small that it is lower than machine precision, and thus is listed as 0 if we extract from 
-the code (e.g. S20_KS_Test[2] prints 0). As such we have just typed the value for presentation purposes. -->
-
-P-values
-
-|S20: 2.2e-16|S20FE: 2.2e-16|iPhone: 2.2e-16|
-
-**Desity Graphs**
+**Density Graphs**
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE, fig.height=4, fig.align='center'}
 feature_sentiment_data %>%
