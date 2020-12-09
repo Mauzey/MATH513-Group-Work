@@ -18,7 +18,6 @@ invisible(lapply(libs, library, character.only = TRUE))
 # IMPORT DATA ---------------------------------------------------------------------------------------------------------------
 tweets <- read_csv("../data/cleaned-tweets.csv") #Load in tweets from the csv file.
 users <- read_csv("../data/cleaned-users.csv")
-
 ```
 
 
@@ -88,7 +87,7 @@ knitr::include_graphics(c("./Images/Logos/apple_logo.png", "./Images/Logos/samsu
   
   We decided to look to the CEO of Apple, Tim Cook, as we thought he would most likely be using the offical hashtag as deemed by Apple's marketing team, which led us to the hashtag #iPhone12.
   
-  We came to the conclusion that it was better to use hashtags instead of pulling data from profiles, either business or individual. This was to ensure we would get a wide range of opinions for a fairer analysis of the publics sentiment.
+  We came to the conclusion that it was better to use hashtags instead of pulling data from profiles, either business or individual. This was to ensure we would get a wide range of opinions for a fairer analysis of the public's sentiment.
 
 --->
 
@@ -142,20 +141,18 @@ knitr::include_graphics(c("./Images/Logos/apple_logo.png", "./Images/Logos/samsu
     - Whether the source of their tweets identified them as a bot through the use of keywords
     - ...and whether the user's bio identified them as a bot, this also used keywords
 
-  - The raw user locations varied because twitter allows custom locations (such as 'on a mountain' or 'earth'):
-    - We used the 'country code' package to extract countries in order to make them usable in analysis and had 25% of tweets with a location
+  - The raw user locations varied because twitter allows custom locations (such as 'on a mountain' or just 'earth'):
+    - We used the 'country code' package to extract countries in order to make them usable in analysis and had 25% of tweets with a location that was usable.
     
   - Tweets were marked as potential spam based on:
     - Whether the tweet text identified it as spam, through the use of keywords
     - ...and whether the author of the tweet had been previously marked as a bot
   
+  Due to glitches in rtweet:
   - We had to manually extract the hash-tags from the tweet text due to an issue with rtweet
   
   - We extracted product features from each of the tweet's text due to a glitch in rtweet
     - These features were: The product's Display, Camera, Battery, Price, and 5G Capabilities
-  
-#### REWRITE
-    - Finally, sentiment score was calculated for each tweet.
 
 --->
 
@@ -173,7 +170,6 @@ knitr::include_graphics(c("./Images/Logos/apple_logo.png", "./Images/Logos/samsu
 - Hash-tags were extracted from the tweet text
 - Product features were extracted from the tweet text
   + Display, Battery, Camera, Price, and 5G Capability
-- An overall sentiment score was calculated for each tweet
 
 <!--- End of Slide 03 ------------------------------------------------------------------------------------------------------>
 
@@ -302,7 +298,7 @@ tweets$product <- as.factor(tweets$product)  # Factorize product column
   We decided to perform sentiment analysis both generally for each model and 
   for 5 most often mentioned features: Camera, 5G, Display, Price and Battery.
 
-  For sentiment analysis, we used the 'sentimentr' package which calculates average sentiment for a group of sentences instead of calculating sentiment scores for individual words. This was more suitable for our analysis since we're analysing the feedback (in form of tweets, each tweet consists of 1 or more whole sentences) on each feature for each of the 3 products.
+  For sentiment analysis, we used the 'sentimentr' package which calculates average sentiment for a group of sentences instead of calculating sentiment scores for individual words. This was more suitable for our analysis since we're analysing the feedback in the form of tweets where each tweet consists of 1 or more whole sentences on each feature for each of the 3 products.
 
   This slide demonstrates the overall sentiment for each product. 
 
@@ -321,7 +317,7 @@ mean_sentiment <- tweets %>%
                             summarize(mean_sentiment = signif(mean(avg_sentiment), 6))  
 ```
 
-```{r echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=5}
+```{r echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=5.5}
 # Plot the distribution of sentiment for tweets for all models
 tweets %>%
   filter(potential_spam == F) %>%
@@ -365,10 +361,16 @@ tweets %>%
 
 !!Overview of sentiment analysis##
 
+  # NEED TO EXPLAIN THE MEAN AND BOX PLOT
 
-Samsung's improvement of particular features which gathered feedback from customers who purchased S20 and S20 Ultra can be clearly seen from the following boxplots that demonstrate sentiments for products of both Samsung and Apple grouped by features. 
-We can observe that the sentiment for all the S20 FE's features except for camera, is higher than of S20, not mentioning that it's higher than of iphone12 in display, price and battery categories.
-Which is again pretty logical considering that Samsung equipps their new flagships with displays which have refresh rate of 120 Hz and 140 Hz.
+  # MENTION WHAT THE IMPROVEMENTS
+
+
+  Samsung's improvement of particular features which gathered feedback from customers who purchased S20 and S20 Ultra can be clearly seen from the following boxplots that demonstrate sentiments for products of both Samsung and Apple grouped by features.
+
+  We can observe that the sentiment for all the S20 FE's features except for camera, is higher than of S20, not mentioning that it's higher than of iphone12 in display, price and battery categories.
+
+  Which is again pretty logical considering that Samsung equipps their new flagships with displays which have refresh rate of 120 Hz and 140 Hz.
 
 --->
 
@@ -432,11 +434,11 @@ feature_sentiment %>%
 <!-- SPEAKER NOTES - Alex
 
   This analysis shows us three main things:
-    that our data set may be too small to cover the sentiment globally as evidenced by the white regions seen on the maps
+    that our data set may be too small to cover the sentiment globally as evidenced by the white regions seen on the maps which indicates no data for that region
 
     where the colours are lighter we may need to improve marketing and brand image
     
-    where there are darker areas for competitors, extra attention should be taken in those regions to improve brand awareness and public sentiment   
+    where there are darker areas for competitors of a certain product, extra attention should be taken in those regions to improve brand awareness and public sentiment   
 
 -->
 
@@ -546,8 +548,6 @@ feature_sentiment_data %>%
 ```
 
 <!--- End of Slide 09 ------------------------------------------------------------------------------------------------------>
-
-
 
 
 
@@ -942,7 +942,57 @@ BTS
 <!--- End of Slide XX ------------------------------------------------------------------------------------------------------>
 
 
+<!--- Additional Slides??
 
+SLIDE START
+
+  ##STOCK PRICE VS SENTIMENT
+
+    REASON FOR REMOVAL
+      Needed to be cut to save time and slide numbers
+
+    SPEAKER NOTES
+      We wanted to determine if there was a correlation between the stock price and the current sentiment of the public's opinion on Twitter.
+      We decided to use a regression analysis to determine this and see if we could predict future stock price based on the current sentiment.
+
+    SLIDE INFO
+      - Regression analysis used
+      - P value = 
+
+      !INSERT CODE CHUNK HERE
+
+END OF SLIDE
+
+
+
+SLIDE START
+
+## Issues and overcoming them
+
+  REASON FOR REMOVAL
+    Most information is already in other slides so this seem redundant.
+
+  SPEAKER NOTES
+    Date refinement on Twitter Premium API functions only
+      Dev suite allowed limited access to full archive and 30 day extraction features
+    Tweets are pulled from date to backwards to date to
+      Pull tweets in a controlled manner using weeks and days
+    Possible duplication if we extracted at the same time
+      Full archive and 30 day extraction allowed for refinement of dates and pull tweets back to 2006
+    Extraction limited to 18k per 15mins
+      Controlled pull of tweets with date refinement over time as retry on rate limit did not function a expected
+    Foreign languages
+      Filter by language of 'en' applied to only pull English tweets
+
+  SLIDE INFO
+    - Extraction by date
+    - Duplication
+    - Time limits
+    - Foreign languages
+
+END OF SLIDE
+
+END OF ADDITIONAL/REMOVED SLIDES -->
 
 
 <!-- END OF SLIDE SHOW -->
