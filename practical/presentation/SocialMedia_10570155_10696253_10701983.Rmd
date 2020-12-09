@@ -46,18 +46,18 @@ OVERVIEW
 
 <!--- SPEAKER NOTES - WILL
 
-  Hi, today we will be discussing the result from the strategic analysis of Twitter data. 
+  Hi, today we will be discussing the result from the strategic analysis of Twitter data for Samsung and Apple. 
 
   Samsung and Apple were chosen as our competing businesses due to the recent release of their flagship phones, the S20FE and 
   iPhone12. This meant we would have access to sufficient relevant data on Twitter to perform analysis upon.
 
   We chose to gather some extra tweets relating to the S20 to give us some comparable information for sentiment analysis and to 
-  determine if there was any improvement in sentiment from the S20 to the S20FE from the public's viewpoint. 
+  determine if there was any improvement in sentiment from the S20 to the S20FE. 
 
-  We utilised RStudio in combination with the 'rTweet' package to extract and analyse the data from the Twitter Developer API.
+  We utilised RStudio in combination with the 'rTweet' package to extract and analyse the data from the Twitter API.
 
-  To allow us to work professionally and on various parts of the project as a group, we decided to break up the code into 
-  sections and utilise GitHub to keep track on the project.
+  To allow us to work professionally and on various parts of the project at the same time as a group, we decided to break up the code into 
+  sections and utilise GitHub to keep track of the project.
 
 --->
 
@@ -71,7 +71,7 @@ OVERVIEW
 
 - Rstudio
 - RTweet
-- Twitter Developer API
+- Twitter API
 - GitHub
 
 ```{r Logos, echo=FALSE, fig.align="center", fig.cap="", fig.show='hold', out.width="15%"}
@@ -92,22 +92,22 @@ knitr::include_graphics(c("./Images/Logos/apple_logo.png", "./Images/Logos/samsu
 <!--- SPEAKER NOTES: - WILL
   
   Twitter provides its data through a number of APIs and after the Cambridge Analytica 'data breach', is one of the few social 
-  media platforms that has not limited the data provided through APIs (Ahemd, Dr. Wasim (2019))
+  media platforms that has not limited the data provided through it's API. (Ahemd, Dr. Wasim (2019))
   
-  Twitter data can provide insights into the public's opinions and combined with the openness and the generous rate limiting of 
-  Twitter’s API, it can produce powerful results. (Young, Michelle (2017))
+  Twitter data can provide insights into the public's opinions and combined with the openness and the generous rate limiting,
+  it can produce powerful results. (Young, Michelle (2017))
 
   We came to the conclusion that it was better to use hashtags instead of pulling data from profiles. This was to ensure we would 
   get a wide range of opinions for a fairer analysis of the public's sentiment.
 
   For our hashtags, we looked to the Samsung Mobile page and identified that the hashtags '#GalaxyS20' and '#GalaxyS20FE' were 
-  the official hashtags used by Samsung.
+  the official hashtags used.
   
   We then looked for the same information from Apple but found that since the Twitter account was hacked in July, Apple have not 
   been keeping tweets on their Twitter page. (Swider, Matt (2020), TechRadar - https://www.techradar.com/news/twitter-hack-2020))
   
-  We decided to look to the CEO of Apple, Tim Cook, as we thought he would most likely be using the official hashtag as deemed by
-   Apple's marketing team, which led us to the hashtag '#iPhone12'.
+  We decided to look to the CEO of Apple, Tim Cook, as he would most likely be using the official hashtag, as deemed by
+  Apple's marketing team. This led us to the hashtag '#iPhone12'.
 
 --->
 
@@ -150,16 +150,16 @@ knitr::include_graphics(c("./Images/Logos/apple_logo.png", "./Images/Logos/samsu
 
 <!--- SPEAKER NOTES - Will
 
-  The normal twitter function allowed us to pull data from the last 6-9 days. We decided that just after the release date of the 
+  The standard rtweet function allowed us to pull data from the last 6-9 days. We decided that just after the release date of the 
   phones would be the best time to examine the public's opinion.
 
-  Due to the limitations of the general search, we utilised the full archive premium feature to pull tweets relating to the S20, 
+  Due to the limitations of the standard search, we utilised the full archive premium feature to pull tweets relating to the S20, 
   seen here in turquoise. 
   
-  However, there was a mistake that led to the tweets being pulled a little earlier than the release date as seen by the turquoise 
-  vertical line on the graph. 
+  However, there was a mistake that led to the tweets being pulled a little earlier than the release date, as seen by the turquoise 
+  vertical line. 
   
-  We learned from this and corrected our code and pulled as much data as we could for the other two phones using the premium 30 
+  We learned from this, corrected our code and pulled as much data as we could for the other two phones using the premium 30 
   day function.
   
   The 30 day limitation meant that the tweets we pulled are about 3 weeks after the release date for the S20FE, seen in purple and 
@@ -265,15 +265,14 @@ tweets$product <- as.factor(tweets$product)  # Factorize product column
 
   - Table 1 shows a summary of the collected tweet data grouped by product:
   
-    - There were less tweets for the Galaxy S20 than the S20 FE and iPhone 12.
-      - This is due to the constraints imposed by the Twitter API rate limits
+    - There were less tweets for the S20 than the S20 FE and iPhone 12 which is due to the constraints imposed by the Twitter API rate limits
     
     - 13-19% of the S20 FE and iPhone12 tweets were marked as spam, compared to the 3% for the S20
-      
-#### This is perhaps due to our tweets for the S20 being extracted before the release date.
 
-      - This is perhaps due to the spammers focusing their efforts on newer, more relevant products in order to reach a wider audience
-    
+Alex we may want to discuss the point below:      
+  ## change this ## This is perhaps due to the spammers focusing their efforts on newer, more relevant products in order to reach a wider audience
+  ## with this ## This is perhaps due to our tweets for the S20 being extracted before the release date.
+
     - Only 7% of iPhone12 tweets contained mentions of the chosen features, compared to roughly 20% for the S20 and S20 FE
   
   - Table 2 shows a summary of the user data:
@@ -325,21 +324,15 @@ users_summary <- users %>%
 
 <!-- SPEAKER NOTES - Tania
 
-  We decided to perform sentiment analysis both generally for each model 
+  We decided to perform sentiment analysis for each model. 
 
-###! MAYBE LEAVE THIS TILL NEXT SLIDE WHERE IT IS ON SCREEN
-  and 
-  for 5 of the most often mentioned features: Camera, 5G, Display, Price and Battery.
+  We used the 'sentimentr' package which calculates average sentiment for a group of sentences instead of individual words. This was more suitable for our analysis since each tweet consists of 1 or more whole sentences, on each feature, for each of the 3 products. This reduces skewed data, for example the phrase 'not so good' could be seen as positive instead of negative as not would be a stop word.
 
-  We used the 'sentimentr' package which calculates average sentiment for a group of sentences instead of individual words. This was more suitable for our analysis since each tweet consists of 1 or more whole sentences on each feature for each of the 3 products. This reduces skewed data , for example the phrase 'not so good' could be seen as positive instead of negative as not would be a stop word.
+  The visualisation on this slide demonstrates the overall sentiment for each product. 
 
-  This slide demonstrates the overall sentiment for each product. 
-
-  As you can see, the Galaxy S20FE, seen in purple, has the highest mean sentiment.
-
-  The idea behind the release of the S20FE is that Samsung took their customer's feedback into consideration and implemented some changes for features like display, price, battery. 
+  The idea behind the release of the S20FE is that Samsung took their customer's feedback into consideration and implemented changes to features like display, price, battery. 
   
-  This can be seen by the S20FE having a higher mean sentiment than the S20 seen here in turquoise.
+  This can be seen by the S20FE having a higher mean sentiment than the S20 and the iPhone.
 
 -->
 
@@ -392,18 +385,15 @@ tweets %>%
 
 <!--- SPEAKER NOTES - Tania
 
-!!Overview of sentiment analysis##
+  We then examined sentiment for the 5 most mentioned features which can be seen in boxplot on the slide.
 
-  # NEED TO EXPLAIN THE MEAN AND BOX PLOT
+  Each coloured box represents where the sentiment of the majority of tweets lay with the thick horizontal line across the inside of the boxes showing the average sentiment.
 
-  # MENTION WHAT THE IMPROVEMENTS
+  Samsung's improvement of particular features, for which it gathered feedback from customers who purchased an S20 model, can be clearly seen from the visualisation.
 
+  This can be seen by the sentiment for all the S20FE's features, except for camera, are higher than that of the S20, not mentioning that it's higher than that of the iphone12 in most features.
 
-  Samsung's improvement of particular features which gathered feedback from customers who purchased S20 and S20 Ultra can be clearly seen from the following boxplots that demonstrate sentiments for products of both Samsung and Apple grouped by features.
-
-  We can observe that the sentiment for all the S20 FE's features except for camera, is higher than of S20, not mentioning that it's higher than of iphone12 in display, price and battery categories.
-
-  Which is again pretty logical considering that Samsung equipps their new flagships with displays which have refresh rate of 120 Hz and 140 Hz.
+  This coincides with the improvements that the S20FE made over the original S20 in all but the camera where the camera spec was reduced for the S20FE.
 
 --->
 
@@ -460,7 +450,8 @@ feature_sentiment %>%
 
 <!-- SPEAKER NOTES - Alex
 
-  This global sentiment analysis shows us three main things:
+  Performing the sentiment analysis globally based on regions produced three main findings:
+
     that our data set may be too small to cover the sentiment globally as evidenced by the white regions seen on the maps which indicates no data for that region
 
     where the colours are lighter, ie. negative sentiment, we may need to improve marketing and brand image
