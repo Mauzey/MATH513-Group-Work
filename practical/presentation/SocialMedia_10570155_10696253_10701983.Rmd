@@ -559,28 +559,6 @@ mapCountryData(S20_matched,
 
 --->
 
-<<<<<<< Updated upstream
-```{r echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4.5} 
-data <- data.frame(feature_sentiment_data)
-
-ggplot(data, aes(x=avg_sentiment, group=product, fill=product)) +
-  geom_density(adjust=1.5, alpha = .9) +
-  theme_bw() +
-  facet_wrap(~product) +
-  scale_fill_manual(values = c("Galaxy S20" = "turquoise",
-                               "Galaxy S20 FE" = "mediumpurple1",
-                               "iPhone12" = "lightgoldenrod3")) +
-  theme(
-    legend.position="none",
-    panel.spacing = unit(0.1, "lines"),
-    axis.ticks.x=element_blank()
-  ) +
-  labs(x = "Average Sentiment",
-       y = "Density",
-       title = "Density Plots for Overall Sentiments of 3 Products")+
-  geom_vline(xintercept = 0 , colour = "black", linetype="dashed")+
-  #scale_x_continuous(breaks=as.numeric(c("-2", "-1", "0", "1", "2")))
-=======
 ```{r echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4.5}
 
 s20fe_vals <- tweets %>% 
@@ -638,7 +616,6 @@ feature_sentiment_data %>%
     theme(legend.position = "none",
           panel.spacing = unit(0.1, 'lines'),
           axis.ticks.x = element_blank())
->>>>>>> Stashed changes
 ```
 
 <!--- End of Slide 09 ------------------------------------------------------------------------------------------------------>
@@ -652,72 +629,36 @@ feature_sentiment_data %>%
 ## Conclusions
 
 <!-- SPEAKER NOTES
-
   From our analysis we can draw the following conclusions:
 
-    Historical twitter data can be used effectively to analyse the public opinions and sentiments about a particular topic. 
-    Due to the nature of Twitter data being current, it is therefore possible for businesses like Samsung and Apple to perform live analysis of the public's opinion around the release of a new product to get instant feedback and determine its early success.
+    Historical twitter data can be used effectively to analsye the public opinions and sentiments about a particular topic. 
+    
+    Due to the nature of Twitter data being current, it is therefore possible for businesses like Samsung and Apple to perform live analysis of the public's opinion around the release of a new product to get instant feedback and determine the ealy success of the release.
 
-  ##Apple
-  
-    From Apple's persepctive we would recommend the following:
+    The sentiment analsysis performed shows that the extra development and improvement of the S20FE over the S20 did lead to an increase in sentiments scores. 
 
-      The sentiment analsysis performed on all tweets shows that the extra development and improvements of the S20FE did lead to an increase in sentiment scores when compared to the S20. Thus Apple would benefit from examining it customer's opinion to help it focus its development of the next iphone. 
+    Feature sentiment analysis demonstrated that while the overall sentiment was higher for the S20FE there were some areas where there was a physical change to the device but no noticeable increase in sentiment.
+    
+    This can be seen when examining the sentiment towards the battery where it has remained similar or the camera where the decreased physical performance has led to a lower sentiment score.  
 
-      The iPhone has positive sentiment in all feature areas but was only marginally ahead of Samsung in the 5G connectivity. For battery, camera, display and price the iPhone received lower sentiment scores. These areas need further investigation which may lead to a need for more R&D or targeted marketing from Apple to improve the sentiment.  
 
-      The iPhone has a very positive sentiment in both Russia and the USA but is lacking in Austrailia, Canada and South America which appear to have a higher sentiment towards Samsung. These location may be key for Apple to increase its sales by converting Samsung users to Apple user.      
-  
-  
-  ##Samsung
-
-    From Samsung's persepctive we would recommend the following:
-
-      Listening to the fans to influence and direct the development and production of the S20FE has led to a more positive response than the S20.
-
-      However the increased battery life of the S20FE did not increase the sentiment significantly. This means either a larger improvement of the battery is needed or less focus in the marketing can be made on battery life. 
-
-      While the camera of the S20FE was recevied positively it was significanyly lower than that of the S20 but more importantly the iPhone12. This is counteracted by the much higher sentiment in price but is an area we would recommend that Samsung try to improve through marketing and R&D.
-
-      The global sentiment shows that Samsung's has a fairly neutral if not negative sentiment in places like Russia and the US where the iPhone is seen in a very positive way. Samsung should examine it's marketing and other factors to determine why sentiment is this way.  
 
 -->
+Twitter data useful
+Region 
 
-<!-- REMOVED SPEAKER NOTES
+- Twitter data provides up to date information for companies to analyse customer feedback
+- Data can provide useful information to guide product teams when analysed correctly
+- With the world map data, which can be broken down into more specific regions, we can see key areas that need to have more targeted marketing or improve marketing to increase the sentiment
 
-  The sentiment analsysis performed on all tweets shows that the extra development and improvements of the S20FE did lead to an increase in sentiments scores when compared to the S20 and iphone12.
-
-  Individual feature sentiment analysis demonstrated that while the overall sentiment was higher for the S20FE there were some features where there was a physical change to the device but no noticeable increase in sentiment.
-  This can be seen when examining the sentiment towards the battery where it has remained similar or the camera where the decreased physical performance over the S20 has led to a lower sentiment score.  
-
-  The feature sentiment analysis can help identify areas were Apple and Samsung need to examine the perceived value of a feature and determine if a larger physical improvement to the device is needed or if it is useful to develop or change a different feature which may lead to a more improved sentiment. 
-
-  The global sentiment analysis, which could be broken down into specific regions can help us to identify keys locations where the business can either improve brand awareness or brand perception.
-
--->
-
-**General**
-
-- Twitter data useful for sentiment analysis
-- Live feedback on product releases
 
 **Apple**
 
-- Analysing customer responses can improve future product sentiment
-- Positive in all features
-- Only ahead with 5G connectivity
-- Strong positive sentiment in Russian and America
-- Negative or low sentiment in Australia, Canada and South America
-- Feature R&D and targeted marketing required
+
+
 
 **Samsung**
-
-- Using customer opions to guide development was successful
-- Battery improvements went almost unoticed 
-- Camera change decreased sentiment
-- Positive sentiment in South America and Africa
-- Negative sentiment in Russia and American
-- Examintation of areas where Apple is seen more positively
+BTS
 
 <!--- End of Slide XX ------------------------------------------------------------------------------------------------------>
 
@@ -727,26 +668,21 @@ feature_sentiment_data %>%
 
 <!--- Slide XX ------------------------------------------------------------------------------------------------------------->
 
-## Further Analysis
+## Improvements & Further Study
 
 <!-- SPEAKER NOTES
 
-  Some key areas for improvements and further research include:
-
-    Utilising Google Maps API to have an improved region filter on the tweets so we could focus the collection of data
-
-    Examination for example of how many time in a tweet about iPhones is another device or manufacture mentioned either positive or negatively.
-
+  It would be useful to utilise the Google Maps API to have region filter on the tweets so we could focus the collection of data.
 
 
 -->
 
+**Improvements**
+
 - Google Maps API 
-- Look at mentions of Apple in Samsung and vice versa
+- Look at mentions of apple in samsung and vice versa
 - Examination of average income and sentiment by region
 - Increased number of tweets with more targeted dates before and after the release dates
-- Additional analysis of the sentiment by feature along with the actual cost of the changes in device could identify better R&D decisions
-
 
 <!--- End of Slide XX ------------------------------------------------------------------------------------------------------>
 
@@ -1052,7 +988,7 @@ SLIDE START
     # alternative hypothesis: two-sided
 
     #ANDERSON-DARLING normality test
-
+    
     library(nortest) #we need this library for this test
     ad.test(vals$s20)
     # data:  vals$s20
