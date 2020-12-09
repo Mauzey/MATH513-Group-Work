@@ -1,5 +1,6 @@
 ---
 title: "MATH513 Practical Presentation"
+subtitle: "Strategic Twitter Analysis: Samsung and Apple"
 author: "10570155, 10696253, 10701983"
 date: "10/12/2020"
 output:
@@ -38,13 +39,15 @@ OVERVIEW
 
 <!--- SPEAKER NOTES - WILL
 
-  Samsung and Apple were chosen as our competing businesses due to the recent release of their flagship phones, the S20FE and iPhone12. This meant we would have access to sufficient relevant data on Twitter to perform analysis on.
+  Hi, today we will be discussing the result from the strategic analysis of Twitter data. 
 
-  We chose to gather some extra tweets relating to the S20 to give us some comparable information for sentiment analysis and to determine if there was any improvement in sentiment from the S20 to the S20FE from the public. 
+  Samsung and Apple were chosen as our competing businesses due to the recent release of their flagship phones, the S20FE and iPhone12. This meant we would have access to sufficient relevant data on Twitter to perform analysis upon.
 
-  We utilised RStudio in combination with the rTweet package to extra and analyse the data from the Twitter Developer API
+  We chose to gather some extra tweets relating to the S20 to give us some comparable information for sentiment analysis and to determine if there was any improvement in sentiment from the S20 to the S20FE from the public's viewpoint. 
 
-  To allow us to work professionally and on various parts of the project as a group we decided to break up the code into sections and utilise GitHub to keep a track on the project.
+  We utilised RStudio in combination with the rTweet package to extract and analyse the data from the Twitter Developer API.
+
+  To allow us to work professionally and on various parts of the project as a group, we decided to break up the code into sections and utilise GitHub to keep track on the project.
 
 --->
 
@@ -77,17 +80,17 @@ knitr::include_graphics(c("./Images/Logos/apple_logo.png", "./Images/Logos/samsu
 
 <!--- SPEAKER NOTES: - WILL
   
-  Twitter provides its data through a number of APIs and after the Cambridge Analytica 'data breach', is one of the few social media platforms that has not limited the data provided through APIs, according to Dr. Wasim Ahmed from Newcastle University (2019).
+  Twitter provides its data through a number of APIs and after the Cambridge Analytica 'data breach', is one of the few social media platforms that has not limited the data provided through APIs (Ahemd, Dr. Wasim (2019))
   
-  Twitter data can provide insights into the general public's opinions and combined with the openness and the generous rate limiting of Twitter’s API, it can produce powerful results. (Michelle Young Chat Bots Life.com, 2017)
+  Twitter data can provide insights into the public's opinions and combined with the openness and the generous rate limiting of Twitter’s API, it can produce powerful results. (Young, Michelle (2017))
 
-  For our hastags, we looked to the Samsung Mobile page and identified that the hastags #GalaxyS20 and #GalaxyS20FE were the offical hashtags used by Samsung.
+  We came to the conclusion that it was better to use hashtags instead of pulling data from profiles. This was to ensure we would get a wide range of opinions for a fairer analysis of the public's sentiment.
+
+  For our hashtags, we looked to the Samsung Mobile page and identified that the hashtags #GalaxyS20 and #GalaxyS20FE were the offical hashtags used by Samsung.
   
-  We then looked for the same information from Apple but found that since the Twitter account was hacked in July (15h July 2020), Apple have not been keeping tweets on their Twitter page. (Swider, Matt (2020), TechRadar - https://www.techradar.com/news/twitter-hack-2020).
+  We then looked for the same information from Apple but found that since the Twitter account was hacked in July, Apple have not been keeping tweets on their Twitter page. (Swider, Matt (2020), TechRadar - https://www.techradar.com/news/twitter-hack-2020))
   
   We decided to look to the CEO of Apple, Tim Cook, as we thought he would most likely be using the offical hashtag as deemed by Apple's marketing team, which led us to the hashtag #iPhone12.
-  
-  We came to the conclusion that it was better to use hashtags instead of pulling data from profiles, either business or individual. This was to ensure we would get a wide range of opinions for a fairer analysis of the public's sentiment.
 
 --->
 
@@ -106,11 +109,13 @@ knitr::include_graphics(c("./Images/Logos/apple_logo.png", "./Images/Logos/samsu
 - Advanced filtering and queries
 - Generous Rate limiting
 
-**Hashtags**
+**Determining Hashtags**
 
-- @SamsungMobile - [https://twitter.com/SamsungMobile](https://twitter.com/SamsungMobile)
-- @Apple - [https://twitter.com/Apple](https://twitter.com/Apple) 
-- @tim_cook - [https://twitter.com/tim_cook](https://twitter.com/tim_cook)
+- @SamsungMobile <!-- [https://twitter.com/SamsungMobile](https://twitter.com/SamsungMobile)-->
+  - #GalaxyS20FE and #GalaxyS20
+- @Apple - <!--[https://twitter.com/Apple](https://twitter.com/Apple) -->
+- @tim_cook - <!-- [https://twitter.com/tim_cook](https://twitter.com/tim_cook) -->
+  - #iPhone12
 
 <!--- End of Slide 02 ------------------------------------------------------------------------------------------------------>
 
@@ -120,9 +125,61 @@ knitr::include_graphics(c("./Images/Logos/apple_logo.png", "./Images/Logos/samsu
 
 <!--- Slide 03 ------------------------------------------------------------------------------------------------------------->
 
+## Time Periods for Data Collection
+
+<!--- SPEAKER NOTES - Will
+
+  The normal twitter function allowed us to pull data from the last 6-9 days. We decided that just after the release date of the phones would be the best time to examine the public's opinion.
+
+  Due to the limitations of the general search, we utilised the full archive premium feature to pull tweets relating to the S20, seen here in red. 
+  
+  However, there was a mistake that led to the tweets being pulled a little earlier than the release date as seen by the red vertical line on the graph. 
+  
+  We leanrt from this and corrected our code and pulled as much data as we could for the other two phone usings the premium 30 day function.
+  
+  The 30 day limitation meant that the tweets we pulled are about 3 weeks after the release date for the S20FE, seen in green and 1 week after the iPhone seen in blue.
+  
+  From the graph, you can see that we managed to gather a reasonable amount of tweets and retweets over the month of November for both these phones.
+
+--->
+
+```{r echo=FALSE, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4.5}
+tweets$product <- as.factor(tweets$product)  # Factorize product column
+
+ tweets %>% group_by(product, is_retweet) %>%
+  ts_plot('days', trim = 1) +
+  labs(x = NULL, y = NULL,
+       title = "Frequency of Twitter Statuses",
+       subtitle = "Twitter status counts aggregated using 1-day intervals",
+       caption = "Source: Data collected from Twitter's REST API via rtweet",
+       color = "Product",
+       linetype = "Retweet") +
+  theme_bw() +
+  theme(plot.title = element_text(face = 'bold'),
+        strip.text.y = element_blank()) + 
+  geom_vline(xintercept = as.POSIXct(as.Date("2020-03-06")), colour = "turquoise") +
+  geom_vline(xintercept = as.POSIXct(as.Date("2020-10-02")), colour = "mediumpurple1") +
+  geom_vline(xintercept = as.POSIXct(as.Date("2020-10-23")), colour = "lightgoldenrod3") +
+  facet_grid(product ~ .) +
+  scale_color_manual(values = c("Galaxy S20" = "turquoise",
+                               "Galaxy S20 FE" = "mediumpurple1",
+                               "iPhone12" = "lightgoldenrod3"))
+```
+
+<!--- End of Slide 03 ------------------------------------------------------------------------------------------------------>
+
+
+
+
+
+
+<!--- Slide 04 ------------------------------------------------------------------------------------------------------------->
+
 ## Data Cleaning and Feature Engineering
 
 <!--- SPEAKER NOTES - Alex
+
+  After collecting the data, we cleaned it and perform some feature engineering to enable better analysis. 
 
   - We removed duplicate entries for both the tweet and user data
     - Duplicate tweets were collected due to overlapping data collection periods
@@ -148,11 +205,9 @@ knitr::include_graphics(c("./Images/Logos/apple_logo.png", "./Images/Logos/samsu
     - Whether the tweet text identified it as spam, through the use of keywords
     - ...and whether the author of the tweet had been previously marked as a bot
   
-  Due to glitches in rtweet:
-  - We had to manually extract the hash-tags from the tweet text due to an issue with rtweet
-  
-  - We extracted product features from each of the tweet's text due to a glitch in rtweet
-    - These features were: The product's Display, Camera, Battery, Price, and 5G Capabilities
+  Due to glitches in the rtweet package:
+  - We had to manually extract the hash-tags and features from each of the tweet's
+    - These features were: The product's Display, Camera, Battery, Price, and 5G capabilities
 
 --->
 
@@ -171,29 +226,31 @@ knitr::include_graphics(c("./Images/Logos/apple_logo.png", "./Images/Logos/samsu
 - Product features were extracted from the tweet text
   + Display, Battery, Camera, Price, and 5G Capability
 
-<!--- End of Slide 03 ------------------------------------------------------------------------------------------------------>
+<!--- End of Slide 04 ------------------------------------------------------------------------------------------------------>
 
 
 
 
 
+<!--- Slide 05 ------------------------------------------------------------------------------------------------------------->
 
-<!--- Slide 04 ------------------------------------------------------------------------------------------------------------->
 
-## Summary of Collected Data
+## Summary of Data 
 
 <!--- SPEAKER NOTES- ALEX
 
-  - After data cleaning, we were left with about 74,000 tweets and 5 extracted features
-  
+  - From the tweets we had left 
+
   - Table 1 shows a summary of the collected tweet data grouped by product:
   
     - There were less tweets for the Galaxy S20 than the S20 FE and iPhone 12.
       - This is due to the constraints imposed by the Twitter API rate limits
     
-    - 15-20% of the S20 FE and iPhone12 tweets were marked as spam, compared to the 3% for the S20
-      - This is perhaps due to the spammers focusing their efforts on newer, more relevant products in order to reach
-        a wider audience
+    - 13-19% of the S20 FE and iPhone12 tweets were marked as spam, compared to the 3% for the S20
+      
+#### This is perhaps due to our tweets for the S20 being extracted before the release date.
+
+      - This is perhaps due to the spammers focusing their efforts on newer, more relevant products in order to reach a wider audience
     
     - Only 7% of iPhone12 tweets contained mentions of the chosen features, compared to roughly 20% for the S20 and S20 FE
   
@@ -234,55 +291,6 @@ users_summary <- users %>%
 
 `r kable(users_summary, caption = "Summary of User Data")`
 
-<!--- End of Slide 04 ------------------------------------------------------------------------------------------------------>
-
-
-
-
-
-<!--- Slide 05 ------------------------------------------------------------------------------------------------------------->
-
-## Time Periods for Data Collection
-
-<!--- SPEAKER NOTES - Will
-
-  The normal twitter function allowed us to pull data from the last 6-9 days. We decided that just after the release date of the phones would be the best time to examine the public's opinion.
-
-  Due to the limitations of the general search, we utilised the full archive premium feature to pull tweets relating to the S20, seen here in red. 
-  
-  However, there was a mistake that led to the tweets being pulled a little earlier than the release date as seen by the red vertical line on the graph. 
-  
-  We leanrt from this and corrected our code and pulled as much data as we could for the other two phone using the premium 30 day function.
-  
-  The 30 day limitation meant that the tweets we pulled are about 3 weeks after the release date for the S20FE, seen in green and 1 week after the iPhone seen in blue.
-  
-  From the graph, you can see that we managed to gather a reasonable amount of tweets over the month of November for both these phones.
-
---->
-
-```{r echo=FALSE, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4.5}
-tweets$product <- as.factor(tweets$product)  # Factorize product column
-
- tweets %>% group_by(product, is_retweet) %>%
-  ts_plot('days', trim = 1) +
-  labs(x = NULL, y = NULL,
-       title = "Frequency of Twitter Statuses",
-       subtitle = "Twitter status counts aggregated using 1-day intervals",
-       caption = "Source: Data collected from Twitter's REST API via rtweet",
-       color = "Product",
-       linetype = "Retweet") +
-  theme_bw() +
-  theme(plot.title = element_text(face = 'bold'),
-        strip.text.y = element_blank()) + 
-  geom_vline(xintercept = as.POSIXct(as.Date("2020-03-06")), colour = "turquoise") +
-  geom_vline(xintercept = as.POSIXct(as.Date("2020-10-02")), colour = "mediumpurple1") +
-  geom_vline(xintercept = as.POSIXct(as.Date("2020-10-23")), colour = "lightgoldenrod3") +
-  facet_grid(product ~ .) +
-  scale_color_manual(values = c("Galaxy S20" = "turquoise",
-                               "Galaxy S20 FE" = "mediumpurple1",
-                               "iPhone12" = "lightgoldenrod3"))
-```
-
 <!--- End of Slide 05 ------------------------------------------------------------------------------------------------------>
 
 
@@ -295,10 +303,13 @@ tweets$product <- as.factor(tweets$product)  # Factorize product column
 
 <!-- SPEAKER NOTES - Tania
 
-  We decided to perform sentiment analysis both generally for each model and 
-  for 5 most often mentioned features: Camera, 5G, Display, Price and Battery.
+  We decided to perform sentiment analysis both generally for each model 
 
-  For sentiment analysis, we used the 'sentimentr' package which calculates average sentiment for a group of sentences instead of calculating sentiment scores for individual words. This was more suitable for our analysis since we're analysing the feedback in the form of tweets where each tweet consists of 1 or more whole sentences on each feature for each of the 3 products.
+###! MAYBE LEAVE THIS TILL NEXT SLIDE WHERE IT IS ON SCREEN
+  and 
+  for 5 of the most often mentioned features: Camera, 5G, Display, Price and Battery.
+
+  For sentiment analysis, we used the 'sentimentr' package which calculates average sentiment for a group of sentences instead for individual words. This was more suitable for our analysis since we're analysing the feedback in the form of tweets where each tweet consists of 1 or more whole sentences on each feature for each of the 3 products.
 
   This slide demonstrates the overall sentiment for each product. 
 
@@ -436,10 +447,14 @@ feature_sentiment %>%
   This analysis shows us three main things:
     that our data set may be too small to cover the sentiment globally as evidenced by the white regions seen on the maps which indicates no data for that region
 
-    where the colours are lighter we may need to improve marketing and brand image
+    where the colours are lighter, ie. negative sentiment, we may need to improve marketing and brand image
     
-    where there are darker areas for competitors of a certain product, extra attention should be taken in those regions to improve brand awareness and public sentiment   
+    where there are darker areas for competitors of a certain product i.e. higher positive sentiment, extra attention should be taken in those regions to improve brand awareness and public sentiment   
 
+-->
+
+<!-- EXTRA SPEAKER NOTES 
+  Add in example of analysis
 -->
 
 ```{r include=FALSE}
@@ -863,31 +878,6 @@ END OF ADDITIONAL/REMOVED SLIDES -->
 
 
 <!--- Slide XX ------------------------------------------------------------------------------------------------------------->
-
-## Improvements & Further Study
-
-<!-- SPEAKER NOTES
-
-  It would be useful to utilise the Google Maps API to have region filter on the tweets so we could focus the collection of data.
-
-
--->
-
-**Improvements**
-
-- Google Maps API 
-- Look at mentions of apple in samsung and vice versa
-- Examination of average income and sentiment by region
-- Increased number of tweets with more targeted dates before and after the release dates
-
-<!--- End of Slide XX ------------------------------------------------------------------------------------------------------>
-
-
-
-
-
-<!--- Slide XX ------------------------------------------------------------------------------------------------------------->
-
 ## Conclusions
 
 <!-- SPEAKER NOTES
@@ -915,6 +905,30 @@ BTS
 
 <!--- Slide XX ------------------------------------------------------------------------------------------------------------->
 
+## Improvements & Further Study
+
+<!-- SPEAKER NOTES
+
+  It would be useful to utilise the Google Maps API to have region filter on the tweets so we could focus the collection of data.
+
+
+-->
+
+**Improvements**
+
+- Google Maps API 
+- Look at mentions of apple in samsung and vice versa
+- Examination of average income and sentiment by region
+- Increased number of tweets with more targeted dates before and after the release dates
+
+<!--- End of Slide XX ------------------------------------------------------------------------------------------------------>
+
+
+
+
+
+<!--- Slide XX ------------------------------------------------------------------------------------------------------------->
+
 ## References
 
 - Ahmed, Wasim (2019). *Using Twitter as a data source: an overview of social media research tools* Available at: [https://blogs.lse.ac.uk/impactofsocialsciences/2019/06/18/using-twitter-as-a-data-source-an-overview-of-social-media-research-tools-2019/](https://blogs.lse.ac.uk/impactofsocialsciences/2019/06/18/using-twitter-as-a-data-source-an-overview-of-social-media-research-tools-2019/) (Accessed: 07 December 2020)
@@ -932,6 +946,8 @@ BTS
 - RStudio (2020). *R Markdown Cheat Sheet* Available at: [https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf](https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf) (Accessed: 10 October 2020)
 
 - RStudio (2014). *R Markdown Reference Guide* Available at: [https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf](https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf) (Accessed: 10 October 2020)
+
+- Swider, Matt (2020). *Twitter hack exploits Apple, Elon Musk and other prominent accounts* Available at: [https://www.techradar.com/news/twitter-hack-2020](https://www.techradar.com/news/twitter-hack-2020) (Accessed: 10 October 2020
 
 - Twitter (2020). *API Documentation* Available at: [https://developer.twitter.com/en/docs/twitter-api](https://developer.twitter.com/en/docs/twitter-api) (Accessed: 10 October 2020)
 
