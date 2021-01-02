@@ -3,15 +3,24 @@ library(readr)
 library(tibble)
 library(dplyr)
 
+# create-dataset.R
+#
+#   Using the provided .txt files:
+#     * Extracts speech date and location from file name
+#     * Extracts speech content from file
+#     * Creates tibble of this information
+#     * Exports data as .csv to './data/trump-speech-data.csv'
+#
+
 for (file in list.files(path="./data/raw_data", pattern='*.txt', full.names=T)){
-  filename <- strsplit(file, "[./]")[[1]][5]  # extract filename from path
+  filename <- strsplit(file, "[./]")[[1]][5]  # extract file name from path
   
   
-  location <- strsplit(filename, split='Sep')[[1]][1]  # extract location from filename
+  location <- strsplit(filename, split='Sep')[[1]][1]  # extract location from file name
   
   
-  raw_date <- strsplit(filename, split='Sep')[[1]][2]  # extract raw date from filename
-  raw_date <- paste("09_", raw_date, sep="", collapse=NULL)  # add september to the raw date
+  raw_date <- strsplit(filename, split='Sep')[[1]][2]  # extract raw date from file name
+  raw_date <- paste("09_", raw_date, sep="", collapse=NULL)  # add September to the raw date
   date <- as.Date(raw_date, "%m_%d_%Y")  # format as datetime
   
   
