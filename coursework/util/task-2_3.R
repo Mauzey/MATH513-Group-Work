@@ -14,7 +14,7 @@ rm(lib)
 #   the weight for commonly used words, and increases the weight for words that are not used very much in a collection of 
 #   documents.
 
-trump_data <- read_csv('./data/trump-speech-data.csv') %>%
+trump_data <- read_csv('../data/trump-speech-data.csv') %>%
   subset(select = -c(X1))
 
 data('stop_words')
