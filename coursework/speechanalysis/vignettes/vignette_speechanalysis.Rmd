@@ -1,0 +1,58 @@
+---
+title: "The speechanalysis Package"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{vignette_speechanalysis}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+|       **Authors**: 10570155, 10696253, 10701983
+|       **Date**: 14th January 2021
+
+```{r setup, include=FALSE}
+libs <- c('speechanalysis', 'knitr')
+
+invisible(lapply(libs, library, character.only = TRUE))
+```
+
+### Usage:
+```{r, results=FALSE}
+library(speechanalysis)
+```
+
+## Donald Trump Speech Data
+
+The `speechanalysis` package comes with an example dataset which can be used to explore the functionality provided. It contains 
+data which details 10 speeches made by President Donald Trump throughout September 2020.
+
+This data can be accessed like so:
+
+```{r}
+trump_speeches
+```
+
+## The Change in Word Frequency Over Time
+
+...
+
+## Frequency of Words per Speech
+
+We can use the `plot_tf_idf(df, n)` function, _where `df` is the data frame to apply to and `n` is the number of 'top' words to 
+show,_ to plot a graphical summary of the most frequent words which occur in each speech. This function makes use of the **tf-idf 
+index** which computes the frequency of a word, adjusted for how rarely it is used.
+
+```{r, warning=FALSE, message=FALSE, fig.width=12, fig.height=8, out.width="98%"}
+plot_tf_idf(trump_speeches, 10)
+```
+
+## Zipf's Law
+
+...
