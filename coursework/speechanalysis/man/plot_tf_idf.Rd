@@ -4,12 +4,12 @@
 \alias{plot_tf_idf}
 \title{Most Frequent Words per Speech, by tf-idf Index}
 \usage{
-plot_tf_idf(df, n)
+plot_tf_idf(df, n_words = 10)
 }
 \arguments{
 \item{df}{A dataframe with the following columns: 'speech' <chr>, 'location' <chr>, 'date' <date>}
 
-\item{n}{<int> The number of 'top' values to plot}
+\item{n_words}{<int> The number of 'top' values to plot}
 }
 \description{
 Produces a plot of the most frequent words used (in descending order) during a collection of speeches. The plot is faceted by
