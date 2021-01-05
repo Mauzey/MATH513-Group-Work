@@ -44,14 +44,14 @@ plot_tf_idf <- function(df, n_words = 10) {
 
     ggplot(aes(x = word, y = tf_idf, fill = location)) +
       geom_col(show.legend = FALSE) +
-      facet_wrap(~location, scales = 'free_y') +
+      facet_wrap(~location, scales = 'free_y', ncol = 2) +
       coord_flip() +
       scale_x_reordered() +
       scale_y_continuous(breaks = c(0, 0.005, 0.01)) +
 
       labs(x = NULL, y = "Frequency (tf-idf Index)",
            title = "Word Frequencies by Speech",
-           subtitle = paste0("Data grouped by location; showing top ", n_words, " words per speech")) +
+           subtitle = paste0("Data grouped by location; showing top ", n_words, " word(s) per speech (including ties)")) +
       theme(axis.text = element_text(size = 12))
 
   return(plot)
