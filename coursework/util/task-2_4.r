@@ -46,3 +46,5 @@ law_data %>%
   scale_x_log10() +
   scale_y_log10(labels = comma) +
   geom_abline(intercept = lin_reg[1], slope = round(lin_reg[2], digits = 0))
+
+rm(lin_reg)
