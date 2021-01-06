@@ -2,7 +2,7 @@
 # Work out tf, idf and tf_idf indexes
 #
 
-lib <- c('readr', 'dplyr', 'tidytext', 'ggplot2')
+lib <- c('readr', 'dplyr', 'tidytext', 'ggplot2', 'scales')
 lapply(lib, library, character.only = T)
 rm(lib)
 
@@ -25,6 +25,7 @@ law_data <- trump_words %>%
 
 
 # PLOTTING THE ZIPF'S LAW
+require(scales)
 law_data %>% 
   ggplot(aes(x = rank, y = tf, color = location)) +
   geom_line() +
@@ -32,8 +33,7 @@ law_data %>%
        title = "Zipf's Law for Donald Trump's Rallies Data",
        color = "Location") +
   scale_x_log10() +
-  scale_y_log10() 
-
+  scale_y_log10(labels = comma)
 
 lin_reg = coef(lm(log(rank) ~ log(tf), data = law_data))
 #ADDING THE LINEAR REGRESSION - NOT WORKING YET BUT I'LL DO MY MAGIC
@@ -44,6 +44,5 @@ law_data %>%
        title = "Zipf's Law for Donald Trump's Rallies Data",
        color = "Location") +
   scale_x_log10() +
-  scale_y_log10() +
-  geom_abline(intercept = lin_reg[1], slope = lin_reg[2])
-  # +geom_smooth(aes(x = rank, y = tf), method='lm', se = FALSE)
+  scale_y_log10(labels = comma) +
+  geom_abline(intercept = lin_reg[1], slope = round(lin_reg[2], digits = 0))
