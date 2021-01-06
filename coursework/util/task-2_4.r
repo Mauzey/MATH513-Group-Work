@@ -34,6 +34,8 @@ law_data %>%
   scale_x_log10() +
   scale_y_log10() 
 
+
+lin_reg = coef(lm(log(rank) ~ log(tf), data = law_data))
 #ADDING THE LINEAR REGRESSION - NOT WORKING YET BUT I'LL DO MY MAGIC
 law_data %>% 
   ggplot(aes(x = rank, y = tf, color = location)) +
@@ -42,5 +44,6 @@ law_data %>%
        title = "Zipf's Law for Donald Trump's Rallies Data",
        color = "Location") +
   scale_x_log10() +
-  scale_y_log10() 
+  scale_y_log10() +
+  geom_abline(intercept = lin_reg[1], slope = lin_reg[2])
   # +geom_smooth(aes(x = rank, y = tf), method='lm', se = FALSE)
