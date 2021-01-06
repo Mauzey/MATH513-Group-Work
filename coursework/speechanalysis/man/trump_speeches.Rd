@@ -13,7 +13,7 @@ A data.frame with 10 rows and 3 columns:
 }
 }
 \source{
-???
+MATH513 Assessment Information - Plymouth University
 }
 \usage{
 trump_speeches
