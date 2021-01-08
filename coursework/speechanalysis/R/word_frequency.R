@@ -1,43 +1,42 @@
-# Import packages used
-
-lib <- c('tidyverse', 'tidytext', 'scales', 'lubridate')
-lapply(lib, library, character.only = T)
-rm(lib)
-
-words_to_graph <- c("america", "biden", "China", "virus", "covid", "black")
-data_set_path <- '../data/trump-speech-data.csv'
-
 #'
 #' Graph of word usage of a data set
 #'
 #' This function provides a graph using ggplt2 of a data set containing speeches.
 #'
-#' @param data_set_path the dataset in csv form with a column called speeches, location and date
+#' @param df A dataframe with the following columns: 'speech' <chr>, 'location' <chr>, 'date' <date>
 #' @param words A collection of words for which the user wants graphs plotted
 #'
-#' @return A named vector of numerical summaries:
+#' @author 10701983 \email{10701983}
+#'
+#' @import tidyverse tidytext scales lubridate
+#'
+#' @export
+#'
+#' @examples
+#' word_frequency(trump_speeches, c("america", "biden", "China"))
+#'
+#' @return A named vector of a plot:
 #' \describe{
-#' \item{M}{The mean of the data.}
-#' \item{M_TRIMMED}{The trimmed mean of the data.}
+#' \item{plot}{The data plotted in a graph.}
 #' }
 #'
 
-word_plots <- function(data_set_path, words_to_graph){
+word_frequency <- function(df, words_to_graph){
 
-    # STAGE 1 - Prepare data --------------------------------------------------
+  # STAGE 1 - Prepare data --------------------------------------------------
 
   # Read in data
   trump_data <- read_csv(data_set_path) %>%
-                subset(select = -c(X1))
+    subset(select = -c(X1))
 
 
   # Tokenize the dialogue, splitting each sentence in separate words
   trump_data_words <-  trump_data %>%
-                        select(speech, location, date) %>%
-                        unnest_tokens(word, speech) %>%
-                        count(date, word) %>%
-                        group_by(date) %>%
-                        mutate(p = n / sum(n))
+    select(speech, location, date) %>%
+    unnest_tokens(word, speech) %>%
+    count(date, word) %>%
+    group_by(date) %>%
+    mutate(p = n / sum(n))
 
   # Remove stop words
   trump_data_words <- trump_data_words %>% anti_join(tidytext::stop_words)
@@ -54,21 +53,21 @@ word_plots <- function(data_set_path, words_to_graph){
 
   words_to_graph <- lapply(words_to_graph, tolower)
 
-  
+
   # STAGE 2 - Filter the data set by the words requested --------------------
 
   trump_data_words_filtered <- trump_data_words %>% filter(word %in% words_to_graph)
 
   trump_data_words_filtered <- trump_data_words_filtered %>%
-      mutate(
-        date_label = paste(day(date), month(date, label= TRUE, abbr = TRUE), sep="/")
-      )
-  
-  
+    mutate(
+      date_label = paste(day(date), month(date, label= TRUE, abbr = TRUE), sep="/")
+    )
+
+
   # STAGE 3 - Plot graphs ---------------------------------------------------
 
   # Plot the contents of trump_data_words using ggplot2
-  ggplot(trump_data_words_filtered,
+  plot <- ggplot(trump_data_words_filtered,
          aes(x = date, y = p, colour = word)) +
     geom_point() +
     geom_text(hjust = 0, nudge_x = 0.25, aes(label = date_label)) +
@@ -85,5 +84,5 @@ word_plots <- function(data_set_path, words_to_graph){
 
 
   # Return the graph
-  return(list(plot = graph))
+  return(plot)
 }
