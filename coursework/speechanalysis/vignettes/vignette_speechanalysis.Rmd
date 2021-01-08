@@ -41,7 +41,12 @@ trump_speeches
 
 ## The Change in Word Frequency Over Time
 
-...
+We can use the `word_frequency(df, c)` function, _where `df` is the data frame to apply to and `c` is a collection of words to check and plot
+,_ to plot a graphical summary of the frequency of words over time from the speeches.
+
+```{r, warning=FALSE, message=FALSE, fig.width=10, fig.height=18, out.width="98%"}
+word_frequency(trump_speeches, c("america", "biden", "China"))
+```
 
 ## Frequency of Words per Speech
 
