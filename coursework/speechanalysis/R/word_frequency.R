@@ -22,15 +22,15 @@
 #'
 
 
-lib <- c('readr', 'dplyr', 'tidytext', 'ggplot2', 'scales', 'lubridate')
-lapply(lib, library, character.only = T)
-rm(lib)
-
-#importing the data
-trump_data <- read_csv('../data/trump-speech-data.csv') %>%
-  subset(select = -c(X1))
-
-words_to_graph = c("america")
+# lib <- c('readr', 'dplyr', 'tidytext', 'ggplot2', 'scales', 'lubridate')
+# lapply(lib, library, character.only = T)
+# rm(lib)
+#
+# #importing the data
+# trump_data <- read_csv('../data/trump-speech-data.csv') %>%
+#   subset(select = -c(X1))
+#
+# words_to_graph = c("america")
 
 word_frequency <- function(df, words_to_graph){
 
@@ -81,7 +81,8 @@ word_frequency <- function(df, words_to_graph){
          aes(x = date, y = p, colour = word)) +
     geom_point() +
     geom_text(hjust = 0, nudge_x = 0.25, aes(label = date_label)) +
-    geom_smooth(model=lm) +
+    geom_smooth() +
+    geom_smooth(method=lm, se=FALSE, col="black") +
     labs(x = "Rally Date",
          y = "Percentage of words",
          title = "Change of word frequency in Donald Trump's rallies in September 2020") +
@@ -90,9 +91,9 @@ word_frequency <- function(df, words_to_graph){
                  limits = c(as_date("2020-09-02")+0.5,
                             as_date("2020-09-24")-0.5)) +
     scale_y_continuous(labels = scales::percent_format(accuracy = 0.1)) +
-    theme(legend.position = "none")+
-    geom_abline(intercept = lin_reg[1], slope = round(lin_reg[2], digits = 0))
+    theme(legend.position = "none")
 
+  plot
 
 
   # Return the graph
