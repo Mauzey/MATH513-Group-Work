@@ -7,7 +7,9 @@
 #' @param df A dataframe with the following columns: 'speech' <chr>, 'location' <chr>, 'date' <date>
 #' @param n_words <int> The number of 'top' values to plot
 #'
-#' @author Alex Mounsey \email{alex.mounsey@@postgrad.plymouth.ac.uk}
+#' @return <ggplot> A plot of the most frequent words used
+#'
+#' @author 1073945 \email{1073945}
 #'
 #' @import dplyr tidytext ggplot2
 #'
