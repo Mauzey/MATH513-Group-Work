@@ -26,8 +26,7 @@ word_frequency <- function(df, words_to_graph){
   # STAGE 1 - Prepare data --------------------------------------------------
 
   # Read in data
-  trump_data <- read_csv(data_set_path) %>%
-    subset(select = -c(X1))
+  trump_data <- trump_speeches
 
 
   # Tokenize the dialogue, splitting each sentence in separate words
