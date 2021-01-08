@@ -21,13 +21,23 @@
 #' }
 #'
 
+
+lib <- c('readr', 'dplyr', 'tidytext', 'ggplot2', 'scales', 'lubridate')
+lapply(lib, library, character.only = T)
+rm(lib)
+
+#importing the data
+trump_data <- read_csv('../data/trump-speech-data.csv') %>%
+  subset(select = -c(X1))
+
+words_to_graph = c("america")
+
 word_frequency <- function(df, words_to_graph){
 
   # STAGE 1 - Prepare data --------------------------------------------------
 
   # Read in data
   trump_data <- trump_speeches
-
 
   # Tokenize the dialogue, splitting each sentence in separate words
   trump_data_words <-  trump_data %>%
@@ -62,6 +72,7 @@ word_frequency <- function(df, words_to_graph){
       date_label = paste(day(date), month(date, label= TRUE, abbr = TRUE), sep="/")
     )
 
+  lin_reg = coef(lm(date ~ p, data = trump_data_words_filtered))
 
   # STAGE 3 - Plot graphs ---------------------------------------------------
 
@@ -79,7 +90,9 @@ word_frequency <- function(df, words_to_graph){
                  limits = c(as_date("2020-09-02")+0.5,
                             as_date("2020-09-24")-0.5)) +
     scale_y_continuous(labels = scales::percent_format(accuracy = 0.1)) +
-    theme(legend.position = "none")
+    theme(legend.position = "none")+
+    geom_abline(intercept = lin_reg[1], slope = round(lin_reg[2], digits = 0))
+
 
 
   # Return the graph
