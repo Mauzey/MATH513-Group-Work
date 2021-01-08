@@ -3,7 +3,9 @@ Title: A Package to Provide Graphical Summaries of Speech Data
 Version: 0.0.0.9000
 Date: 2021-01-14
 Authors@R: c(
-      person("Alex", "Mounsey", email = "alex.mounsey@postgrad.plymouth.ac.uk", role = c("aut", "cre"))
+      person("10696253", "10696253", email = "10696253@postgrad.plymouth.ac.uk", role = c("aut", "cre")),
+      person("10701983", "10701983", email = "10701983@postgrad.plymouth.ac.uk", role = c("aut")),
+      person("10570155", "10570155", email = "10570155@postgrad.plymouth.ac.uk", role = c("aut"))
     )
 Description: Provides a number of functions which produce graphical summaries of speech data. An example dataset is provided, 
     which consists of 10 speeches made by Donald Trump throughout September 2020.
@@ -14,7 +16,7 @@ Roxygen: list(markdown = TRUE)
 RogygenNote: 7.1.1
 Depends:
   R (>= 2.10)
-Imports: dplyr, tidytext, ggplot2
+Imports: tidyverse, tidytext, lubridate, scales
 RoxygenNote: 7.1.1
 Suggests: 
     knitr,

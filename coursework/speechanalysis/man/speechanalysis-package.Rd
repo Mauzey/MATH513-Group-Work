@@ -10,7 +10,13 @@ Provides a number of functions which produce graphical summaries of speech data.
     which consists of 10 speeches made by Donald Trump throughout September 2020.
 }
 \author{
-\strong{Maintainer}: Alex Mounsey \email{alex.mounsey@postgrad.plymouth.ac.uk}
+\strong{Maintainer}: 10696253 10696253 \email{10696253@postgrad.plymouth.ac.uk}
+
+Authors:
+\itemize{
+  \item 10701983 10701983 \email{10701983@postgrad.plymouth.ac.uk}
+  \item 10570155 10570155 \email{10570155@postgrad.plymouth.ac.uk}
+}
 
 }
 \keyword{internal}
