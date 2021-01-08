@@ -3,6 +3,13 @@ library(dplyr)
 library(themes)
 library(gganimate)
 
+#add this when knitting the vignette
+# library(devtools)
+# library(usethis)
+# library(roxygen2)
+# document()
+# install()
+# load_all()
 
 word_count <- read.delim('../data/pl_50k.txt', header = FALSE, sep = " ", dec = ".")# Data frame containing words and their frequency 
 
