@@ -26,17 +26,18 @@ law_data <- trump_words %>%
 
 # PLOTTING THE ZIPF'S LAW
 require(scales)
-law_data %>% 
-  ggplot(aes(x = rank, y = tf, color = location)) +
-  geom_line() +
-  labs(x = "Word rank", y = "Term frequencey (tf)", 
-       title = "Zipf's Law for Donald Trump's Rallies Data",
-       color = "Location") +
-  scale_x_log10() +
-  scale_y_log10(labels = comma)
-
+# law_data %>% 
+#   ggplot(aes(x = rank, y = tf, color = location)) +
+#   geom_line() +
+#   labs(x = "Word rank", y = "Term frequencey (tf)", 
+#        title = "Zipf's Law for Donald Trump's Rallies Data",
+#        color = "Location") +
+#   scale_x_log10() +
+#   scale_y_log10(labels = comma)
+# 
 lin_reg = coef(lm(log(rank) ~ log(tf), data = law_data))
-#ADDING THE LINEAR REGRESSION - NOT WORKING YET BUT I'LL DO MY MAGIC
+
+#ADDING THE LINEAR REGRESSION
 law_data %>% 
   ggplot(aes(x = rank, y = tf, color = location)) +
   geom_line() +
@@ -49,7 +50,12 @@ law_data %>%
 
 rm(lin_reg)
 
+#CHECKING WITH REAL ZIPF'S LAW
+word_count <- law_data %>%
+  mutate(word = factor(word, levels = word),
+         zipfs_freq = ifelse(rank == 1, count, first(count) / rank^alpha))
 
 #CHECKING THE TOP FREQUENT WORDS FOR TRUMP'S SPEECH AND THEIR TF
 data('stop_words')
 new_law <- anti_join(law_data, stop_words)
+new_land_2 <- new_land %>% group_by(rank) %>% arrange(rank) %>%group_by(location)
