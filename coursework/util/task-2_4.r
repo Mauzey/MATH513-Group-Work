@@ -48,3 +48,8 @@ law_data %>%
   geom_abline(intercept = lin_reg[1], slope = round(lin_reg[2], digits = 0))
 
 rm(lin_reg)
+
+
+#CHECKING THE TOP FREQUENT WORDS FOR TRUMP'S SPEECH AND THEIR TF
+data('stop_words')
+new_law <- anti_join(law_data, stop_words)
