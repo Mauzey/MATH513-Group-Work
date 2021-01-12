@@ -24,7 +24,7 @@ invisible(lapply(libs, library, character.only = TRUE))
 ```
 
 ### Usage:
-```{r, results=FALSE}
+```{r usage, results=FALSE}
 library(speechanalysis)
 ```
 
@@ -35,18 +35,51 @@ Trump throughout September 2020.
 
 The dataset can be accessed like so:
 
-```{r}
+```{r trump_speech_data}
 trump_speeches
 ```
+
+The speeches span from the 03/09/2020 to 22/09/2020 and take place in the following locations: 
+
+| Date     | City          | State          | Length of Speech   | Election Result | Nearest Golf Course |
+|----------|---------------|----------------|--------------------|-----------------|---------------------|
+| 03/09/20 | Latrobe       | Pennsylvania   | 01:31:29 - 1.52hrs | Biden           | 2.2mi - 4mins       |
+| 08/09/20 | Winston-Salem | North Carolina | 01:13:55 - 1.23hrs | Trump           | 3.1mi - 7mins       |
+| 10/09/20 | Freeland      | Michigan       | 01:21:06 - 1.35hrs | Biden           | 4.7mi - 8mins       |
+| 12/09/20 | Minden        | Nevada         | 01:32:01 - 1.53hrs | Biden           | 7.2mi - 13mins      |
+| 13/09/20 | Henderson     | Nevada         | 01:06:44 - 1.11hrs | Biden           | 4.7mi - 11mins      |
+| 17/09/20 | Mosinee       | Wisconsin      | 01:32:36 - 1.54hrs | Biden           | 0.9mi - 4mins       |
+| 18/09/20 | Bemidji       | Minnesota      | 01:48:20 - 1.81hrs | Biden           | 7.5mi - 14mins      |
+| 19/09/20 | Fayetteville  | North Carolina | 01:48:40 - 1.81hrs | Trump           | 9.1mi - 14mins      |
+| 21/09/20 | Vandalia      | Ohio           | 01:05:53 - 1.10hrs | Trump           | 4.4mi - 11mins      |
+| 22/09/20 | Pittsburgh    | Pennsylvania   | 01:29:51 - 1.50hrs | Biden           | 8.1mi - 10mins      |
+
+Average legth of the speeches was 01:24:04 - 1.35hrs.
+
+Average time to nearest golfcourse from the airport was 9.6 mins at a distance of 5.19 miles.
+
+Of the 10 places in the dataset only 3 of them ended up being won by Trump in the 2020 America Presidential Election.
+
+# ```{r}
+# date <- c("03/09/20","08/09/20", "10/09/20", "12/09/20", "13/09/20", "17/09/20", "18/09/20", "19/09/20", "21/09/20", "22/09/20" )
+# city <- c("Latrobe", "Winston-Salem", "Freeland", "Minden", "Henderson", "Mosinee", "Bemidji", "Fayetteville", "Vandalia", "Pittsburgh")
+# state <- c("Pennsylvania", "North Carolina", "Michigan", "Nevada", "Nevada", "Wisconsin", "Minnesota", "North Carolina", "Ohio", "Pennsylvania")
+# Length <- c("01:31:29 - 1.52hrs", "01:13:55 - 1.23hrs", "01:21:06 - 1.35hrs", "01:32:01 - 1.53hrs 01:06:44 - 1.11hrs", "01:32:36 - 1.54hrs", "01:48:20 - 1.81hrs", "01:48:40 - 1.81hrs", "01:05:53 - 1.10hrs", "01:29:51 - 1.50hrs")
+# df_speech_stats <- (date, city, state, length)
+# ```
+
 
 ## The Change in Word Frequency Over Time
 
 We can use the `word_frequency(df, c)` function, _where `df` is the data frame to apply to and `c` is a collection of words to check and plot
 ,_ to plot a graphical summary of the frequency of words over time from the speeches.
 
-```{r, warning=FALSE, message=FALSE, fig.width=10, fig.height=6, out.width="98%"}
-word_frequency(trump_speeches, c("america", "biden", "China"))
+```{r word_frequency_over_time, warning=FALSE, message=FALSE, fig.width=10, fig.height=6, out.width="98%"}
+word_frequency(trump_speeches, c("virus", "biden", "china", "president", "economy","jobs"))
 ```
+
+We examined multiple words used throuhg out Trump's speeches.
+
 
 ## Frequency of Words per Speech
 
@@ -54,10 +87,15 @@ We can use the `plot_tf_idf(df, n)` function, _where `df` is the data frame to a
 show,_ to plot a graphical summary of the most frequent words which occur in each speech. This function makes use of the **tf-idf 
 index** which computes the frequency of a word, adjusted for how rarely it is used.
 
-```{r, warning=FALSE, message=FALSE, fig.width=10, fig.height=18, out.width="98%"}
+```{r frequency_of_words_per_speech, warning=FALSE, message=FALSE, fig.width=10, fig.height=18, out.width="98%"}
 plot_tf_idf(trump_speeches, 10)
 ```
 
 ## Zipf's Law
 
 ...
+
+## References
+
+CNN Politics (2020) Presidential Results. Available at: https://edition.cnn.com/election/2020/results/president#mapmode=lead (Accessed: 12 January 2021)
+

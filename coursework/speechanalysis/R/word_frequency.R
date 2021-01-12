@@ -25,14 +25,44 @@
 # lib <- c('readr', 'dplyr', 'tidytext', 'ggplot2', 'scales', 'lubridate')
 # lapply(lib, library, character.only = T)
 # rm(lib)
-#
+
 # #importing the data
 # trump_data <- read_csv('../data/trump-speech-data.csv') %>%
 #   subset(select = -c(X1))
-#
-# words_to_graph = c("america")
+
+# # Yes -
+# words_to_graph = c(
+#   'virus',
+#   'biden',
+#   'america',
+#   'win',
+#   'love',
+#   'people',
+#   'russia',
+#   'joe',
+#   'deal',
+#   'china',
+#   'country',
+#   'time',
+#   'remember',
+#   'guy',
+#   'job',
+#   'clinton',
+#   'president',
+#   'protest'
+# )
+
+# # Maybe - clinton
+# # No - covid, Constitution, great, refugees
+
+# word_frequency(trump_data, words_to_graph)
+
+
 
 word_frequency <- function(df, words_to_graph){
+
+  # ERROR MESSAGE
+  error = "Your collection of word(s) was not found in the speeches. Please try again with another colelction of word(s)"
 
   # STAGE 1 - Prepare data --------------------------------------------------
 
@@ -43,8 +73,8 @@ word_frequency <- function(df, words_to_graph){
   trump_data_words <-  trump_data %>%
     select(speech, location, date) %>%
     unnest_tokens(word, speech) %>%
-    count(date, word) %>%
-    group_by(date) %>%
+    count(location, date, word) %>%
+    group_by(location) %>%
     mutate(p = n / sum(n))
 
   # Remove stop words
@@ -67,10 +97,13 @@ word_frequency <- function(df, words_to_graph){
 
   trump_data_words_filtered <- trump_data_words %>% filter(word %in% words_to_graph)
 
-  trump_data_words_filtered <- trump_data_words_filtered %>%
-    mutate(
-      date_label = paste(day(date), month(date, label= TRUE, abbr = TRUE), sep="/")
-    )
+  dim(trump_data_words_filtered)
+
+  if (dim(trump_data_words_filtered) == 0) {
+    words_to_graph = c("america")
+    trump_data_words_filtered <- trump_data_words %>% filter(word %in% words_to_graph)
+    error
+  }
 
   lin_reg = coef(lm(date ~ p, data = trump_data_words_filtered))
 
@@ -80,9 +113,10 @@ word_frequency <- function(df, words_to_graph){
   plot <- ggplot(trump_data_words_filtered,
          aes(x = date, y = p, colour = word)) +
     geom_point() +
-    geom_text(hjust = 0, nudge_x = 0.25, aes(label = date_label)) +
+    geom_text(hjust = 0, nudge_x = 0.25, aes(label = location)) +
     geom_smooth() +
     geom_smooth(method=lm, se=FALSE, col="black") +
+    geom_hline(yintercept=0, linetype="dashed", color = "black") +
     labs(x = "Rally Date",
          y = "Percentage of words",
          title = "Change of word frequency in Donald Trump's rallies in September 2020") +
