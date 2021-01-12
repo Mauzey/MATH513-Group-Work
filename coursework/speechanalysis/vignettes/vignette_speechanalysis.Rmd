@@ -1,5 +1,5 @@
 ---
-title: "The speechanalysis Package"
+title: "The Speechanalysis Package"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{vignette_speechanalysis}
@@ -60,15 +60,6 @@ Average time to nearest golfcourse from the airport was 9.6 mins at a distance o
 
 Of the 10 places in the dataset only 3 of them ended up being won by Trump in the 2020 America Presidential Election.
 
-# ```{r}
-# date <- c("03/09/20","08/09/20", "10/09/20", "12/09/20", "13/09/20", "17/09/20", "18/09/20", "19/09/20", "21/09/20", "22/09/20" )
-# city <- c("Latrobe", "Winston-Salem", "Freeland", "Minden", "Henderson", "Mosinee", "Bemidji", "Fayetteville", "Vandalia", "Pittsburgh")
-# state <- c("Pennsylvania", "North Carolina", "Michigan", "Nevada", "Nevada", "Wisconsin", "Minnesota", "North Carolina", "Ohio", "Pennsylvania")
-# Length <- c("01:31:29 - 1.52hrs", "01:13:55 - 1.23hrs", "01:21:06 - 1.35hrs", "01:32:01 - 1.53hrs 01:06:44 - 1.11hrs", "01:32:36 - 1.54hrs", "01:48:20 - 1.81hrs", "01:48:40 - 1.81hrs", "01:05:53 - 1.10hrs", "01:29:51 - 1.50hrs")
-# df_speech_stats <- (date, city, state, length)
-# ```
-
-
 ## The Change in Word Frequency Over Time
 
 We can use the `word_frequency(df, c)` function, _where `df` is the data frame to apply to and `c` is a collection of words to check and plot
@@ -78,7 +69,40 @@ We can use the `word_frequency(df, c)` function, _where `df` is the data frame t
 word_frequency(trump_speeches, c("virus", "biden", "china", "president", "economy","jobs"))
 ```
 
-We examined multiple words used throuhg out Trump's speeches.
+The graphs show us the frequency of the words (y-axis) in each of the speeches (point on the graph) plotted over time (x-axis). A trend line is added to help idenitiy the usage of the words by Trump in his speeches. A horizontal line has been added to aid in seeing the percentage above zero for some words that are used very infrequently. 
+
+In the graph above, it is interesting to note the following:
+
+* Virus
+  * that Trump rarly uses the word virus or in fact any word relating to the COVID pandemic. However it is mentioned in each of the speeches in a very small amount. 
+* Economy
+  * Used only slightly more than the word virus but still not noticable.
+* Jobs
+  * Used less and less over the month in a downward trend
+
+Based on these two words and their frequency in his speeches, it could be deemed that given the amount of bad press the Americans and Trump has recevied over the pandemic he is most likely trying to not make too big a deal of it. The estimated cost to the Americans of the virus has been estimated at $16 trillion according to Gandal (2020) of CBS news.
+
+Looking at the following words:
+
+* President
+  * Used more frequently as the election daty approaches
+* Biden
+  * Used less frequently as the election day approaches
+
+We can see that there is an increase in the usage of president and decrease in the word Biden. This could be in relation to Trump wishing to downplay his compeitior in the race for the preseidency and associate himself with the word president.
+
+
+One of the most commonly used words was America. This is due to each of the speeches finishing with the following phrases:
+* make America wealthy again
+* make America strong again
+* make America proud again
+* make America safe again
+* make America great again
+This can be seen reflected in the frequency graph below.
+
+```{r word_frequency_over_time2, warning=FALSE, message=FALSE, fig.width=10, fig.height=6, out.width="98%"}
+word_frequency(trump_speeches, c("america", "american"))
+```
 
 
 ## Frequency of Words per Speech
@@ -96,6 +120,8 @@ plot_tf_idf(trump_speeches, 10)
 ...
 
 ## References
+
+Gandel, S (2020) Coronavirus pandemic to cost Americans $16 trillion, study finds. Available at: https://www.cbsnews.com/news/coronavirus-pandemic-cost-americans-16-trillion/ (Accessed: 12 January 2021)
 
 CNN Politics (2020) Presidential Results. Available at: https://edition.cnn.com/election/2020/results/president#mapmode=lead (Accessed: 12 January 2021)
 
