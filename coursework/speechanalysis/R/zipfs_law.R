@@ -58,6 +58,10 @@ zipfs_law <- function(trump_data, plot_type){
            color = "Location") +
       scale_x_log10() +
       scale_y_log10(labels = comma)
+
+    # Return the graph
+    return(plot)
+    
   }
 
   else if (plot_type==2){
@@ -76,6 +80,10 @@ zipfs_law <- function(trump_data, plot_type){
       geom_abline(intercept = lin_reg[1], slope = round(lin_reg[2], digits = 0))
 
     rm(lin_reg)
+
+    # Return the graph
+    return(plot)
+
   }
 
   else if (plot_type==3){
@@ -115,6 +123,12 @@ zipfs_law <- function(trump_data, plot_type){
       scale_x_log10() +
       scale_y_log10(labels=comma) +
       geom_hline(yintercept = 0, linetype="dashed", color = "red", size=1)
+
+    # Return the graph
+    return(plot)
+
   }
 
+
+  
 }
