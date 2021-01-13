@@ -222,3 +222,7 @@ As it can be seen,  Trump's word frequencies are overall higher than the predict
 - Rev (2020) Joe Biden Train Tour Campaign Speech Transcript Greensburg, PA September 30. Available at: https://www.rev.com/blog/transcripts/joe-biden-train-tour-campaign-speech-transcript-greensburg-pa-september-30 (Accessed: 13 January 2021)
 
 - Rev (2020) Joe Biden Speech Transcript Warren, Michigan September 9. Available at: https://www.rev.com/blog/transcripts/joe-biden-speech-transcript-warren-michigan-september-9 (Accessed: 13 January 2021)
+
+- Linear Regression. Available at: http://www.stat.yale.edu/Courses/1997-98/101/linreg.htm (Accessed: 13 January 2021)
+
+- Maj, M (2019) Investigating words distribution with R – Zipf’s law. Available at: https://www.r-bloggers.com/2019/02/investigating-words-distribution-with-r-zipfs-law/ (Accessed: 13 January 2021)
