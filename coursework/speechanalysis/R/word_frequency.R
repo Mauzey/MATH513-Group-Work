@@ -65,7 +65,7 @@ word_frequency <- function(df, words_to_graph){
   dim(trump_data_words_filtered)
 
   if (dim(trump_data_words_filtered) == 0) {
-    stop(paste0("Column '", col, "' does not exist in dataframe 'df'"))
+    stop(paste0(error))
   }
 
   lin_reg = coef(lm(date ~ p, data = trump_data_words_filtered))
