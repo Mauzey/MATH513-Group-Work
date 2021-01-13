@@ -154,7 +154,9 @@ plot_tf_idf(trump_speeches, 10)
 
 ## Zipf's Law
 
-...
+```{r zipfs_law, warning=FALSE, message=FALSE, fig.width=10, fig.height=18, out.width="98%"}
+zipfs_law(trump_speeches, 3)
+```
 
 ## References
 
