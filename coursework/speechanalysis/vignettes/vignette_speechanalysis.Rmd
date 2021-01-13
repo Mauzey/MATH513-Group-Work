@@ -201,7 +201,7 @@ In general, the 'term frequency - word rank' curve follows the regression line t
 However, we can see that Trump uses words with ranks 10-100 more frequently than predicted by the linear
 regression model. On top of this, the predicted term frequency for the most frequent word (which has rank No1) is supposed to be bigger, which isn't followed by the Trump.
 
-```{r zipfs_law, warning=FALSE, message=FALSE, fig.width=10, fig.height=6, out.width="98%"}
+```{r zipfs_law2, warning=FALSE, message=FALSE, fig.width=10, fig.height=6, out.width="98%"}
 
 zipfs_law(trump_speeches, 3)
 
