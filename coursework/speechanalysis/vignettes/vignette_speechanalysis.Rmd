@@ -159,27 +159,27 @@ plot_tf_idf(trump_speeches, 10)
 
 '**Pulitzer**' refers to the _Pulitzer Prize_, an award for achievements in newspaper, magazine, and online journalism. Trump explains how he doesn't believe that organisations such as the New York Times and The Washington Post deserve the prizes they have been awarded.
 
-### Fayetteville Rally
+### Fayetteville Rally Insights
 '**David**' and '**1.1**' refer to a $1.1 billion construction project involving David Friedman, an American economist and lawyer.
 
 '**TikTok**': The speech contains two references to how Trump is _"very close"_ to a _"great deal"_ with Tik-Tok.
 
-### Freeland Rally
+### Freeland Rally Insights
 '**Elite'**: Trump is referring to the audience; _"I think most of you are nod middle class. You're upper class"_.
 
 '**Tariffs**' and '**200**': Tariffs with Japan and China for imported cars was one of the key points of discussion during this rally. Trump mentions that his administration has added _"over 200 new auto and auto parts plants"_.
 
-### Henderson Rally
+### Henderson Rally Insights
 '**Colby**' and '**Justin**' refers to Colby Covington and Justin Gaethje; two mixed-martial artists.
 
 '**Dana**' is a reference to Dana White: the president of the UFC.
 
 '**Brandon**' refers to Brandon Judd, president of the National Border Patrol Council. Trump invites Brandon to pick out a fighter, so he can see _"whether he can take Colby in a fight"_.
 
-### Latrobe Rally
+### Latrobe Rally Insights
 '**Salon**' refers to a controversy involving Nancy Pelosi, the Speaker of the United States House of Representatives. She was seen in a hair salon without a mask; the hair salon in question was pressured into shutting down as a result of this controversy. A GoFundMe raise $300,000 for the owner.
 
-### Minden
+### Minden Rally Insights
 '**Rig**': Trump mentions how _"they"_ are trying to righ the election. _"[the govener] is in charge of the election and the millions of ballots...he can rig the election"_.
 
 ## Zipf's Law
