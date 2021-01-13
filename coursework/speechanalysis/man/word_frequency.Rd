@@ -8,8 +8,7 @@ word_frequency(df, words_to_graph)
 }
 \arguments{
 \item{df}{A dataframe with the following columns: 'speech' <chr>, 'location' <chr>, 'date' <date>}
-
-\item{words}{A collection of words for which the user wants graphs plotted}
+\item{words_to_graph}{A collection of words for which the user wants graphs plotted}
 }
 \value{
 A named vector of a plot:

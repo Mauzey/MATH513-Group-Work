@@ -1,10 +1,9 @@
-#'
 #' Graph of word usage of a data set
 #'
 #' This function provides a graph using ggplt2 of a data set containing speeches.
 #'
 #' @param df A dataframe with the following columns: 'speech' <chr>, 'location' <chr>, 'date' <date>
-#' @param words A collection of words for which the user wants graphs plotted
+#' @param words_to_graph A collection of words for which the user wants graphs plotted
 #'
 #' @author 10701983 \email{10701983}
 #'
@@ -21,56 +20,23 @@
 #' }
 #'
 
-
-# lib <- c('readr', 'dplyr', 'tidytext', 'ggplot2', 'scales', 'lubridate')
-# lapply(lib, library, character.only = T)
-# rm(lib)
-
-# #importing the data
-# trump_data <- read_csv('../data/trump-speech-data.csv') %>%
-#   subset(select = -c(X1))
-
-# # Yes -
-# words_to_graph = c(
-#   'virus',
-#   'biden',
-#   'america',
-#   'win',
-#   'love',
-#   'people',
-#   'russia',
-#   'joe',
-#   'deal',
-#   'china',
-#   'country',
-#   'time',
-#   'remember',
-#   'guy',
-#   'job',
-#   'clinton',
-#   'president',
-#   'protest'
-# )
-
-# # Maybe - clinton
-# # No - covid, Constitution, great, refugees
-
-# word_frequency(trump_data, words_to_graph)
-
-
-
 word_frequency <- function(df, words_to_graph){
+
+  # Check that the required columns exist in the dataframe
+  for (col in c('speech', 'location', 'date')) {
+    if ((col %in% colnames(df) == FALSE)) {
+      # this could be expanded to include a dtype check
+      stop(paste0("Column '", col, "' does not exist in dataframe 'df'"))
+    }
+  }
 
   # ERROR MESSAGE
   error = "Your collection of word(s) was not found in the speeches. Please try again with another colelction of word(s)"
 
   # STAGE 1 - Prepare data --------------------------------------------------
 
-  # Read in data
-  trump_data <- trump_speeches
-
   # Tokenize the dialogue, splitting each sentence in separate words
-  trump_data_words <-  trump_data %>%
+  trump_data_words <-  df %>%
     select(speech, location, date) %>%
     unnest_tokens(word, speech) %>%
     count(location, date, word) %>%
@@ -84,12 +50,11 @@ word_frequency <- function(df, words_to_graph){
   custom_stop_words <- data.frame(word = c(''))
   trump_data_words <- trump_data_words %>% anti_join(custom_stop_words)
 
-  rm(custom_stop_words)  # Remove vars from memory to keep the environment tidy
-
+  # Remove vars from memory to keep the environment tidy
+  rm(custom_stop_words)
 
   # Convert all words to lower case for matching
   trump_data_words <- trump_data_words %>% mutate(word = tolower(word))
-
   words_to_graph <- lapply(words_to_graph, tolower)
 
 
@@ -100,9 +65,7 @@ word_frequency <- function(df, words_to_graph){
   dim(trump_data_words_filtered)
 
   if (dim(trump_data_words_filtered) == 0) {
-    words_to_graph = c("america")
-    trump_data_words_filtered <- trump_data_words %>% filter(word %in% words_to_graph)
-    error
+    stop(paste0("Column '", col, "' does not exist in dataframe 'df'"))
   }
 
   lin_reg = coef(lm(date ~ p, data = trump_data_words_filtered))
@@ -117,18 +80,15 @@ word_frequency <- function(df, words_to_graph){
     geom_smooth() +
     geom_smooth(method=lm, se=FALSE, col="black") +
     geom_hline(yintercept=0, linetype="dashed", color = "black") +
-    labs(x = "Rally Date",
+    labs(x = "Date",
          y = "Percentage of words",
-         title = "Change of word frequency in Donald Trump's rallies in September 2020") +
+         title = "Change of word frequency in speeches") +
     facet_wrap(~ word) +
     scale_x_date(labels = date_format("%d %b %y", tz = "UTC"),
                  limits = c(as_date("2020-09-02")+0.5,
                             as_date("2020-09-24")-0.5)) +
     scale_y_continuous(labels = scales::percent_format(accuracy = 0.1)) +
     theme(legend.position = "none")
-
-  plot
-
 
   # Return the graph
   return(plot)
