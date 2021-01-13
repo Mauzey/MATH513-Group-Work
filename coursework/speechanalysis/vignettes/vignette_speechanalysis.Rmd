@@ -156,9 +156,16 @@ plot_tf_idf(trump_speeches, 10)
 
 ## Zipf's Law
 
+Zipf’s law states that the word frequencies in any word datasets will be very similar to Zipf’s distribution - the number of occurrences of the Nth most frequent word would be X/N, where X is the frequency of the most frequent word. 
+
+Most recent studies of this phenomena show that in the case of words, typically there is the same value of 𝞪, and the frequency on Nth word is described as: X/N^𝞪 However, we couldn't find how 𝞪 is being calculated, therefore we set 𝞪=1 in order to explore the Zipf's law in its standard form.
+
+First, plotting the frequencies of the words in Trump's speeches grouped by their locations and with linear regression line in order to observe the tendency of word frequencies.
+
 ```{r zipfs_law, warning=FALSE, message=FALSE, fig.width=10, fig.height=6, out.width="98%"}
 zipfs_law(trump_speeches, 2)
 zipfs_law(trump_speeches, 3)
+
 ```
 
 ## References
