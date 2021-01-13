@@ -184,33 +184,94 @@ We can use the `plot_tf_idf(df, n)` function, _where `df` is the data frame to a
 plot_tf_idf(trump_speeches, 10)
 ```
 
-### Bemidji Rally
+### Bemidji, Minnesota
 '**Jason**' refers to Jason Lewis, a Republican who was running for Senate in September 2020 and has said that he _"won't distance himself from Presdient Donald Trump or his policies"_ while running for federal office.
 
 '**Pulitzer**' refers to the _Pulitzer Prize_, an award for achievements in newspaper, magazine, and online journalism. Trump explains how he doesn't believe that organisations such as the New York Times and The Washington Post deserve the prizes they have been awarded.
 
-### Fayetteville Rally Insights
+'**Chris**' refers to Chris Vreeland, the major of Hoyt Lakes, Minnesota. All mentions of Chris are from a single statement where Trump is thanking him.
+
+### Fayetteville, North Carolina
+'**Rush**' refers to Rush Limbaugh, an American radio personality. All mentions of Rush in this speech are instances where Trump is praising him for his support.
+
 '**David**' and '**1.1**' refer to a $1.1 billion construction project involving David Friedman, an American economist and lawyer.
 
 '**TikTok**': The speech contains two references to how Trump is _"very close"_ to a _"great deal"_ with Tik-Tok.
 
-### Freeland Rally Insights
+### Freeland, Michigan
 '**Elite'**: Trump is referring to the audience; _"I think most of you are not middle class. You're upper class"_.
+
+'**John**' and '**James**' refers to John James, the Michigan U.S. Senate candidate Trump is endorsing.
+
+'**Motown**': _"That's right, Motown. We love Motown. Michigan gave us Motown, gave us Motown"_.
+
+'**Paul**' and '**Junge**' refers to Paul Junge, a republican politician.
 
 '**Tariffs**' and '**200**': Tariffs with Japan and China for imported cars was one of the key points of discussion during this rally. Trump mentions that his administration has added _"over 200 new auto and auto parts plants"_.
 
-### Henderson Rally Insights
+### Henderson, Nevada
 '**Colby**' and '**Justin**' refers to Colby Covington and Justin Gaethje; two mixed-martial artists.
 
 '**Dana**' is a reference to Dana White: the president of the UFC.
 
 '**Brandon**' refers to Brandon Judd, president of the National Border Patrol Council. Trump invites Brandon to pick out a fighter, so he can see _"whether he can take Colby in a fight"_.
 
-### Latrobe Rally Insights
+### Latrobe, Pennsylvania
 '**Salon**' refers to a controversy involving Nancy Pelosi, the Speaker of the United States House of Representatives. She was seen in a hair salon without a mask; the hair salon in question was pressured into shutting down as a result of this controversy. A GoFundMe raise $300,000 for the owner.
 
-### Minden Rally Insights
+'**Physical**': Trump discusses a physical he had from the White House doctor, Sean Conley.
+
+'**Rick**' refers to Rick Perry, a republican who Trump was endorsing.
+
+### Minden, Nevada
 '**Rig**': Trump mentions how _"they"_ are trying to righ the election. _"[the govener] is in charge of the election and the millions of ballots...he can rig the election"_.
+
+'**Pathetic**' - Insults directed towards Joe Biden and the Mayor of Portland.
+
+'**Jim**' refers to Jim Jordan, a U.S. representative who was awarded the medal of freedom by Trump.
+
+'**Ronna**' refers to Ronna McDanial, the chair of the republican national committee. Trump is praising her.
+
+'**James**' refers to James Settelmeyer, the Nevada state senator. Trump is praising him.
+
+'**Beast**' refers to Air Force One.
+
+### Mosinee, Wisconsin
+'**Specialty**' and '**Milk**' - Specialty Milk.
+
+'**Coast**': Trump praises the U.S. Coast Guard.
+
+'**Timber**': The timber industry is prominent in Wisconsin, Trump mentions how he has saved _"many timbenr jobs in [Wisconsin]"_.
+
+'**Hawaii**' - _"Remember the crazy senator from Hawaii?"_
+
+'**Guarding**' - _"we right now have 27,000 soldiers from Mexico guarding our border."_
+
+'**Duffy**' refers to Sean Duffy, a former U.S. representative. Trump talks about how he was the world champion tree climber.
+
+'**Derrick**' refers to Derrick Van Orden, the republican congressional candidate. Trump is praising him.
+
+### Vandalia, Ohio
+'**Bob**' refers to a number of people: Bob Paduchik (senior advisor for Trump's 2020 re-election campaign), Bob Latta (U.S representative), and Bob Cupp (speaker of the Ohio House of Representatives)
+
+'**Suburbia**' - _"I ended a regulation that will destroy suburbia"_.
+
+'**Lima**' Trump mentions how he _'saved Lima'_: _"I came here and they were going to close that plant in Lima...and I said why are we closing a tank plant?"_
+
+'**Jeep**' Jeep originates from Ohio.
+
+'**Jane**' refers to Jane Timken, the chairwoman of the Ohio republican party. Trump is praising her.
+
+'**Grabbed**' - Trump talks about how the National Guard handled the riots: _"They grabbed ones guy...they throw him aside like he was a little bag of popcorn...it's a beautiful sight."_
+
+'**Lid**' - Joe Biden called a 'lid', which is a term used by reporteds when a politician has finished travelling for the day.
+
+'**Richard**' - Trump tells a story about himself and one of his friends.
+
+### Winston-Salem, North Carolina
+'**Mick**' refers to Mick Mulvaney, an American politician. Trump is praising him.
+
+'**Lindsey**' refers to Lindsey Graham, a U.S. senator. Trump is praising him.
 
 ## Zipf's Law
 
