@@ -106,35 +106,37 @@ We can use the `word_frequency(df, c)` function, _where `df` is the data frame t
 word_frequency(trump_speeches, c("virus", "biden", "china", "president", "economy","jobs"))
 ```
 
-The graphs show us the frequency of the words (y-axis) in each of the speeches (point on the graph) plotted over time (x-axis). A trend line is added to help idenitiy the usage of the words by Trump in his speeches. A horizontal line has been added to aid in seeing the percentage above zero for some words that are used very infrequently. 
+The graphs show us the frequency of the words (y-axis) in each of the speeches (point on the graph) plotted over time (x-axis). A trend line is added to help identiy the usage of the words by Trump in his speeches. A horizontal line has been added to aid in seeing the percentage above zero for some words that are used very infrequently. 
 
 In the graph above, it is interesting to note the following:
 
 * Virus
-  * that Trump rarely uses the word virus or in fact any word relating to the COVID pandemic. However it is mentioned in each of the speeches in a very small amount. 
+  * that Trump rarely uses the word virus or in fact any word relating to the COVID pandemic. However, it is mentioned in each of the speeches in a very small amount
 * Economy
-  * Used only slightly more than the word virus but still not noticable.
+  * Used only slightly more than the word virus but still not noticeable
 * Jobs
   * Used less and less over the month in a downward trend
 
-Based on these two words and their frequency in his speeches, it could be deemed that given the amount of bad press the Americans and Trump has recevied over the pandemic he is most likely trying to not make too big a deal of it. The estimated cost to the Americans of the virus has been estimated at $16 trillion according to Gandal (2020) of CBS news.
+Based on these two words and their frequency in his speeches, it could be deemed that given the amount of bad press the Americans and Trump has received over the pandemic he is most likely trying to not make too big a deal of it. The estimated cost to the Americans of the virus has been estimated at $16 trillion according to Gandal (2020) of CBS news.
 
 Looking at the following words:
 
 * President
-  * Used more frequently as the election daty approaches
+  * Used more frequently as the election day approaches
 * Biden
   * Used less frequently as the election day approaches
 
-We can see that there is an increase in the usage of president and decrease in the word Biden. This could be in relation to Trump wishing to downplay his compeitior in the race for the preseidency and associate himself with the word president.
+We can see that there is an increase in the usage of president and decrease in the word Biden. This could be in relation to Trump wishing to downplay his competitor in the race for the presidency and associate himself with the word president.
 
 
 One of the most commonly used words was America. This is due to each of the speeches finishing with the following phrases:
+
 * make America wealthy again
 * make America strong again
 * make America proud again
 * make America safe again
 * make America great again
+
 This can be seen reflected in the frequency graph below.
 
 ```{r word_frequency_over_time2, warning=FALSE, message=FALSE, fig.width=10, fig.height=6, out.width="98%"}
