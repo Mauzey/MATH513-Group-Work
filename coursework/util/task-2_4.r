@@ -2,7 +2,8 @@
 # Work out tf, idf and tf_idf indexes
 #
 
-lib <- c('readr', 'dplyr', 'tidytext', 'ggplot2', 'scales')
+
+lib <- c('readr', 'dplyr', 'tidytext', 'ggplot2', 'scales', 'rlang')
 lapply(lib, library, character.only = T)
 rm(lib)
 
@@ -34,7 +35,8 @@ require(scales)
 #        color = "Location") +
 #   scale_x_log10() +
 #   scale_y_log10(labels = comma)
-# 
+
+
 lin_reg = coef(lm(log(rank) ~ log(tf), data = law_data))
 
 #ADDING THE LINEAR REGRESSION
@@ -50,12 +52,46 @@ law_data %>%
 
 rm(lin_reg)
 
-#CHECKING WITH REAL ZIPF'S LAW
-word_count <- law_data %>%
-  mutate(word = factor(word, levels = word),
-         zipfs_freq = ifelse(rank == 1, count, first(count) / rank^alpha))
+#CHECKING WITH THEORETICAL ZIPF'S LAW
+# 1. Creating a tibble with zipf's frequencies and 
+# removing the location column since we just want a theoretical zipf's law 
+# for Trump's speeches in general
 
-#CHECKING THE TOP FREQUENT WORDS FOR TRUMP'S SPEECH AND THEIR TF
-data('stop_words')
-new_law <- anti_join(law_data, stop_words)
-new_land_2 <- new_land %>% group_by(rank) %>% arrange(rank) %>%group_by(location)
+# DIDN'T WORK!
+# theor_data <- trump_words %>%
+#   count(word) %>%
+#   group_by(word) %>% 
+#   arrange(desc(n)) %>% mutate(rank = row_number())
+
+
+theor_data <- trump_words %>%
+  subset(select = -location) %>%
+  group_by(word) %>%
+  count(word) %>%
+  arrange(desc(n))
+
+theor_data$rank <- seq.int(nrow(theor_data))
+
+# adding a zipf's frequency calculated according to the zipf's law
+
+alpha <- 1 # this coeficient can be changed if needed
+
+theor_data_zipfs <- theor_data %>%
+  mutate(word = factor(word, levels = word),
+         zipfs_freq =  ifelse(rank == 1, n, dplyr::first(n) / rank^alpha))
+
+
+require(scales)
+
+ggplot(theor_data_zipfs, aes(x = rank, y = n)) + 
+  geom_line(aes(color = "observed")) +
+  theme_bw() + 
+  geom_line(aes(y = zipfs_freq, color = "theoretical")) +
+  #transition_reveal(count, rank) + 
+  labs(x = "Word's Rank", y = "Count", title = "Zipf's law visualization") +
+  scale_colour_manual(name = "Word count", values=c("theoretical" = "red", "observed" = "black")) +
+  theme(legend.position = "top") +
+  scale_x_log10() +
+  scale_y_log10(labels=comma)
+
+
