@@ -13,6 +13,6 @@
 #' # plot the top 10 most frequent words, according to their tf-idf index
 #' plot_tf_idf(trump_speeches, 10)
 #'
-#' @source ???
+#' @source University of Plymouth, MATH513 Assignment
 #'
 "trump_speeches"

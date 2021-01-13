@@ -1,6 +1,6 @@
 #' Graph of word usage of a data set
 #'
-#' This function provides a graph using ggplt2 of a data set containing speeches.
+#' This function provides a graph using ggplot2 of a data set containing speeches.
 #'
 #' @param df A dataframe with the following columns: 'speech' <chr>, 'location' <chr>, 'date' <date>
 #' @param words_to_graph A collection of words for which the user wants graphs plotted

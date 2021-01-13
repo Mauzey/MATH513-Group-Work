@@ -111,7 +111,7 @@ The graphs show us the frequency of the words (y-axis) in each of the speeches (
 In the graph above, it is interesting to note the following:
 
 * Virus
-  * that Trump rarly uses the word virus or in fact any word relating to the COVID pandemic. However it is mentioned in each of the speeches in a very small amount. 
+  * that Trump rarely uses the word virus or in fact any word relating to the COVID pandemic. However it is mentioned in each of the speeches in a very small amount. 
 * Economy
   * Used only slightly more than the word virus but still not noticable.
 * Jobs
