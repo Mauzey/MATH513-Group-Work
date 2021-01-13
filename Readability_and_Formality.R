@@ -65,10 +65,8 @@ trump_data_words <-  trump_data %>%
   unnest_tokens(word, speech) %>%
   count(location, date, word) %>%
   group_by(location)
-
 # Remove stop words
 trump_data_words <- trump_data_words %>% anti_join(tidytext::stop_words)
-
 # Remove custom stop words
 custom_stop_words <- data.frame(word = c(''))
 trump_data_words <- trump_data_words %>% anti_join(custom_stop_words)
@@ -103,7 +101,6 @@ head(trump_data_words_bing_count)
 # Plot sentiment scores for top 50 words words
 trump_data_words_bing_count %>% 
   group_by(sentiment) %>%
-
   head(n = 50L) %>% 
   ungroup() %>%
   ggplot(aes(x = word, y = n, fill = sentiment)) + theme_minimal() + coord_flip() +

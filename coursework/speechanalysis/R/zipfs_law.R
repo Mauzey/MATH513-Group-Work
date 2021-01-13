@@ -112,7 +112,7 @@ zipfs_law <- function(trump_data, plot_type){
       geom_line(aes(y = zipfs_freq, color = "theoretical")) +
       labs(x = "Word's Rank", y = "Frequency", title = "Zipf's Law Visualization") +
       scale_colour_manual(name = "Word count", values=c("theoretical" = "red", "observed" = "black")) +
-      # theme(legend.position = "top") +
+      #theme(legend.position = "right") +
       scale_x_log10() +
       scale_y_log10(labels=comma) +
       geom_hline(yintercept = 0, linetype="dashed", color = "red", size=1)

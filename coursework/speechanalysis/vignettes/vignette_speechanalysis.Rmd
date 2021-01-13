@@ -58,13 +58,13 @@ The speeches span from the 03/09/2020 to 22/09/2020 and take place in the follow
 
 Average legth of the speeches was 01:24:04 - 1.35hrs.
 
-Average time to nearest golfcourse from the airport was 9.6 mins at a distance of 5.19 miles.
+Average time to the nearest golf course by car from the airport was 9.6 mins at a distance of 5.19 miles.
 
 Of the 10 places in the dataset only 3 of them ended up being won by Trump in the 2020 America Presidential Election.
 
 ### Readability
 
-The following table show the readability calculation of each of Trump's speeches. 
+The following table shows the readability calculation of each of Trump's speeches: 
 
 | Date       | City          | Flesch-Kincaid Reading (Higher is easier) | New Dale Chall (Lower is easier) | Spache Readability (Lower is easier) | Flesch-Kincaid Grade (Lower is easier) | Gunning Fog Index (Lower is easier) | Coleman-Liau Index (Lower is easier) | SMOG Index Score (Lower is easier) | Automated Readability Index (Lower is easier) |
 |------------|---------------|:-----------------------------------------:|:--------------------------------:|:------------------------------------:|:--------------------------------------:|:-----------------------------------:|:------------------------------------:|:----------------------------------:|:---------------------------------------------:|
@@ -88,7 +88,7 @@ We can then compare this to an equivalent speech by Joe Biden seen below:
 | 21/09/20 |   Manitowoc  | 84.7                                      | 3.3                              | 5                                    | 3.6                                    | 6.3                                 | 7.6                                  | 8.2                                | 1.6                                           |
 | 30/09/20 |  Greensburg  | 84.4                                      | 3.1                              | 5                                    | 3.5                                    | 6.2                                 | 7.4                                  | 8.1                                | 1.2                                           |
 
-From this we can determine the averages for each of the scores and compare them:
+From this, we can determine the averages for each of the scores and compare them:
 
 | Candidate | Flesch-Kincaid Reading (Higher is easier) | New Dale Chall (Lower is easier) | Spache Readability (Lower is easier) | Flesch-Kincaid Grade (Lower is easier) | Gunning Fog Index (Lower is easier) | Coleman-Liau Index (Lower is easier) | SMOG Index Score (Lower is easier) | Automated Readability Index (Lower is easier) |
 |-----------|:-----------------------------------------:|:--------------------------------:|:------------------------------------:|:--------------------------------------:|:-----------------------------------:|:------------------------------------:|:----------------------------------:|:---------------------------------------------:|
@@ -96,6 +96,38 @@ From this we can determine the averages for each of the scores and compare them:
 |   Biden   |           78.5                            |             3.7                  |             5.0                      |             4.7                        |             7.2                     |             8.6                      |             9.0                    |             2.8                               |
 
 We can see that the readability of Trump's speeches is on average easier than those of Biden's speeches. This could be due to them attempting to appeal to different voters. It is worth noting that Biden's speeches tend to be short, at an average of 26 mins.
+
+### Sentiment
+
+We performed a sentiment analysis of Trump's speeches by individual words using the Bing lexicon. We removed stop words before processing and came up with the following chart. 
+
+```{r sentiment_analysis, echo=FALSE, warning=FALSE, message=FALSE, fig.width=10, fig.height=6, out.width="98%"}
+# Tokenize the dialogue, splitting each sentence in separate words
+trump_data_words <-  trump_data %>%
+  select(speech, location, date) %>%
+  unnest_tokens(word, speech) %>%
+  count(location, date, word) %>%
+  group_by(location)
+# Remove stop words
+trump_data_words <- trump_data_words %>% anti_join(tidytext::stop_words)
+# Remove custom stop words
+custom_stop_words <- data.frame(word = c(''))
+trump_data_words <- trump_data_words %>% anti_join(custom_stop_words)
+# Get sentiment scores
+trump_data_words_bing_count <- trump_data_words %>%
+  inner_join(sentiments) %>% 
+  count(word, sentiment, sort = T) %>%
+  mutate(word = reorder(word, n))
+trump_data_words_bing_count %>%
+  ggplot(aes(x = n, y = sentiment, fill = location)) +
+  geom_col(show.legend = FALSE) +
+  labs(x = "word count")+
+  facet_wrap(~location, ncol = 2, scales = "free_x")
+```
+
+As you can see from the chart, Trump's speeches carry a more negitive sentiment. Out of the ten speeches none of them carry a mainly positive sentiment.
+
+We believe that for better understanding, we could utilise the sentimentr package to analysis sentiment based on whole sentences.
 
 ## The Change in Word Frequency Over Time
 
@@ -111,13 +143,13 @@ The graphs show us the frequency of the words (y-axis) in each of the speeches (
 In the graph above, it is interesting to note the following:
 
 * Virus
-  * that Trump rarely uses the word virus or in fact any word relating to the COVID pandemic. However, it is mentioned in each of the speeches in a very small amount
+  * Trump rarely uses the word virus or in fact, when tested, any word we could consider, relating to the COVID-19 pandemic. However, it is still mentioned in each of the speeches in a very small amount
 * Economy
-  * Used only slightly more than the word virus but still not noticeable
+  * Used only slightly more than the word virus but still not very often
 * Jobs
   * Used less and less over the month in a downward trend
 
-Based on these two words and their frequency in his speeches, it could be deemed that given the amount of bad press the Americans and Trump has received over the pandemic he is most likely trying to not make too big a deal of it. The estimated cost to the Americans of the virus has been estimated at $16 trillion according to Gandal (2020) of CBS news.
+Based on these three words and their frequency, it could be concluded that he is trying to avert attention from these sensitive and current topics. The estimated cost to the Americans of the virus has been estimated at $16 trillion according to Gandal (2020) of CBS news.
 
 Looking at the following words:
 
@@ -128,6 +160,8 @@ Looking at the following words:
 
 We can see that there is an increase in the usage of president and decrease in the word Biden. This could be in relation to Trump wishing to downplay his competitor in the race for the presidency and associate himself with the word president.
 
+# China
+# Trend less frequently
 
 One of the most commonly used words was America. This is due to each of the speeches finishing with the following phrases:
 
@@ -143,18 +177,14 @@ This can be seen reflected in the frequency graph below.
 word_frequency(trump_speeches, c("america", "american"))
 ```
 
-
 ## Frequency of Words per Speech
 
-We can use the `plot_tf_idf(df, n)` function, _where `df` is the data frame to apply to and `n` is the number of 'top' words to 
-show,_ to plot a graphical summary of the most frequent words which occur in each speech. This function makes use of the **tf-idf 
-index** which computes the frequency of a word, adjusted for how rarely it is used.
-
+We can use the `plot_tf_idf(df, n)` function, _where `df` is the data frame to apply to and `n` is the number of 'top' words to show,_ to plot a graphical summary of the most frequent words which occur in each speech. This function makes use of the **tf-idf index** which computes the frequency of a word adjusted for how rarely it is used.
 ```{r frequency_of_words_per_speech, warning=FALSE, message=FALSE, fig.width=10, fig.height=18, out.width="98%"}
 plot_tf_idf(trump_speeches, 10)
 ```
 
-### Bemidji Rally Insights
+### Bemidji Rally
 '**Jason**' refers to Jason Lewis, a Republican who was running for Senate in September 2020 and has said that he _"won't distance himself from Presdient Donald Trump or his policies"_ while running for federal office.
 
 '**Pulitzer**' refers to the _Pulitzer Prize_, an award for achievements in newspaper, magazine, and online journalism. Trump explains how he doesn't believe that organisations such as the New York Times and The Washington Post deserve the prizes they have been awarded.
@@ -179,50 +209,47 @@ plot_tf_idf(trump_speeches, 10)
 ### Latrobe Rally
 '**Salon**' refers to a controversy involving Nancy Pelosi, the Speaker of the United States House of Representatives. She was seen in a hair salon without a mask; the hair salon in question was pressured into shutting down as a result of this controversy. A GoFundMe raise $300,000 for the owner.
 
-### Minden
+### Minden Rally
 '**Rig**': Trump mentions how _"they"_ are trying to righ the election. _"[the govener] is in charge of the election and the millions of ballots...he can rig the election"_.
 
 ## Zipf's Law
 
-Zipf’s law states that the word frequencies in any word datasets will be very similar to Zipf’s distribution - the number of occurrences of the Nth most frequent word would be X/N, where X is the frequency of the most frequent word. 
+Zipf’s law states that the word frequencies in any text datasets will be very similar to Zipf’s distribution - the number of occurrences of the $N$th most frequent word would be $X/N$, where $X$ is the frequency of the most frequent word.
 
-Most recent studies of this phenomena show that in the case of words, typically there is the same value of 𝞪, and the frequency on Nth word is described as: X/N^𝞪 However, we couldn't find how 𝞪 is being calculated, therefore we set 𝞪=1 in order to explore the Zipf's law in its standard form.
+Most recent studies of this phenomena show that typically there exists a certain value of $𝞪$ which influences the distribution so that the frequency of the $N$th word is described as: $X/N^𝞪$. However, in order to explore Zipf's law in its standard form, we defined $𝞪=1$.
 
-First, plotting the frequencies of the words in Trump's speeches grouped by their locations and with linear regression line in order to observe the tendency of word frequencies.
+Utilising Trump's speeches, grouped by the locations, we have plotted the relationship between the word frequencies and their respective ranks with a linear regression model.
 
 ```{r zipfs_law, warning=FALSE, message=FALSE, fig.width=10, fig.height=6, out.width="98%"}
 zipfs_law(trump_speeches, 2)
-
 ```
-Linear regression attempts to model the relationship between two variables by fitting a linear equation to observed data. In our case, we're trying to determine a relationship between the word rank and the term frequency.
+Linear regression attempts to model the relationship between two variables by fitting a linear equation to observed data (Yale University, 1998). In our case, we're trying to determine a relationship between the word rank and the term frequency.
 
-
-In general, the 'term frequency - word rank' curve follows the regression line trend.
-However, we can see that Trump uses words with ranks 10-100 more frequently than predicted by the linear
-regression model. On top of this, the predicted term frequency for the most frequent word (which has rank No1) is supposed to be bigger, which isn't followed by the Trump.
+In general, the 'term frequency - word rank' curve follows the regression line trend. However, we can see that Trump uses words with ranks of 10-100 more frequently than predicted by the linear
+regression model. On top of this, the predicted term frequency for the most frequent word (which has rank No1) is supposed to be bigger according to the linear regression model. This shows us that Trump's speeches do not follow the model exactly.
 
 ```{r zipfs_law2, warning=FALSE, message=FALSE, fig.width=10, fig.height=6, out.width="98%"}
-
 zipfs_law(trump_speeches, 3)
-
 ```
 
-In order to explore how much Trump's speeches deviate from the theoretical Zipf's law, we counted the word frequencies for each word across the dataset comprised of all the provided speeches and plotted them alongside the word frequencies calculated using the Zipf's law. The red dash line indicates the 0-point on Y-axis.
-As it can be seen,  Trump's word frequencies are overall higher than the predicted ones as the line with observed values declines more slowly, which means that he uses most popular and simple words (in the given speech dataset it's 'the', 'and', 'a', 'you', 'up', 'to' etc) more often than normal (according to Zipf's law). 
+In order to explore how much Trump's speeches deviate from the theoretical Zipf's law, we counted frequencies for each word across the dataset of all the provided speeches and plotted them alongside the word frequencies calculated using Zipf's law. The red dash line indicates the absolute 0-point on Y-axis.
+
+As it can be seen, Trump's word frequencies are overall higher than the predicted ones as the line with observed values declines more slowly. This means that he uses more popular and simple words (such as 'the', 'and', 'a', 'you', 'up', 'to', etc.) more often than they should normally be used according to Zipf's law. 
+
 ## References
 
-- Gandel, S (2020) Coronavirus pandemic to cost Americans $16 trillion, study finds. Available at: https://www.cbsnews.com/news/coronavirus-pandemic-cost-americans-16-trillion/ (Accessed: 12 January 2021)
+- CNN Politics (2020) Presidential Results. Available at: https://edition.cnn.com/election/2020/results/president#mapmode=lead (Accessed: 20 December 2020)
 
-- CNN Politics (2020) Presidential Results. Available at: https://edition.cnn.com/election/2020/results/president#mapmode=lead (Accessed: 12 January 2021)
+- Gandel, S (2020) Coronavirus pandemic to cost Americans $16 trillion, study finds. Available at: https://www.cbsnews.com/news/coronavirus-pandemic-cost-americans-16-trillion/ (Accessed: 20 December 2020)
 
-- Rev (2020) Joe Biden Climate Change Speech Transcript in Wilmington, Delaware September 14. Available at: https://www.rev.com/blog/transcripts/joe-biden-climate-change-speech-transcript-september-14 (Accessed: 13 January 2021)
+- Maj, M (2019) Investigating words distribution with R – Zipf’s law. Available at: https://www.r-bloggers.com/2019/02/investigating-words-distribution-with-r-zipfs-law/ (Accessed: 10 January 2021)
 
-- Rev (2020) Joe Biden Campaign Speech Transcript Manitowoc, Wisconsin September 21. Available at: https://www.rev.com/blog/transcripts/joe-biden-campaign-speech-transcript-manitowoc-wisconsin-september-21 (Accessed: 13 January 2021)
+- Rev (2020) Joe Biden Climate Change Speech Transcript in Wilmington, Delaware September 14. Available at: https://www.rev.com/blog/transcripts/joe-biden-climate-change-speech-transcript-september-14 (Accessed: 21 December 2020)
 
-- Rev (2020) Joe Biden Train Tour Campaign Speech Transcript Greensburg, PA September 30. Available at: https://www.rev.com/blog/transcripts/joe-biden-train-tour-campaign-speech-transcript-greensburg-pa-september-30 (Accessed: 13 January 2021)
+- Rev (2020) Joe Biden Campaign Speech Transcript Manitowoc, Wisconsin September 21. Available at: https://www.rev.com/blog/transcripts/joe-biden-campaign-speech-transcript-manitowoc-wisconsin-september-21 (Accessed: 21 December 2020)
 
-- Rev (2020) Joe Biden Speech Transcript Warren, Michigan September 9. Available at: https://www.rev.com/blog/transcripts/joe-biden-speech-transcript-warren-michigan-september-9 (Accessed: 13 January 2021)
+- Rev (2020) Joe Biden Train Tour Campaign Speech Transcript Greensburg, PA September 30. Available at: https://www.rev.com/blog/transcripts/joe-biden-train-tour-campaign-speech-transcript-greensburg-pa-september-30 (Accessed: 21 December 2020)
 
-- Linear Regression. Available at: http://www.stat.yale.edu/Courses/1997-98/101/linreg.htm (Accessed: 13 January 2021)
+- Rev (2020) Joe Biden Speech Transcript Warren, Michigan September 9. Available at: https://www.rev.com/blog/transcripts/joe-biden-speech-transcript-warren-michigan-september-9 (Accessed: 21 December 2020)
 
-- Maj, M (2019) Investigating words distribution with R – Zipf’s law. Available at: https://www.r-bloggers.com/2019/02/investigating-words-distribution-with-r-zipfs-law/ (Accessed: 13 January 2021)
+- Yale University (1998) Linear Regression. Available at: http://www.stat.yale.edu/Courses/1997-98/101/linreg.htm (Accessed: 13 January 2021)
