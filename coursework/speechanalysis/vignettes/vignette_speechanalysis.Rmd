@@ -165,7 +165,7 @@ plot_tf_idf(trump_speeches, 10)
 '**TikTok**': The speech contains two references to how Trump is _"very close"_ to a _"great deal"_ with Tik-Tok.
 
 ### Freeland Rally Insights
-'**Elite'**: Trump is referring to the audience; _"I think most of you are nod middle class. You're upper class"_.
+'**Elite'**: Trump is referring to the audience; _"I think most of you are not middle class. You're upper class"_.
 
 '**Tariffs**' and '**200**': Tariffs with Japan and China for imported cars was one of the key points of discussion during this rally. Trump mentions that his administration has added _"over 200 new auto and auto parts plants"_.
 
