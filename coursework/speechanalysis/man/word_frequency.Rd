@@ -18,7 +18,7 @@ A named vector of a plot:
 }
 }
 \description{
-This function provides a graph using ggplt2 of a data set containing speeches.
+This function provides a graph using ggplot2 of a data set containing speeches.
 }
 \examples{
 word_frequency(trump_speeches, c("america", "biden", "China"))
