@@ -1,34 +1,11 @@
-#' Graph of word usage of a data set
-#'
-#' This function provides a graph using ggplt2 of a data set containing speeches.
-#'
-#' @param trump_data A dataframe with the following columns: 'speech' <chr>, 'location' <chr>, 'date' <date>
-#' @param plot_type A number 1, 2, or 3 which indicates of the type of plot to be displayed.
-#' 1 stands for 'frequency plot', 2 for 'frequency + linear', 
-#' 3 for 'theoretical zipf's law and practical frequencies'
-#'
-#' @author 10696253 \email{10696253}
-#'
-#' @import tidyverse tidytext scales lubridate
-#'
-#' @export
-#'
-#' @examples
-#' zipfs_law(trump_speeches, 1)
-#'
-#' @return A named vector of a plot:
-#' \describe{
-#' \item{plot}{The data plotted in a graph.}
-#' }
-#'
 
-# lib <- c('readr', 'dplyr', 'tidytext', 'ggplot2', 'scales', 'rlang')
-# lapply(lib, library, character.only = T)
-# rm(lib)
+ lib <- c('readr', 'dplyr', 'tidytext', 'ggplot2', 'scales', 'rlang')
+ lapply(lib, library, character.only = T)
+ rm(lib)
 
 #importing the data
-# trump_data <- read_csv('../data/trump-speech-data.csv') %>%
-#   subset(select = -c(X1))
+ trump_data <- read_csv('../data/trump-speech-data.csv') %>%
+   subset(select = -c(X1))
 
 #tokenizing - creating a tibble with location, words
 
@@ -59,6 +36,7 @@ zipfs_law <- function(trump_data, plot_type){
            color = "Location") +
       scale_x_log10() +
       scale_y_log10(labels = comma) 
+    return(plot)
   }
     
   else if (plot_type==2){
@@ -77,6 +55,7 @@ zipfs_law <- function(trump_data, plot_type){
       geom_abline(intercept = lin_reg[1], slope = round(lin_reg[2], digits = 0))
     
     rm(lin_reg)
+    return(plot)
   }
   
   else if (plot_type==3){
@@ -112,10 +91,17 @@ zipfs_law <- function(trump_data, plot_type){
       geom_line(aes(y = zipfs_freq, color = "theoretical")) +
       labs(x = "Word's Rank", y = "Frequency", title = "Zipf's law visualization") +
       scale_colour_manual(name = "Word count", values=c("theoretical" = "red", "observed" = "black")) +
-      theme(legend.position = "top") +
+      # theme(legend.position = "top") +
+      # xlim(0, NA) +
+      # ylim(0, NA)+
       scale_x_log10() +
       scale_y_log10(labels=comma) +
-      geom_hline(yintercept = 0, linetype="dashed", color = "red", size=1)
+      geom_hline(yintercept = 0, linetype="dashed", color = "red", size=1) 
+      
+    
+    return(plot)
   }
   
 }
+
+zipfs_law(trump_data, 3)

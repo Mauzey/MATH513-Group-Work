@@ -21,13 +21,6 @@
 #' }
 #'
 
-# lib <- c('readr', 'dplyr', 'tidytext', 'ggplot2', 'scales', 'rlang')
-# lapply(lib, library, character.only = T)
-# rm(lib)
-
-#importing the data
-# trump_data <- read_csv('../data/trump-speech-data.csv') %>%
-#   subset(select = -c(X1))
 
 #tokenizing - creating a tibble with location, words
 
@@ -117,7 +110,7 @@ zipfs_law <- function(trump_data, plot_type){
       geom_line(aes(color = "observed")) +
       theme_bw() +
       geom_line(aes(y = zipfs_freq, color = "theoretical")) +
-      labs(x = "Word's Rank", y = "Frequency", title = "Zipf's law visualization") +
+      labs(x = "Word's Rank", y = "Frequency", title = "Zipf's Law Visualization") +
       scale_colour_manual(name = "Word count", values=c("theoretical" = "red", "observed" = "black")) +
       # theme(legend.position = "top") +
       scale_x_log10() +
