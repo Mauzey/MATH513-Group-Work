@@ -13,7 +13,7 @@ A data.frame with 10 rows and 3 columns:
 }
 }
 \source{
-University of Plymouth, MATH513 Assignment
+University of Plymouth, MATH513 Assignment 2020/21
 }
 \usage{
 trump_speeches
@@ -22,8 +22,9 @@ trump_speeches
 A dataset consisting of 10 speeches made by Donald Trump throughout September 2020.
 }
 \examples{
-# plot the top 10 most frequent words, according to their tf-idf index
 plot_tf_idf(trump_speeches, 10)
+word_frequency(trump_speeches, c("america", "biden", "China"))
+zipfs_law(trump_speeches, 1)
 
 }
 \keyword{datasets}
