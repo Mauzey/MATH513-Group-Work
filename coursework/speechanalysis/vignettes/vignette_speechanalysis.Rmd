@@ -163,7 +163,7 @@ We can see that there is an increase in the usage of president and decrease in t
 * China
   * Downward trend with Trump using it less frequently in his speeches towards the end of the month of September
 
-
+Tensions between the US and China were evident at the UN assembly on 15 September 2020 (BBC, 2020). Trump may be reducing the number of times China is mentioned in the same way that he is reducing the number of times he mentions Biden, the economy, jobs, and the virus. This is to distance himself from what could be seen to be negative. 
 
 One of the most commonly used words was America. This is due to each of the speeches finishing with the following phrases:
 
@@ -303,6 +303,8 @@ In order to explore how much Trump's speeches deviate from the theoretical Zipf'
 As it can be seen, Trump's word frequencies are overall higher than the predicted ones as the line with observed values declines more slowly. This means that he uses more popular and simple words (such as 'the', 'and', 'a', 'you', 'up', 'to', etc.) more often than they should normally be used according to Zipf's law. 
 
 ## References
+
+- BBC (2020) UN General Assembly: US-China tensions flare over coronavirus. Available at: https://www.bbc.co.uk/news/world-54253408 (Accessed: 13 January 2021)
 
 - CNN Politics (2020) Presidential Results. Available at: https://edition.cnn.com/election/2020/results/president#mapmode=lead (Accessed: 20 December 2020)
 
