@@ -10,9 +10,10 @@
 #' }
 #'
 #' @examples
-#' # plot the top 10 most frequent words, according to their tf-idf index
 #' plot_tf_idf(trump_speeches, 10)
-#'
-#' @source University of Plymouth, MATH513 Assignment
+#' word_frequency(trump_speeches, c("america", "biden", "China"))
+#' zipfs_law(trump_speeches, 1)
+#' 
+#' @source University of Plymouth, MATH513 Assignment 2020/21
 #'
 "trump_speeches"

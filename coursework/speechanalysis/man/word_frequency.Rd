@@ -12,13 +12,10 @@ word_frequency(df, words_to_graph)
 \item{words_to_graph}{A collection of words for which the user wants graphs plotted}
 }
 \value{
-A named vector of a plot:
-\describe{
-\item{plot}{The data plotted in a graph.}
-}
+<ggplot> A plot of the word frequency over time
 }
 \description{
-This function provides a graph using ggplot2 of a data set containing speeches.
+Returns a plot of the frequencies of the words provided over time in the dataset.
 }
 \examples{
 word_frequency(trump_speeches, c("america", "biden", "China"))

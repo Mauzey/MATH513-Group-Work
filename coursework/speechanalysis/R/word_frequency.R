@@ -1,9 +1,11 @@
 #' Graph of word usage of a data set
 #'
-#' This function provides a graph using ggplot2 of a data set containing speeches.
+#' Returns a plot of the frequencies of the words provided over time in the dataset.
 #'
 #' @param df A dataframe with the following columns: 'speech' <chr>, 'location' <chr>, 'date' <date>
 #' @param words_to_graph A collection of words for which the user wants graphs plotted
+#'
+#' @return <ggplot> A plot of the word frequency over time
 #'
 #' @author 10701983 \email{10701983}
 #'
@@ -14,11 +16,7 @@
 #' @examples
 #' word_frequency(trump_speeches, c("america", "biden", "China"))
 #'
-#' @return A named vector of a plot:
-#' \describe{
-#' \item{plot}{The data plotted in a graph.}
-#' }
-#'
+
 
 word_frequency <- function(df, words_to_graph){
 
@@ -46,13 +44,6 @@ word_frequency <- function(df, words_to_graph){
   # Remove stop words
   trump_data_words <- trump_data_words %>% anti_join(tidytext::stop_words)
 
-  # Remove custom stop words
-  custom_stop_words <- data.frame(word = c(''))
-  trump_data_words <- trump_data_words %>% anti_join(custom_stop_words)
-
-  # Remove vars from memory to keep the environment tidy
-  rm(custom_stop_words)
-
   # Convert all words to lower case for matching
   trump_data_words <- trump_data_words %>% mutate(word = tolower(word))
   words_to_graph <- lapply(words_to_graph, tolower)
@@ -61,8 +52,6 @@ word_frequency <- function(df, words_to_graph){
   # STAGE 2 - Filter the data set by the words requested --------------------
 
   trump_data_words_filtered <- trump_data_words %>% filter(word %in% words_to_graph)
-
-  dim(trump_data_words_filtered)
 
   if (dim(trump_data_words_filtered) == 0) {
     stop(paste0(error))

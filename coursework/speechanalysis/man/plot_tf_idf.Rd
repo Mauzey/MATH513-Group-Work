@@ -15,7 +15,7 @@ plot_tf_idf(df, n_words = 10)
 <ggplot> A plot of the most frequent words used
 }
 \description{
-Produces a plot of the most frequent words used (in descending order) during a collection of speeches. The plot is faceted by
+Returns a plot of the most frequent words used (in descending order) during a collection of speeches. The plot is faceted by
 the location of the speech, and uses the tf-idf index to determine word frequencies.
 }
 \examples{
@@ -23,5 +23,5 @@ plot_tf_idf(trump_speeches, 10)
 
 }
 \author{
-1073945 \email{1073945}
+10570155 \email{10570155}
 }

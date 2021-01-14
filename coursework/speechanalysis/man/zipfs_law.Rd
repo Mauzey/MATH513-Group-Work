@@ -2,26 +2,21 @@
 % Please edit documentation in R/zipfs_law.R
 \name{zipfs_law}
 \alias{zipfs_law}
-\title{Graph of word frequencies against linear regression and against the theoretical Zipf's Law.
-This function provides a graph using ggplt2 of a data set containing speeches.}
+\title{Graph of word frequencies against linear regression and against the theoretical Zipf's Law.}
 \usage{
-zipfs_law(trump_data, plot_type)
+zipfs_law(df, plot_type)
 }
 \arguments{
-\item{trump_data}{A dataframe with the following columns: 'speech' <chr>, 'location' <chr>, 'date' <date>}
+\item{df}{A dataframe with the following columns: 'speech' <chr>, 'location' <chr>, 'date' <date>}
 
 \item{plot_type}{A number 1, 2, or 3 which indicates of the type of plot to be displayed.
 1 stands for 'frequency plot', 2 for 'frequency + linear',
 3 for 'theoretical zipf's law and practical frequencies'}
 }
 \value{
-A named vector of a plot:
-\describe{
-\item{plot}{The data plotted in a graph.}
-}
+<ggplot> Graph of word frequencies against linear regression and against the theoretical Zipf's Law.
 }
 \description{
-Graph of word frequencies against linear regression and against the theoretical Zipf's Law.
 This function provides a graph using ggplt2 of a data set containing speeches.
 }
 \examples{

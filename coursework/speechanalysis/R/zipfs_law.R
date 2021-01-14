@@ -1,11 +1,14 @@
 #' Graph of word frequencies against linear regression and against the theoretical Zipf's Law.
+#' 
 #' This function provides a graph using ggplt2 of a data set containing speeches.
 #'
-#' @param trump_data A dataframe with the following columns: 'speech' <chr>, 'location' <chr>, 'date' <date>
+#' @param df A dataframe with the following columns: 'speech' <chr>, 'location' <chr>, 'date' <date>
 #' @param plot_type A number 1, 2, or 3 which indicates of the type of plot to be displayed.
 #' 1 stands for 'frequency plot', 2 for 'frequency + linear',
 #' 3 for 'theoretical zipf's law and practical frequencies'
 #'
+#' @return <ggplot> Graph of word frequencies against linear regression and against the theoretical Zipf's Law.
+#' 
 #' @author 10696253 \email{10696253}
 #'
 #' @import tidyverse tidytext scales lubridate
@@ -15,18 +18,21 @@
 #' @examples
 #' zipfs_law(trump_speeches, 1)
 #'
-#' @return A named vector of a plot:
-#' \describe{
-#' \item{plot}{The data plotted in a graph.}
-#' }
-#'
+
+zipfs_law <- function(df, plot_type){
+
+  # check that the required columns exist
+  for (col in c('speech', 'location', 'date')) {
+    if ((col %in% colnames(df) == FALSE)) {
+      # this could be expanded to include a dtype check
+      stop(paste0("Column '", col, "' does not exist in dataframe 'df'"))
+    }
+  }
 
 
-#tokenizing - creating a tibble with location, words
 
-zipfs_law <- function(trump_data, plot_type){
-
-  trump_words <- trump_data %>%
+  #tokenizing - creating a tibble with location, words
+  trump_words <- df %>%
     select(speech, location)%>%
     unnest_tokens(word, speech)
 
@@ -47,7 +53,7 @@ zipfs_law <- function(trump_data, plot_type){
       ggplot(aes(x = rank, y = tf, color = location)) +
       geom_line() +
       labs(x = "Word rank", y = "Term frequencey (tf)",
-           title = "Zipf's Law for Donald Trump's Rallies Data",
+           title = "Zipf's Law for the Data",
            color = "Location") +
       scale_x_log10() +
       scale_y_log10(labels = comma)
@@ -66,7 +72,7 @@ zipfs_law <- function(trump_data, plot_type){
       ggplot(aes(x = rank, y = tf, color = location)) +
       geom_line() +
       labs(x = "Word rank", y = "Term frequencey (tf)",
-           title = "Zipf's Law for Donald Trump's Rallies Data",
+           title = "Zipf's Law for the Data",
            color = "Location") +
       scale_x_log10() +
       scale_y_log10(labels = comma) +
@@ -85,7 +91,6 @@ zipfs_law <- function(trump_data, plot_type){
     # removing the location column since we just want a theoretical zipf's law
     # for Trump's speeches in general
 
-
     theor_data <- trump_words %>%
       subset(select = -location) %>%
       group_by(word) %>%
@@ -102,9 +107,6 @@ zipfs_law <- function(trump_data, plot_type){
       mutate(word = factor(word, levels = word),
              zipfs_freq =  ifelse(rank == 1, n, dplyr::first(n) / rank^alpha))
 
-
-    require(scales)
-
     # PLOT THE THEORETICAL ZIPF'S LAW AGAINS THE WORD FREQUENCY
     plot <- ggplot(theor_data_zipfs, aes(x = rank, y = n)) +
       geom_line(aes(color = "observed")) +
@@ -112,7 +114,6 @@ zipfs_law <- function(trump_data, plot_type){
       geom_line(aes(y = zipfs_freq, color = "theoretical")) +
       labs(x = "Word's Rank", y = "Frequency", title = "Zipf's Law Visualization") +
       scale_colour_manual(name = "Word count", values=c("theoretical" = "red", "observed" = "black")) +
-      #theme(legend.position = "right") +
       scale_x_log10() +
       scale_y_log10(labels=comma) +
       geom_hline(yintercept = 0, linetype="dashed", color = "red", size=1)
@@ -122,6 +123,7 @@ zipfs_law <- function(trump_data, plot_type){
 
   }
 
-
-
+  else {
+    stop(paste0("Please select a number from 1 -3 to specify a graph type"))
+  }
 }
